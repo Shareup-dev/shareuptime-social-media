@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:14
+    container_name: shareup_postgres
+    environment:
+      POSTGRES_DB: shareup_social
+      POSTGRES_USER: social_admin
+      POSTGRES_PASSWORD: SocialPass123!
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: shareup_redis
+    command: ["redis-server", "--notify-keyspace-events", "KEA", "--maxmemory", "2gb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:5.12.0-community
+    container_name: shareup_neo4j
+    environment:
+      NEO4J_AUTH: neo4j/graph123!
+      NEO4J_dbms_memory_heap_initial__size: 2G
+      NEO4J_dbms_memory_heap_max__size: 4G
+      NEO4J_dbms_default__database: socialgraph
+      NEO4J_dbms_security_procedures_unrestricted: apoc.*
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4jdata:/data
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    container_name: shareup_mongo
+    environment:
+      MONGO_INITDB_DATABASE: shareup_social
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    restart: unless-stopped
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+    container_name: shareup_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - cluster.name=shareuptime-search
+      - node.name=node-1
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  neo4jdata:
+  mongodata:
+  esdata:
