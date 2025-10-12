@@ -165,13 +165,13 @@ chmod +x $INSTALL_DIR/start_all.sh
 # ---------------------------
 echo "✅ Kurulum Tamamlandı!"
 echo "🛠️ Test Komutları:"
-echo "1. PostgreSQL: psql $PG_URL -c 'SELECT count(*) FROM users'"
+echo "1. PostgreSQL: psql \$PG_URL -c 'SELECT count(*) FROM users'"
 echo "2. Redis: redis-cli ping"
 echo "3. Neo4j: curl -H 'Content-Type: application/json' -d '{\"statements\":[{\"statement\":\"MATCH (n) RETURN count(n)\"}]}' http://localhost:7474/db/socialgraph/tx/commit"
-echo "4. MongoDB: mongosh $MONGO_URI --eval 'db.posts.countDocuments()'"
-echo "5. Elasticsearch: curl -X GET $ES_URL/_cat/indices?v"
+echo "4. MongoDB: mongosh \$MONGO_URI --eval 'db.posts.countDocuments()'"
+echo "5. Elasticsearch: curl -X GET \$ES_URL/_cat/indices?v"
 
 # ---------------------------
 # 10. YEDEKLEME CRON JOB
 # ---------------------------
-(crontab -l 2>/dev/null; echo "0 3 * * * $INSTALL_DIR/backup.sh") | crontab 
+(crontab -l 2>/dev/null; echo "0 3 * * * $INSTALL_DIR/backup.sh") | crontab
