@@ -1,6 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes';
+import authRoutes from './routes/authRoutes';
+import postRoutes from './routes/postRoutes';
+import followRoutes from './routes/followRoutes';
+import { requestLogger } from './middleware';
 
 // Ortam değişkenlerini yükle
 dotenv.config();
@@ -10,6 +14,7 @@ const app = express();
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(requestLogger);
 
 // CORS ayarları (geliştirme için)
 app.use((req, res, next) => {
@@ -30,16 +35,63 @@ app.get('/', (req, res) => {
     message: 'ShareUpTime Backend API Çalışıyor!',
     version: '1.0.0',
     endpoints: {
-      users: '/api/users',
-      auth: '/api/auth',
-      posts: '/api/posts',
-      follows: '/api/follows'
-    }
+      users: {
+        base: '/api/users',
+        endpoints: [
+          'POST /register - Kullanıcı kayıt',
+          'GET /search - Kullanıcı arama',
+          'GET /:userId - Kullanıcı profili görüntüleme',
+          'PUT /:userId - Kullanıcı profili güncelleme (korumalı)'
+        ]
+      },
+      auth: {
+        base: '/api/auth',
+        endpoints: [
+          'POST /login - Kullanıcı girişi',
+          'GET /verify - Token doğrulama (korumalı)',
+          'POST /change-password - Şifre değiştirme (korumalı)',
+          'POST /request-password-reset - Şifre sıfırlama talebi'
+        ]
+      },
+      posts: {
+        base: '/api/posts',
+        endpoints: [
+          'POST / - Gönderi oluştur (korumalı)',
+          'GET / - Gönderileri listele',
+          'GET /:postId - Belirli gönderiyi getir',
+          'GET /user/:userId - Kullanıcının gönderilerini getir',
+          'PUT /:postId - Gönderi güncelle (korumalı)',
+          'DELETE /:postId - Gönderi sil (korumalı)'
+        ]
+      },
+      follows: {
+        base: '/api/follows',
+        endpoints: [
+          'POST /:userId - Kullanıcıyı takip et (korumalı)',
+          'DELETE /:userId - Kullanıcıyı takipten çık (korumalı)',
+          'GET /:userId/followers - Takipçileri listele',
+          'GET /:userId/following - Takip edilenleri listele',
+          'GET /:userId/status - Takip durumunu kontrol et (korumalı)',
+          'GET /:userId/mutual - Ortak takip edilenleri getir (korumalı)'
+        ]
+      }
+    },
+    features: [
+      'JWT Kimlik Doğrulama',
+      'Rate Limiting',
+      'Input Validation & Sanitization',
+      'Mongoose ODM',
+      'Request Logging',
+      'Error Handling'
+    ]
   });
 });
 
 // API rotaları
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/follows', followRoutes);
 
 // 404 handler
 app.use((req, res) => {

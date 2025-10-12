@@ -102,9 +102,16 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
   try {
     const { userId } = req.params;
     const updateData: UpdateUserRequest = req.body;
+    const authenticatedUserId = (req as any).userId; // Middleware'den gelen kullanıcı ID'si
 
     if (!userId) {
       res.status(400).json(createResponse(false, 'Kullanıcı ID gereklidir'));
+      return;
+    }
+
+    // Kullanıcı sadece kendi profilini güncelleyebilir
+    if (userId !== authenticatedUserId) {
+      res.status(403).json(createResponse(false, 'Sadece kendi profilinizi güncelleyebilirsiniz'));
       return;
     }
 
