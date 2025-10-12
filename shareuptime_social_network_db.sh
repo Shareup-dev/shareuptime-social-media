@@ -56,9 +56,9 @@ redis-cli CONFIG SET maxmemory-policy allkeys-lru
 # ---------------------------
 # 4. NEO4J (Arkadaşlık Grafiği)
 # ---------------------------
-wget https://neo4j.com/artifact.php?name=neo4j-community-5.12.0-unix.tar.gz
-tar -xf neo4j-community-5.12.0-unix.tar.gz
-mv neo4j-community-5.12.0 $INSTALL_DIR/neo4j
+wget -q https://neo4j.com/artifact.php?name=neo4j-community-5.12.0-unix.tar.gz -O /tmp/neo4j-community.tar.gz
+tar -xf /tmp/neo4j-community.tar.gz -C $INSTALL_DIR
+mv $INSTALL_DIR/neo4j-community-5.12.0 $INSTALL_DIR/neo4j
 
 # Neo4j ayarları
 cat > $INSTALL_DIR/neo4j/conf/neo4j.conf <<EOF
@@ -100,9 +100,9 @@ EOF
 # ---------------------------
 # 6. ELASTICSEARCH (Arama)
 # ---------------------------
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.9.0-linux-x86_64.tar.gz
-tar -xzf elasticsearch-8.9.0-linux-x86_64.tar.gz
-mv elasticsearch-8.9.0 $INSTALL_DIR/elasticsearch
+wget -q https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.9.0-linux-x86_64.tar.gz -O /tmp/elasticsearch.tar.gz
+tar -xzf /tmp/elasticsearch.tar.gz -C $INSTALL_DIR
+mv $INSTALL_DIR/elasticsearch-8.9.0 $INSTALL_DIR/elasticsearch
 
 # Sosyal arama için ayarlar
 cat > $INSTALL_DIR/elasticsearch/config/elasticsearch.yml <<EOF
