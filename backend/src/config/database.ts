@@ -22,15 +22,13 @@ pgPool.on('error', (err) => {
 
 // MongoDB
 export const connectMongo = async () => {
-	try {
-		await mongoose.connect(process.env.MONGO_URI as string);
-		console.log('MongoDB bağlantısı başarılı');
-	} catch (err) {
-		console.error('MongoDB bağlantı hatası:', err);
-	}
-};
-
-// Redis
+  try {
+    await mongoose.connect(process.env.MONGO_URI as string);
+    console.log('MongoDB bağlantısı başarılı');
+  } catch (err) {
+    console.warn('MongoDB bağlantısı başarısız, devam ediliyor:', err instanceof Error ? err.message : err);
+  }
+};// Redis
 export const redisClient = createRedisClient({
 	url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
 });
@@ -41,13 +39,14 @@ redisClient.on('error', (err) => {
 
 // Neo4j
 export const neo4jDriver = neo4j.driver(
-	process.env.NEO4J_URI as string,
-	neo4j.auth.basic(
-		process.env.NEO4J_USER as string,
-		process.env.NEO4J_PASSWORD as string
-	)
+  process.env.NEO4J_URI as string,
+  neo4j.auth.basic(
+    process.env.NEO4J_USER as string,
+    process.env.NEO4J_PASSWORD as string
+  )
 );
 
+// Neo4j bağlantısını opsiyonel olarak test et
 neo4jDriver.verifyConnectivity()
-	.then(() => console.log('Neo4j bağlantısı başarılı'))
-	.catch((err) => console.error('Neo4j bağlantı hatası:', err));
+  .then(() => console.log('Neo4j bağlantısı başarılı'))
+  .catch((err) => console.warn('Neo4j bağlantısı başarısız, devam ediliyor:', err.message));
