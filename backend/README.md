@@ -172,7 +172,78 @@ curl -X POST http://localhost:4000/api/users/register \
 
 MIT License - detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
-## 👥 Katkıda Bulunma
+## � Detaylı Dokümantasyon
+
+Bu proje kapsamlı dokümantasyona sahiptir:
+
+- **[API Dokümantasyonu](./API_DOCUMENTATION.md)** - Tüm endpoint'ler, request/response formatları ve örnekler
+- **[Veritabanı Şemaları](./DATABASE_SCHEMA.md)** - MongoDB, PostgreSQL, Redis ve Neo4J veri modelleri
+- **[Deployment Rehberi](./DEPLOYMENT.md)** - Production deployment, güvenlik ve monitoring
+- **[Environment Setup](./.env.example)** - Tüm environment değişkenleri
+
+## 🛠️ Frontend Geliştirme İçin
+
+Frontend geliştiriciler için hazır API:
+
+### Temel URL
+```
+Development: http://localhost:4000/api
+Production: https://api.shareuptime.com/api
+```
+
+### Kimlik Doğrulama
+```javascript
+headers: {
+  'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
+  'Content-Type': 'application/json'
+}
+```
+
+### Örnek Kullanım
+```javascript
+// Kullanıcı kaydı
+const response = await fetch('/api/users/register', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: 'kullaniciadi',
+    email: 'email@ornek.com',
+    password: '123456',
+    fullName: 'Tam Ad'
+  })
+});
+
+// Gönderileri getir
+const posts = await fetch('/api/posts?page=1&limit=10');
+const data = await posts.json();
+```
+
+Daha fazla örnek için [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) dosyasına bakın.
+
+## 🎯 Özellik Roadmap
+
+### ✅ Tamamlanan Özellikler
+- Kullanıcı kayıt/giriş sistemi
+- JWT kimlik doğrulama
+- Post CRUD işlemleri
+- Takip sistemi
+- Rate limiting ve güvenlik
+- Multi-database desteği
+
+### 🚧 Geliştirme Aşamasında
+- Real-time bildirimler (WebSocket)
+- Medya dosya yükleme sistemi
+- Gelişmiş arama ve filtreleme
+- Analytics dashboard
+
+### 📋 Planlanan Özellikler
+- Direct messaging
+- Story özelliği
+- Live streaming
+- Mobile push notifications
+- Advanced moderation tools
+
+## �👥 Katkıda Bulunma
 
 1. Fork yapın
 2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
@@ -180,8 +251,23 @@ MIT License - detaylar için [LICENSE](LICENSE) dosyasına bakın.
 4. Branch'i push edin (`git push origin feature/AmazingFeature`)
 5. Pull Request açın
 
-## 📞 İletişim
+### Geliştirme Kuralları
+- TypeScript kullanın
+- ESLint kurallarına uyun
+- Unit testler yazın
+- API dokümantasyonunu güncelleyin
+- Commit mesajlarında Türkçe veya İngilizce kullanın
+
+## 📞 İletişim ve Destek
 
 **Shareup-dev** - [GitHub](https://github.com/Shareup-dev)
 
 Proje Linki: [https://github.com/Shareup-dev/shareuptime-social-media](https://github.com/Shareup-dev/shareuptime-social-media)
+
+### Hızlı Başlangıç Desteği
+- 🚨 **Acil Sorunlar:** GitHub Issues açın
+- 💬 **Genel Sorular:** Discussions bölümünü kullanın
+- 📧 **İş Birliği:** Email ile iletişime geçin
+- 📱 **Frontend Entegrasyonu:** API dokümantasyonunu inceleyin
+
+**Frontend geliştirme için hazır! 🎉**
