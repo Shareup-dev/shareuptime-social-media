@@ -25,12 +25,14 @@ interface IUser {
 ```
 
 **Indexler:**
+
 - `username` (unique)
 - `email` (unique)
 - `createdAt` (-1)
 
 **Validation:**
-- `username`: 3-30 karakter, alfanumerik ve _ 
+
+- `username`: 3-30 karakter, alfanumerik ve _
 - `email`: Geçerli e-posta formatı
 - `password`: Minimum 6 karakter (hash'lenmeden önce)
 - `fullName`: 2-100 karakter

@@ -68,8 +68,8 @@ export interface Follow {
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
-  data?: T;
-  error?: string;
+  data?: T | undefined;
+  error?: string | undefined;
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {

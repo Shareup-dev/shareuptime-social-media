@@ -33,14 +33,14 @@ export const verifyToken = (token: string): { userId: string } | null => {
 export const createResponse = <T>(
   success: boolean,
   message: string,
-  data?: T,
-  error?: string
+  data?: T | undefined,
+  error?: string | undefined
 ): ApiResponse<T> => {
   return {
     success,
     message,
-    data,
-    error
+    data: data as T | undefined,
+    error: error as string | undefined
   };
 };
 
