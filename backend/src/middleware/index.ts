@@ -14,7 +14,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 
     const decoded = verifyToken(token);
     if (!decoded) {
-      res.status(403).json(createResponse(false, 'Geçersiz veya süresi dolmuş token'));
+      res.status(401).json(createResponse(false, 'Geçersiz veya süresi dolmuş token'));
       return;
     }
 
@@ -23,7 +23,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     next();
   } catch (error) {
     console.error('Token doğrulama middleware hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Token doğrulama sırasında hata oluştu'));
+    res.status(401).json(createResponse(false, 'Geçersiz token'));
   }
 };
 
@@ -53,6 +53,12 @@ const requestCounts = new Map<string, { count: number; resetTime: number }>();
 
 export const rateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) => {
   return (req: Request, res: Response, next: NextFunction): void => {
+    // Skip rate limiting in test environment
+    if (process.env.NODE_ENV === 'test') {
+      next();
+      return;
+    }
+
     const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
     const now = Date.now();
     

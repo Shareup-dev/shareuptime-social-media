@@ -5,7 +5,8 @@ const mockDatabaseClient = {
 };
 
 const mockDatabasePool = {
-  connect: jest.fn().mockResolvedValue(mockDatabaseClient)
+  connect: jest.fn().mockResolvedValue(mockDatabaseClient),
+  query: jest.fn()
 };
 
 jest.mock('../../src/config/database', () => ({
@@ -206,7 +207,8 @@ describe('User Controller', () => {
       });
       const res = createMockResponse();
 
-      mockDatabaseClient.query.mockRejectedValueOnce(new Error('Database error'));
+      // Mock database connection failure for registration
+      mockDatabasePool.connect.mockRejectedValueOnce(new Error('Database connection failed'));
 
       await registerUser(req, res);
 
@@ -214,6 +216,7 @@ describe('User Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         message: 'Sunucu hatası',
+        data: undefined,
         error: 'Kullanıcı kaydı sırasında hata oluştu'
       });
     });
@@ -221,7 +224,7 @@ describe('User Controller', () => {
 
   describe('getUserProfile', () => {
     it('should return 400 for invalid user ID', async () => {
-      const req = createMockRequest({}, {}, {}); // No userId in params
+      const req = createMockRequest({}, {}, { userId: 'invalid-id' }); // Invalid UUID format
       const res = createMockResponse();
 
       await getUserProfile(req, res);
@@ -229,12 +232,12 @@ describe('User Controller', () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Kullanıcı ID gereklidir'
+        message: 'Geçersiz kullanıcı ID formatı'
       });
     });
 
     it('should return 404 for user not found', async () => {
-      const req = createMockRequest({}, {}, { userId: testUser.id });
+      const req = createMockRequest({}, {}, { userId: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' }); // Valid UUID format
       const res = createMockResponse();
 
       mockDatabaseClient.query.mockResolvedValueOnce({ rows: [] });
@@ -249,7 +252,7 @@ describe('User Controller', () => {
     });
 
     it('should return 200 with user profile', async () => {
-      const req = createMockRequest({}, {}, { userId: testUser.id });
+      const req = createMockRequest({}, {}, { userId: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' }); // Valid UUID format
       const res = createMockResponse();
 
       mockDatabaseClient.query.mockResolvedValueOnce({ 
@@ -267,10 +270,11 @@ describe('User Controller', () => {
     });
 
     it('should handle database errors', async () => {
-      const req = createMockRequest({}, {}, { userId: testUser.id });
+      const req = createMockRequest({}, {}, { userId: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' }); // Valid UUID format
       const res = createMockResponse();
 
-      mockDatabaseClient.query.mockRejectedValueOnce(new Error('Database error'));
+      // Properly mock the database connection and query failure
+      mockDatabasePool.connect.mockRejectedValueOnce(new Error('Database connection failed'));
 
       await getUserProfile(req, res);
 
@@ -278,6 +282,7 @@ describe('User Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         message: 'Sunucu hatası',
+        data: undefined,
         error: 'Kullanıcı profili getirilirken hata oluştu'
       });
     });

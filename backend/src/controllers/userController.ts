@@ -92,6 +92,13 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
       return;
     }
 
+    // UUID format validation
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(userId)) {
+      res.status(400).json(createResponse(false, 'Geçersiz kullanıcı ID formatı'));
+      return;
+    }
+
     const client = await pgPool.connect();
     try {
       const userQuery = `

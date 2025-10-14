@@ -93,7 +93,9 @@ describe('Auth Controller', () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Invalid email format'
+        message: 'Geçersiz email formatı',
+        data: undefined,
+        error: undefined
       });
     });
 
@@ -188,7 +190,8 @@ describe('Auth Controller', () => {
       });
       const res = createMockResponse();
 
-      mockDatabaseClient.query.mockRejectedValueOnce(new Error('Database error'));
+      // Mock database connection failure
+      mockDatabasePool.connect.mockRejectedValueOnce(new Error('Database connection failed'));
 
       await loginUser(req, res);
 
@@ -196,6 +199,7 @@ describe('Auth Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         message: 'Sunucu hatası',
+        data: undefined,
         error: 'Giriş sırasında hata oluştu'
       });
     });
@@ -249,6 +253,12 @@ describe('Auth Controller', () => {
       const req = createMockRequest({}, { authorization: 'Bearer valid-token' });
       const res = createMockResponse();
 
+      // Mock the userId that would be set by auth middleware
+      (req as any).userId = testUser.id;
+
+      // Mock successful JWT verification
+      (mockJwt.verify as jest.Mock).mockReturnValueOnce({ userId: testUser.id });
+
       mockDatabaseClient.query.mockResolvedValueOnce({ 
         rows: [{ 
           id: testUser.id, 
@@ -256,8 +266,6 @@ describe('Auth Controller', () => {
           email: testUser.email 
         }] 
       });
-
-      (mockJwt.verify as jest.Mock).mockReturnValueOnce({ userId: testUser.id });
 
       await verifyTokenEndpoint(req, res);
 

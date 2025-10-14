@@ -28,6 +28,7 @@
   ],
   "author": "Shareup-dev",
   "license": "MIT",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/Shareup-dev/shareuptime-social-media.git"
