@@ -33,14 +33,19 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
+    "@types/multer": "^2.0.0",
+    "@types/socket.io": "^3.0.2",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
+    "multer": "^2.0.2",
     "neo4j-driver": "^6.0.0",
     "pg": "^8.16.3",
-    "redis": "^5.8.3"
+    "redis": "^5.8.3",
+    "sharp": "^0.34.4",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

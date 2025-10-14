@@ -124,18 +124,8 @@ const startServer = async () => {
 
   // Veritabanı bağlantılarını asenkron olarak yap
   try {
-    const { connectMongo, redisClient } = await import('./config/database');
-    
-    // MongoDB bağlantısı
-    await connectMongo();
-    
-    // Redis bağlantısı  
-    try {
-      await redisClient.connect();
-      console.log('Redis bağlantısı başarılı');
-    } catch (redisError) {
-      console.warn('Redis bağlantısı başarısız, cache özelliği kullanılamayacak');
-    }
+    const { initializeDatabase } = await import('./config/database');
+    await initializeDatabase();
   } catch (dbError) {
     console.warn('Veritabanı modülü yüklenemedi, temel API özellikleri çalışacak');
   }

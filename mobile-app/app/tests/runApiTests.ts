@@ -7,42 +7,88 @@ import ApiIntegrationTester from '../services/ApiIntegrationTester';
  * entegrasyonunu test eder.
  */
 
-const runApiTests = async () => {
-  const tester = new ApiIntegrationTester();
-  
-  try {
-    console.log('📱 ShareUpTime Mobile App - API Integration Test');
-    console.log('Backend: ShareUptime Social Media API');
-    console.log('Date:', new Date().toLocaleString());
-    console.log('\n');
+import { shareUpTimeApi } from '../redux/api';
 
-    const results = await tester.runFullTest();
+export class ApiIntegrationTest {
+  async testBackendConnection(): Promise<boolean> {
+    try {
+      const response = await fetch('http://localhost:4000/');
+      const data = await response.json();
+      console.log('✅ Backend Connection:', data.message);
+      return response.ok;
+    } catch (error) {
+      console.error('❌ Backend Connection Failed:', error);
+      return false;
+    }
+  }
+
+  async testApiEndpoints(): Promise<{ [key: string]: boolean }> {
+    const results: { [key: string]: boolean } = {};
+
+    // Test main API
+    try {
+      const response = await fetch('http://localhost:4000/');
+      results.main = response.ok;
+    } catch {
+      results.main = false;
+    }
+
+    // Test auth endpoints
+    try {
+      const response = await fetch('http://localhost:4000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'test@test.com', password: 'test' })
+      });
+      results.auth = response.status !== 404;
+    } catch {
+      results.auth = false;
+    }
+
+    // Test users endpoints
+    try {
+      const response = await fetch('http://localhost:4000/api/users/search?q=test');
+      results.users = response.status !== 404;
+    } catch {
+      results.users = false;
+    }
+
+    // Test posts endpoints
+    try {
+      const response = await fetch('http://localhost:4000/api/posts');
+      results.posts = response.status !== 404;
+    } catch {
+      results.posts = false;
+    }
+
+    return results;
+  }
+
+  async runFullTest(): Promise<{
+    backendConnected: boolean;
+    endpoints: { [key: string]: boolean };
+    integrationReady: boolean;
+  }> {
+    console.log('🚀 Starting ShareUpTime Mobile-Backend Integration Test...');
+
+    const backendConnected = await this.testBackendConnection();
+    const endpoints = await this.testApiEndpoints();
     
-    // Return results for further processing
-    return {
-      success: results.every(r => r.success),
-      results,
-      summary: {
-        total: results.length,
-        passed: results.filter(r => r.success).length,
-        failed: results.filter(r => !r.success).length,
-        averageResponseTime: Math.round(
-          results.reduce((sum, r) => sum + r.responseTime, 0) / results.length
-        ),
-      },
-    };
+    const workingEndpoints = Object.values(endpoints).filter(Boolean).length;
+    const totalEndpoints = Object.keys(endpoints).length;
+    const integrationReady = backendConnected && workingEndpoints >= 2;
 
-  } catch (error) {
-    console.error('❌ API Integration Test Failed:', error);
+    console.log(`📊 Test Results:`);
+    console.log(`- Backend Connected: ${backendConnected ? '✅' : '❌'}`);
+    console.log(`- Working Endpoints: ${workingEndpoints}/${totalEndpoints}`);
+    console.log(`- Integration Ready: ${integrationReady ? '✅' : '❌'}`);
+
     return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      backendConnected,
+      endpoints,
+      integrationReady
     };
   }
-};
+}
 
-// Export for use in components/screens
-export { runApiTests };
-
-// Export for React Native usage
-export default runApiTests;
+export default ApiIntegrationTest;

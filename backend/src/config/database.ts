@@ -2,51 +2,87 @@
 import { Pool } from 'pg';
 import mongoose from 'mongoose';
 import { createClient as createRedisClient } from 'redis';
-import neo4j from 'neo4j-driver';
-
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-// PostgreSQL
+// PostgreSQL - Ana veritabanı
 export const pgPool = new Pool({
-	host: process.env.POSTGRES_HOST,
-	port: Number(process.env.POSTGRES_PORT),
-	database: process.env.POSTGRES_DB,
-	user: process.env.POSTGRES_USER,
-	password: process.env.POSTGRES_PASSWORD,
+	host: process.env.POSTGRES_HOST || 'localhost',
+	port: Number(process.env.POSTGRES_PORT) || 5432,
+	database: process.env.POSTGRES_DB || 'shareuptime_db',
+	user: process.env.POSTGRES_USER || 'postgres',
+	password: process.env.POSTGRES_PASSWORD || 'password',
+	max: 20,
+	idleTimeoutMillis: 30000,
+	connectionTimeoutMillis: 2000,
 });
 
 pgPool.on('error', (err) => {
 	console.error('PostgreSQL pool error:', err);
 });
 
-// MongoDB
+pgPool.on('connect', () => {
+	console.log('PostgreSQL bağlantısı başarılı');
+});
+
+// PostgreSQL bağlantısını test et
+export const testPostgreSQLConnection = async () => {
+  try {
+    const client = await pgPool.connect();
+    const result = await client.query('SELECT NOW()');
+    client.release();
+    console.log('PostgreSQL bağlantı testi başarılı:', result.rows[0].now);
+    return true;
+  } catch (err) {
+    console.warn('PostgreSQL bağlantısı başarısız:', err instanceof Error ? err.message : err);
+    return false;
+  }
+};
+
+// MongoDB - Yedek/alternatif
 export const connectMongo = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI as string);
-    console.log('MongoDB bağlantısı başarılı');
+    if (process.env.MONGO_URI) {
+      await mongoose.connect(process.env.MONGO_URI as string);
+      console.log('MongoDB bağlantısı başarılı');
+    }
   } catch (err) {
     console.warn('MongoDB bağlantısı başarısız, devam ediliyor:', err instanceof Error ? err.message : err);
   }
-};// Redis
-export const redisClient = createRedisClient({
-	url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
-});
+};
 
-redisClient.on('error', (err) => {
-	console.error('Redis bağlantı hatası:', err);
-});
+// Redis - Cache (disabled for development)
+export const redisClient = {
+  isOpen: false,
+  connect: async () => { console.log('Redis disabled for development'); },
+  on: () => {},
+  quit: async () => {},
+};
 
-// Neo4j
-export const neo4jDriver = neo4j.driver(
-  process.env.NEO4J_URI as string,
-  neo4j.auth.basic(
-    process.env.NEO4J_USER as string,
-    process.env.NEO4J_PASSWORD as string
-  )
-);
+// ShareUpTime için özel database initialization
+export const initializeDatabase = async () => {
+  console.log('🔄 ShareUpTime Database başlatılıyor...');
+  
+  // PostgreSQL öncelikli bağlantı
+  const pgConnected = await testPostgreSQLConnection();
+  
+  if (pgConnected) {
+    console.log('✅ PostgreSQL aktif - Ana veritabanı olarak kullanılacak');
+  } else {
+    console.log('⚠️ PostgreSQL bağlantısı yok - MongoDB geçiliyor');
+    await connectMongo();
+  }
 
-// Neo4j bağlantısını opsiyonel olarak test et
-neo4jDriver.verifyConnectivity()
-  .then(() => console.log('Neo4j bağlantısı başarılı'))
-  .catch((err) => console.warn('Neo4j bağlantısı başarısız, devam ediliyor:', err.message));
+  // Redis cache
+  try {
+    if (!redisClient.isOpen) {
+      await redisClient.connect();
+    }
+  } catch (redisError) {
+    console.warn('⚠️ Redis bağlantısı başarısız, cache özelliği kullanılamayacak');
+    // Redis retry disabled to prevent spam
+  }
+  
+  console.log('🚀 Database initialization tamamlandı');
+};
