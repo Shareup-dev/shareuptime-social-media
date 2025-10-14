@@ -33,7 +33,8 @@
       "@/routes/*": ["routes/*"],
       "@/middleware/*": ["middleware/*"],
       "@/config/*": ["config/*"]
-    }
+    },
+    "types": ["jest"]
   },
   "include": [
     "src/**/*"

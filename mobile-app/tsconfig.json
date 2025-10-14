@@ -1,54 +1,17 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": [
-      "ES2020",
-      "DOM"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "module": "commonjs",
     "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "app/*"
-      ],
-      "@/components/*": [
-        "app/components/*"
-      ],
-      "@/screens/*": [
-        "app/screens/*"
-      ]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "node_modules/@types"
-    ],
-    "types": [
-      "react-native",
-      "jest"
-    ]
+    "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "app/**/*",
-    "App.tsx",
-    "index.js"
-  ],
-  "exclude": [
-    "node_modules",
-    "android",
-    "ios",
-    "__tests__"
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "typeRoots": [
+    "./node_modules/@types",
+    "node_modules/@types"
   ]
 }
