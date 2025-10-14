@@ -1,4 +1,4 @@
-# 🚀 ShareUpTime Social Media Platform# shareuptime-social-media
+# 🚀 ShareUpTime Social Media Platform
 
 ## 📱 Complete Full-Stack Social Media Solution
 
@@ -6,7 +6,7 @@ ShareUpTime is a comprehensive social media platform with both **backend API** a
 
 ### 🏗️ Project Structure
 
-```
+```bash
 shareuptime-social-media/
 ├── backend/                 # 🖥️ Node.js TypeScript API Server
 │   ├── src/
@@ -36,8 +36,10 @@ shareuptime-social-media/
 
 ## 🛠️ Technology Stack
 
+
 ### Backend
 - **Runtime**: Node.js with TypeScript
+
 - **Framework**: Express.js
 - **Database**: PostgreSQL
 - **ORM**: Sequelize
@@ -47,8 +49,10 @@ shareuptime-social-media/
 - **Cache**: Redis support
 - **API Documentation**: Comprehensive REST API
 
+
 ### Mobile App
 - **Framework**: React Native 0.74.5
+
 - **Language**: TypeScript
 - **State Management**: Redux Toolkit with RTK Query
 - **Navigation**: React Navigation v6
@@ -148,8 +152,8 @@ npx react-native run-android
 ## 📧 Contact
 
 - **Developer**: ShareUpTime Team
-- **Email**: shareuptimex@gmail.com
-- **Repository**: https://github.com/Shareup-dev/shareuptime-social-media
+- **Email**: `shareuptimex@gmail.com`
+- **Repository**: `https://github.com/Shareup-dev/shareuptime-social-media`
 
 ## 📄 License
 
