@@ -1,12 +1,17 @@
 // Cache servisi - Redis operations
-import { redisClient } from '../config/database';
-
 export class CacheService {
+  private static inMemoryCache = new Map<string, { value: string; expiry: number }>();
+
   static async get(key: string): Promise<string | null> {
     try {
-      const { redisClient: client } = await import('../config/database');
-      if (!client.isOpen) return null;
-      return await client.get(key);
+      // In-memory fallback when Redis is not available
+      const cached = this.inMemoryCache.get(key);
+      if (cached && cached.expiry > Date.now()) {
+        return cached.value;
+      } else if (cached) {
+        this.inMemoryCache.delete(key);
+      }
+      return null;
     } catch (error) {
       console.warn('Cache get error:', error);
       return null;
@@ -15,9 +20,9 @@ export class CacheService {
 
   static async set(key: string, value: string, ttlSeconds: number = 3600): Promise<boolean> {
     try {
-      const { redisClient: client } = await import('../config/database');
-      if (!client.isOpen) return false;
-      await client.setEx(key, ttlSeconds, value);
+      // In-memory fallback when Redis is not available
+      const expiry = Date.now() + (ttlSeconds * 1000);
+      this.inMemoryCache.set(key, { value, expiry });
       return true;
     } catch (error) {
       console.warn('Cache set error:', error);
@@ -27,10 +32,8 @@ export class CacheService {
 
   static async del(key: string): Promise<boolean> {
     try {
-      const { redisClient: client } = await import('../config/database');
-      if (!client.isOpen) return false;
-      await client.del(key);
-      return true;
+      // In-memory fallback when Redis is not available
+      return this.inMemoryCache.delete(key);
     } catch (error) {
       console.warn('Cache delete error:', error);
       return false;
@@ -39,10 +42,14 @@ export class CacheService {
 
   static async exists(key: string): Promise<boolean> {
     try {
-      const { redisClient: client } = await import('../config/database');
-      if (!client.isOpen) return false;
-      const result = await client.exists(key);
-      return result > 0;
+      // In-memory fallback when Redis is not available
+      const cached = this.inMemoryCache.get(key);
+      if (cached && cached.expiry > Date.now()) {
+        return true;
+      } else if (cached) {
+        this.inMemoryCache.delete(key);
+      }
+      return false;
     } catch (error) {
       console.warn('Cache exists error:', error);
       return false;

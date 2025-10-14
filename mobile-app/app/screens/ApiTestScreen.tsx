@@ -8,7 +8,7 @@ import {
   Alert,
   SafeAreaView,
 } from 'react-native';
-import { runApiTests } from '../tests/runApiTests';
+import runApiTests from '../tests/runApiTests';
 import colors from '../config/colors';
 
 interface TestResult {
@@ -38,21 +38,35 @@ const ApiTestScreen: React.FC = () => {
     setSummary(null);
 
     try {
-      const testResult = await runApiTests();
-      
-      if (testResult.success && testResult.results) {
-        setResults(testResult.results);
-        setSummary(testResult.summary);
-        setLastRunTime(new Date().toLocaleString());
+      const tester = new runApiTests();
+      const testResult = await tester.runFullTest();
+
+      if (testResult.backendConnected && testResult.integrationReady) {
+        // Convert endpoints object to TestResult array
+        const results = Object.entries(testResult.endpoints).map(([endpoint, success]) => ({
+          endpoint,
+          method: 'GET',
+          success,
+          response: success ? 'OK' : 'Failed',
+          responseTime: 0,
+        }));
         
+        setResults(results);
+        setSummary({
+          total: results.length,
+          passed: results.filter(r => r.success).length,
+          failed: results.filter(r => !r.success).length,
+          averageResponseTime: 0,
+        });
+
         Alert.alert(
-          '✅ Tests Complete',
-          `${testResult.summary.passed}/${testResult.summary.total} endpoints passed`
+          'Test Completed',
+          `${results.filter(r => r.success).length}/${results.length} endpoints passed`
         );
       } else {
         Alert.alert(
-          '❌ Tests Failed',
-          testResult.error || 'API integration tests failed'
+          'Tests Failed',
+          testResult.backendConnected ? 'Integration not ready' : 'Backend connection failed'
         );
       }
     } catch (error) {

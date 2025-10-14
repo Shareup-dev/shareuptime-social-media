@@ -1,6 +1,11 @@
-import { Server as SocketIOServer } from 'socket.io';
+import { Server as SocketIOServer, Socket } from 'socket.io';
 import { Server as HttpServer } from 'http';
 import jwt from 'jsonwebtoken';
+
+// Extend Socket interface to include userId
+interface AuthenticatedSocket extends Socket {
+  userId: string;
+}
 
 export class ShareUpTimeWebSocket {
   private io: SocketIOServer;
@@ -20,7 +25,7 @@ export class ShareUpTimeWebSocket {
 
   private setupMiddleware() {
     // Authentication middleware
-    this.io.use((socket, next) => {
+    this.io.use((socket: Socket, next) => {
       const token = socket.handshake.auth.token;
       
       if (!token) {
@@ -29,7 +34,7 @@ export class ShareUpTimeWebSocket {
 
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'shareuptime-secret') as any;
-        socket.userId = decoded.userId;
+        (socket as AuthenticatedSocket).userId = decoded.userId;
         next();
       } catch (err) {
         next(new Error('Authentication error'));
@@ -38,30 +43,31 @@ export class ShareUpTimeWebSocket {
   }
 
   private setupEventHandlers() {
-    this.io.on('connection', (socket) => {
-      console.log(`User ${socket.userId} connected: ${socket.id}`);
+    this.io.on('connection', (socket: Socket) => {
+      const authSocket = socket as AuthenticatedSocket;
+      console.log(`User ${authSocket.userId} connected: ${socket.id}`);
       
       // Store user connection
-      this.connectedUsers.set(socket.userId, socket.id);
+      this.connectedUsers.set(authSocket.userId, socket.id);
 
       // Join user to their personal room
-      socket.join(`user_${socket.userId}`);
+      socket.join(`user_${authSocket.userId}`);
 
       // Handle real-time events
-      this.handleMessaging(socket);
-      this.handleNotifications(socket);
-      this.handlePostUpdates(socket);
-      this.handleUserActivity(socket);
+      this.handleMessaging(authSocket);
+      this.handleNotifications(authSocket);
+      this.handlePostUpdates(authSocket);
+      this.handleUserActivity(authSocket);
 
       // Handle disconnection
       socket.on('disconnect', () => {
-        console.log(`User ${socket.userId} disconnected: ${socket.id}`);
-        this.connectedUsers.delete(socket.userId);
+        console.log(`User ${authSocket.userId} disconnected: ${socket.id}`);
+        this.connectedUsers.delete(authSocket.userId);
       });
     });
   }
 
-  private handleMessaging(socket: any) {
+  private handleMessaging(socket: AuthenticatedSocket) {
     // Join conversation rooms
     socket.on('join_conversation', (conversationId: string) => {
       socket.join(`conversation_${conversationId}`);
@@ -106,7 +112,7 @@ export class ShareUpTimeWebSocket {
     });
   }
 
-  private handleNotifications(socket: any) {
+  private handleNotifications(socket: AuthenticatedSocket) {
     // User activity notifications
     socket.on('user_online', () => {
       socket.broadcast.emit('user_status_change', {
@@ -117,7 +123,7 @@ export class ShareUpTimeWebSocket {
     });
   }
 
-  private handlePostUpdates(socket: any) {
+  private handlePostUpdates(socket: AuthenticatedSocket) {
     // Like notifications
     socket.on('post_liked', (data: { postId: string; postOwnerId: string }) => {
       this.io.to(`user_${data.postOwnerId}`).emit('post_interaction', {
@@ -140,7 +146,7 @@ export class ShareUpTimeWebSocket {
     });
   }
 
-  private handleUserActivity(socket: any) {
+  private handleUserActivity(socket: AuthenticatedSocket) {
     // Follow notifications
     socket.on('user_followed', (followedUserId: string) => {
       this.io.to(`user_${followedUserId}`).emit('new_follower', {

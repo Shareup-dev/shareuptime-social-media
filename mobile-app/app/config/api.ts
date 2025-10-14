@@ -90,6 +90,5 @@ const apiConfig: ApiConfig = {
   },
 };
 
-export default apiConfig;
-
+export { apiConfig };
 export default apiConfig;

@@ -1,4 +1,4 @@
-import { launchImageLibrary, launchCamera, ImagePickerResponse, MediaType } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera, ImagePickerResponse, MediaType, PhotoQuality } from 'react-native-image-picker';
 import { Platform, PermissionsAndroid, Alert } from 'react-native';
 
 export interface MediaFile {
@@ -10,7 +10,7 @@ export interface MediaFile {
 
 export interface MediaPickerOptions {
   mediaType: 'photo' | 'video' | 'mixed';
-  quality: number;
+  quality: PhotoQuality;
   maxWidth?: number;
   maxHeight?: number;
   includeBase64?: boolean;

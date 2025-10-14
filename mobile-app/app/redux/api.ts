@@ -1,5 +1,23 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { RootState } from './store';
+
+// Types for authentication state
+interface LoggedInUserState {
+  payload?: {
+    token?: string;
+    user?: any;
+  };
+  token?: string;
+  access_token?: string;
+  user?: any;
+  id?: string;
+  email?: string;
+  username?: string;
+}
+
+interface RootState {
+  loggedInUser: LoggedInUserState;
+  [key: string]: any;
+}
 
 // ShareUpTime Backend API base URL
 const API_BASE_URL = 'http://localhost:4000/api';
@@ -8,7 +26,14 @@ const API_BASE_URL = 'http://localhost:4000/api';
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).loggedInUser.token; // Adjust based on your auth token
+    const state = getState() as RootState;
+    const loggedInUser = state.loggedInUser;
+    
+    // Handle different token structures
+    const token = loggedInUser?.payload?.token || 
+                  loggedInUser?.token || 
+                  loggedInUser?.access_token;
+    
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
