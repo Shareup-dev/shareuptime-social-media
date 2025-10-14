@@ -8,18 +8,24 @@ Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScrip
 - ✅ **Kimlik Doğrulama**: JWT tabanlı güvenli kimlik doğrulama
 - ✅ **Gönderi Sistemi**: CRUD işlemleri, medya desteği
 - ✅ **Takip Sistemi**: Kullanıcı takip/çıkma, takipçi listeleri
+- ✅ **Real-time Mesajlaşma**: WebSocket ile anlık mesajlaşma
+- ✅ **File Upload**: Medya yükleme ve işleme (profil, gönderi)
 - ✅ **Rate Limiting**: API güvenliği ve kaynak korunması
+- ✅ **Performance Monitoring**: Gerçek zamanlı performans metrikleri
 - ✅ **Veritabanı Desteği**: MongoDB, PostgreSQL, Redis, Neo4J
 - ✅ **TypeScript**: Tip güvenliği ve modern JavaScript
+- ✅ **Production Docker**: Multi-stage Docker build
+- ✅ **Test Suite**: Jest ile unit ve integration testler
 - ✅ **Modüler Mimari**: Temiz kod ve bakım kolaylığı
 
 ## 📋 Gereksinimler
 
 - Node.js >= 18.0.0
 - npm >= 8.0.0
+- Docker & Docker Compose (for production deployment)
 - MongoDB (optional, for data persistence)
 - Redis (optional, for caching)
-- PostgreSQL (optional, for relational data)
+- PostgreSQL (recommended, for relational data)
 - Neo4J (optional, for graph relationships)
 
 ## 🛠️ Kurulum
