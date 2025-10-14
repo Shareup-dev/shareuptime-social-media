@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 
-import BottomSheet from 'reanimated-bottom-sheet';
+import BottomSheet from '../BottomSheet';
 import DrawerList from './DrawerList';
 import defaultStyle from '../../config/styles';
 import colors from '../../config/colors';
@@ -22,14 +22,10 @@ export default function EnhancedOptionsDrawer({options, forwardedRef}) {
   );
 
   return (
-    <BottomSheet
-      ref={forwardedRef}
-      snapPoints={[140, 100, 200, 320]}
-      enabledBottomClamp
-      enabledBottomInitialAnimation
-      renderHeader={renderHeader}
-      renderContent={renderContent}
-    />
+    <BottomSheet ref={forwardedRef}>
+      {renderHeader()}
+      {renderContent()}
+    </BottomSheet>
   );
   // return <Text>works</Text>;
 }
