@@ -3,9 +3,12 @@ import {
   registerUser, 
   getUserProfile, 
   updateUserProfile, 
-  searchUsers 
+  searchUsers,
+  uploadProfilePicture,
+  uploadCoverPhoto
 } from '../controllers/userController';
 import { authenticateToken, rateLimiter, validateRequired } from '../middleware';
+import { uploadSingle, handleUploadError } from '../middleware/uploadMiddleware';
 
 const router = Router();
 
@@ -26,6 +29,22 @@ router.get('/:userId', getUserProfile);
 router.put('/:userId', 
   authenticateToken,
   updateUserProfile
+);
+
+// POST /api/users/upload/profile-picture - Profil resmi yükleme (korumalı)
+router.post('/upload/profile-picture',
+  authenticateToken,
+  uploadSingle('profilePicture'),
+  handleUploadError,
+  uploadProfilePicture
+);
+
+// POST /api/users/upload/cover-photo - Kapak fotoğrafı yükleme (korumalı)
+router.post('/upload/cover-photo',
+  authenticateToken,
+  uploadSingle('coverPhoto'),
+  handleUploadError,
+  uploadCoverPhoto
 );
 
 export default router;

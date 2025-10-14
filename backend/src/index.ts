@@ -1,15 +1,23 @@
 import express from 'express';
+import { createServer } from 'http';
 import dotenv from 'dotenv';
+import path from 'path';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import postRoutes from './routes/postRoutes';
 import followRoutes from './routes/followRoutes';
+import messageRoutes from './routes/messageRoutes';
+import notificationRoutes from './routes/notificationRoutes';
+import adminRoutes from './routes/adminRoutes';
 import { requestLogger, rateLimiter } from './middleware';
+import { performanceMiddleware } from './middleware/performanceMiddleware';
+import ShareUpTimeWebSocket from './services/websocket';
 
 // Ortam değişkenlerini yükle
 dotenv.config();
 
 const app = express();
+const server = createServer(app);
 
 // Trust proxy for rate limiting
 app.set('trust proxy', 1);
@@ -42,6 +50,12 @@ app.use(express.urlencoded({
 
 // Request logging
 app.use(requestLogger);
+
+// Performance monitoring
+app.use(performanceMiddleware);
+
+// Static file serving for uploads
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Rate limiting - genel API rate limit
 app.use('/api/', rateLimiter(100, 15 * 60 * 1000)); // 100 requests per 15 minutes
@@ -144,6 +158,36 @@ app.get('/', (req, res) => {
           'GET /:userId/status - Takip durumunu kontrol et (korumalı)',
           'GET /:userId/mutual - Ortak takip edilenleri getir (korumalı)'
         ]
+      },
+      messages: {
+        base: '/api/messages',
+        endpoints: [
+          'POST /conversations - Konuşma oluştur/getir (korumalı)',
+          'GET /conversations - Kullanıcının konuşmaları (korumalı)',
+          'POST /conversations/:conversationId/messages - Mesaj gönder (korumalı)',
+          'GET /conversations/:conversationId/messages - Konuşma mesajları (korumalı)',
+          'PUT /messages/:messageId/read - Mesajı okundu işaretle (korumalı)'
+        ]
+      },
+      notifications: {
+        base: '/api/notifications',
+        endpoints: [
+          'GET / - Kullanıcının bildirimleri (korumalı)',
+          'GET /unread-count - Okunmamış bildirim sayısı (korumalı)',
+          'PUT /:notificationId/read - Bildirimi okundu işaretle (korumalı)',
+          'PUT /mark-all-read - Tüm bildirimleri okundu işaretle (korumalı)'
+        ]
+      },
+      admin: {
+        base: '/api/admin',
+        endpoints: [
+          'GET /performance - Sistem performans metrikleri (admin)',
+          'GET /database - Database istatistikleri (admin)',
+          'GET /cache - Cache istatistikleri (admin)',
+          'GET /health - Sistem sağlık durumu (admin)',
+          'POST /cache/clear - Cache temizleme (admin)',
+          'GET /logs - Son logları görüntüle (admin)'
+        ]
       }
     },
     security: [
@@ -183,6 +227,9 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/follows', followRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -190,7 +237,7 @@ app.use((req, res) => {
     success: false,
     message: 'Endpoint bulunamadı',
     requestedPath: req.originalUrl,
-    availableEndpoints: ['/api/users', '/api/auth', '/api/posts', '/api/follows'],
+    availableEndpoints: ['/api/users', '/api/auth', '/api/posts', '/api/follows', '/api/messages', '/api/notifications', '/api/admin'],
     timestamp: new Date().toISOString()
   });
 });
@@ -218,24 +265,35 @@ const PORT = process.env.PORT || 4000;
 
 // Veritabanı bağlantıları ve sunucu başlatma
 const startServer = async () => {
-  // Sunucuyu önce başlat
-  const server = app.listen(PORT, () => {
+  // WebSocket servisini başlat
+  const wsService = new ShareUpTimeWebSocket(server);
+  
+  // Sunucuyu başlat
+  const serverInstance = server.listen(PORT, () => {
     console.log(`🚀 ShareUpTime Backend API ${PORT} portunda çalışıyor.`);
     console.log(`📋 API Dokümantasyon: http://localhost:${PORT}/`);
     console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
     console.log(`🛡️  Security: Enhanced security measures active`);
+    console.log(`📡 WebSocket: Real-time features enabled`);
     console.log(`⚡ Environment: ${process.env.NODE_ENV || 'development'}`);
   });
 
-  // Veritabanı bağlantılarını asenkron olarak yap
+  // Veritabanı bağlantıları asenkron olarak yap
   try {
     const { initializeDatabase } = await import('./config/database');
     await initializeDatabase();
+    
+    // Cache service'i initialize et
+    const { CacheService } = await import('./services/cacheService');
+    await CacheService.initialize();
   } catch (dbError) {
     console.warn('⚠️  Veritabanı modülü yüklenemedi, temel API özellikleri çalışacak');
   }
 
-  return server;
+  // WebSocket servisini global olarak erişilebilir yap
+  (global as any).wsService = wsService;
+
+  return { server: serverInstance, websocket: wsService };
 };
 
 // Graceful shutdown

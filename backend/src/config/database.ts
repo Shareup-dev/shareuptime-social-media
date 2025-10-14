@@ -58,6 +58,14 @@ export const redisClient = {
   connect: async () => { console.log('Redis disabled for development'); },
   on: () => {},
   quit: async () => {},
+  ping: async () => { throw new Error('Redis disabled'); },
+  get: async (key: string) => null,
+  setEx: async (key: string, seconds: number, value: string) => {},
+  del: async (key: string | string[]) => 0,
+  exists: async (key: string) => 0,
+  keys: async (pattern: string) => [],
+  incr: async (key: string) => 1,
+  expire: async (key: string, seconds: number) => false
 };
 
 // ShareUpTime için özel database initialization

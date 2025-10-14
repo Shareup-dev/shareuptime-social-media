@@ -7,35 +7,71 @@ import {
   sanitizeInput 
 } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
+import { ImageProcessor, FileManager } from '../middleware/uploadMiddleware';
 
 // Gönderi oluştur
 export const createPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { content, mediaUrls, feeling, location, privacy }: CreatePostRequest = req.body;
+    const { content, feeling, location, privacy }: CreatePostRequest = req.body;
     const authorId = (req as any).userId;
+    const files = req.files as Express.Multer.File[];
 
     // Girdi doğrulaması
     if (!content || content.trim().length === 0) {
-      res.status(400).json(createResponse(false, 'Gönderi içeriği gereklidir'));
-      return;
+      if (!files || files.length === 0) {
+        res.status(400).json(createResponse(false, 'Gönderi içeriği veya medya gereklidir'));
+        return;
+      }
     }
 
-    if (content.length > 2200) {
+    if (content && content.length > 2200) {
       res.status(400).json(createResponse(false, 'Gönderi içeriği 2200 karakterden uzun olamaz'));
       return;
     }
 
-    // Medya URL'lerini doğrula
-    let validatedMediaUrls: string[] = [];
-    let validatedMediaTypes: string[] = [];
-    
-    if (mediaUrls && Array.isArray(mediaUrls)) {
-      validatedMediaUrls = mediaUrls.filter(url => 
-        typeof url === 'string' && url.trim().length > 0
-      ).slice(0, 10); // Maksimum 10 medya dosyası
-      
-      // Media types'ı da hazırla (şimdilik hepsi 'image' olarak)
-      validatedMediaTypes = validatedMediaUrls.map(() => 'image');
+    // Medya dosyalarını işle
+    let processedMediaUrls: string[] = [];
+    let mediaTypes: string[] = [];
+
+    if (files && files.length > 0) {
+      try {
+        for (const file of files) {
+          // Dosya validasyonu
+          const isValid = await FileManager.validateFile(file);
+          if (!isValid) {
+            FileManager.deleteFile(file.path);
+            continue;
+          }
+
+          let processedPath: string;
+          let mediaType: string;
+
+          if (file.mimetype.startsWith('image/')) {
+            // Resmi işle
+            processedPath = await ImageProcessor.processPostImage(file.path);
+            mediaType = 'image';
+          } else if (file.mimetype.startsWith('video/')) {
+            // Video için şimdilik orijinal dosyayı kullan
+            processedPath = file.path;
+            mediaType = 'video';
+          } else {
+            FileManager.deleteFile(file.path);
+            continue;
+          }
+
+          const mediaUrl = FileManager.getFileUrl(processedPath);
+          processedMediaUrls.push(mediaUrl);
+          mediaTypes.push(mediaType);
+        }
+      } catch (mediaError) {
+        console.error('Medya işleme hatası:', mediaError);
+        // Tüm yüklenen dosyaları temizle
+        if (files) {
+          files.forEach(file => FileManager.deleteFile(file.path));
+        }
+        res.status(500).json(createResponse(false, 'Medya dosyaları işlenirken hata oluştu'));
+        return;
+      }
     }
 
     const client = await pgPool.connect();
@@ -51,9 +87,9 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
       const newPostResult = await client.query(insertPostQuery, [
         postId,
         authorId,
-        sanitizeInput(content),
-        validatedMediaUrls,
-        validatedMediaTypes,
+        content ? sanitizeInput(content) : '',
+        processedMediaUrls,
+        mediaTypes,
         privacy || 'public',
         location || null,
         feeling || null

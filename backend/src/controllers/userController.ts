@@ -9,6 +9,7 @@ import {
   sanitizeInput 
 } from '../utils';
 import bcrypt from 'bcrypt';
+import { ImageProcessor, FileManager } from '../middleware/uploadMiddleware';
 import { v4 as uuidv4 } from 'uuid';
 
 // Kullanıcı kayıt
@@ -265,5 +266,125 @@ export const searchUsers = async (req: Request, res: Response): Promise<void> =>
   } catch (error) {
     console.error('Kullanıcı arama hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı arama sırasında hata oluştu'));
+  }
+};
+
+// Profil resmi yükleme
+export const uploadProfilePicture = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = (req as any).userId;
+    const file = req.file;
+
+    if (!file) {
+      res.status(400).json(createResponse(false, 'Profil resmi gereklidir'));
+      return;
+    }
+
+    // Dosya validasyonu
+    const isValid = await FileManager.validateFile(file);
+    if (!isValid) {
+      FileManager.deleteFile(file.path);
+      res.status(400).json(createResponse(false, 'Geçersiz dosya'));
+      return;
+    }
+
+    let profilePictureUrl: string;
+
+    try {
+      // Resmi işle
+      const processedPath = await ImageProcessor.processProfilePicture(file.path);
+      profilePictureUrl = FileManager.getFileUrl(processedPath);
+
+      const client = await pgPool.connect();
+      try {
+        // Eski profil resmini al
+        const oldImageQuery = 'SELECT profile_picture_url FROM users WHERE id = $1';
+        const oldImageResult = await client.query(oldImageQuery, [userId]);
+        
+        // Kullanıcının profil resmini güncelle
+        const updateQuery = 'UPDATE users SET profile_picture_url = $1 WHERE id = $2 RETURNING profile_picture_url';
+        const updateResult = await client.query(updateQuery, [profilePictureUrl, userId]);
+
+        // Eski resmi sil (varsayılan resim değilse)
+        const oldImageUrl = oldImageResult.rows[0]?.profile_picture_url;
+        if (oldImageUrl && !oldImageUrl.includes('default-avatar')) {
+          const oldImagePath = oldImageUrl.replace('/uploads/', 'uploads/');
+          FileManager.deleteFile(oldImagePath);
+        }
+
+        res.status(200).json(createResponse(true, 'Profil resmi başarıyla güncellendi', {
+          profile_picture_url: updateResult.rows[0].profile_picture_url
+        }));
+      } finally {
+        client.release();
+      }
+    } catch (processError) {
+      console.error('Resim işleme hatası:', processError);
+      FileManager.deleteFile(file.path);
+      res.status(500).json(createResponse(false, 'Resim işlenirken hata oluştu'));
+    }
+  } catch (error) {
+    console.error('Profil resmi yükleme hatası:', error);
+    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Profil resmi yüklenirken hata oluştu'));
+  }
+};
+
+// Kapak fotoğrafı yükleme
+export const uploadCoverPhoto = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = (req as any).userId;
+    const file = req.file;
+
+    if (!file) {
+      res.status(400).json(createResponse(false, 'Kapak fotoğrafı gereklidir'));
+      return;
+    }
+
+    // Dosya validasyonu
+    const isValid = await FileManager.validateFile(file);
+    if (!isValid) {
+      FileManager.deleteFile(file.path);
+      res.status(400).json(createResponse(false, 'Geçersiz dosya'));
+      return;
+    }
+
+    let coverPhotoUrl: string;
+
+    try {
+      // Resmi işle (kapak fotoğrafı için farklı boyutlar)
+      const processedPath = await ImageProcessor.processPostImage(file.path);
+      coverPhotoUrl = FileManager.getFileUrl(processedPath);
+
+      const client = await pgPool.connect();
+      try {
+        // Eski kapak fotoğrafını al
+        const oldImageQuery = 'SELECT cover_photo_url FROM users WHERE id = $1';
+        const oldImageResult = await client.query(oldImageQuery, [userId]);
+        
+        // Kullanıcının kapak fotoğrafını güncelle
+        const updateQuery = 'UPDATE users SET cover_photo_url = $1 WHERE id = $2 RETURNING cover_photo_url';
+        const updateResult = await client.query(updateQuery, [coverPhotoUrl, userId]);
+
+        // Eski kapak fotoğrafını sil
+        const oldImageUrl = oldImageResult.rows[0]?.cover_photo_url;
+        if (oldImageUrl && !oldImageUrl.includes('default-cover')) {
+          const oldImagePath = oldImageUrl.replace('/uploads/', 'uploads/');
+          FileManager.deleteFile(oldImagePath);
+        }
+
+        res.status(200).json(createResponse(true, 'Kapak fotoğrafı başarıyla güncellendi', {
+          cover_photo_url: updateResult.rows[0].cover_photo_url
+        }));
+      } finally {
+        client.release();
+      }
+    } catch (processError) {
+      console.error('Kapak fotoğrafı işleme hatası:', processError);
+      FileManager.deleteFile(file.path);
+      res.status(500).json(createResponse(false, 'Kapak fotoğrafı işlenirken hata oluştu'));
+    }
+  } catch (error) {
+    console.error('Kapak fotoğrafı yükleme hatası:', error);
+    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kapak fotoğrafı yüklenirken hata oluştu'));
   }
 };

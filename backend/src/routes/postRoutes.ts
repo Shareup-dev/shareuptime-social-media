@@ -8,6 +8,7 @@ import {
   deletePost 
 } from '../controllers/postController';
 import { authenticateToken, optionalAuthentication, rateLimiter, validateRequired } from '../middleware';
+import { uploadPost, handleUploadError } from '../middleware/uploadMiddleware';
 
 const router = Router();
 
@@ -15,7 +16,8 @@ const router = Router();
 router.post('/', 
   authenticateToken,
   rateLimiter(10, 60 * 60 * 1000), // Saatte max 10 gönderi
-  validateRequired(['content']),
+  uploadPost,
+  handleUploadError,
   createPost
 );
 

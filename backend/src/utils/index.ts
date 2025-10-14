@@ -69,13 +69,20 @@ export const createPaginatedResponse = <T>(
 
 // Email doğrulama
 export const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$/;
+  // Check for consecutive dots
+  if (email.includes('..')) {
+    return false;
+  }
   return emailRegex.test(email);
 };
 
 // Username doğrulama
 export const isValidUsername = (username: string): boolean => {
-  const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+  if (username.length < 3 || username.length > 20) {
+    return false;
+  }
+  const usernameRegex = /^[a-zA-Z0-9_]+$/;
   return usernameRegex.test(username);
 };
 
