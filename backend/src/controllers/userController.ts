@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UserModel } from '../models';
+import { pgPool } from '../config/database';
 import { CreateUserRequest, UpdateUserRequest, User } from '../types';
 import { 
   hashPassword, 
@@ -8,6 +8,8 @@ import {
   isValidUsername, 
   sanitizeInput 
 } from '../utils';
+import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 
 // Kullanıcı kayıt
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
@@ -35,38 +37,44 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    // Mevcut kullanıcı kontrolü
-    const existingUser = await UserModel.findOne({
-      $or: [
-        { email: email.toLowerCase() },
-        { username: username.toLowerCase() }
-      ]
-    });
+    const client = await pgPool.connect();
+    try {
+      // Mevcut kullanıcı kontrolü
+      const existingUserQuery = 'SELECT id FROM users WHERE email = $1 OR username = $2';
+      const existingUserResult = await client.query(existingUserQuery, [email.toLowerCase(), username.toLowerCase()]);
 
-    if (existingUser) {
-      res.status(409).json(createResponse(false, 'Bu email veya kullanıcı adı zaten kullanılıyor'));
-      return;
+      if (existingUserResult.rows.length > 0) {
+        res.status(409).json(createResponse(false, 'Bu email veya kullanıcı adı zaten kullanılıyor'));
+        return;
+      }
+
+      // Şifreyi hashle
+      const saltRounds = 12;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      // Yeni kullanıcı oluştur
+      const userId = uuidv4();
+      const insertUserQuery = `
+        INSERT INTO users (id, username, email, password_hash, first_name, last_name) 
+        VALUES ($1, $2, $3, $4, $5, $6) 
+        RETURNING id, username, email, first_name, last_name, created_at
+      `;
+      
+      const newUserResult = await client.query(insertUserQuery, [
+        userId,
+        sanitizeInput(username),
+        email.toLowerCase(),
+        hashedPassword,
+        firstName ? sanitizeInput(firstName) : null,
+        lastName ? sanitizeInput(lastName) : null
+      ]);
+
+      const newUser = newUserResult.rows[0];
+
+      res.status(201).json(createResponse(true, 'Kullanıcı başarıyla oluşturuldu', newUser));
+    } finally {
+      client.release();
     }
-
-    // Şifreyi hashle
-    const hashedPassword = await hashPassword(password);
-
-    // Yeni kullanıcı oluştur
-    const newUser = new UserModel({
-      username: sanitizeInput(username),
-      email: email.toLowerCase(),
-      passwordHash: hashedPassword,
-      firstName: firstName ? sanitizeInput(firstName) : undefined,
-      lastName: lastName ? sanitizeInput(lastName) : undefined
-    });
-
-    const savedUser = await newUser.save();
-
-    // Şifreyi response'dan çıkar
-    const userResponse = savedUser.toObject();
-    const { passwordHash, ...userWithoutPassword } = userResponse;
-
-    res.status(201).json(createResponse(true, 'Kullanıcı başarıyla oluşturuldu', userWithoutPassword));
   } catch (error) {
     console.error('Kullanıcı kayıt hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı kaydı sırasında hata oluştu'));
@@ -83,14 +91,25 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    const user = await UserModel.findById(userId).select('-passwordHash');
+    const client = await pgPool.connect();
+    try {
+      const userQuery = `
+        SELECT id, username, email, first_name, last_name, bio, 
+               profile_picture_url, cover_photo_url, is_verified, 
+               is_private, location, website, created_at
+        FROM users WHERE id = $1
+      `;
+      const userResult = await client.query(userQuery, [userId]);
 
-    if (!user) {
-      res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
-      return;
+      if (userResult.rows.length === 0) {
+        res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
+        return;
+      }
+
+      res.status(200).json(createResponse(true, 'Kullanıcı profili getirildi', userResult.rows[0]));
+    } finally {
+      client.release();
     }
-
-    res.status(200).json(createResponse(true, 'Kullanıcı profili getirildi', user));
   } catch (error) {
     console.error('Kullanıcı profili getirme hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı profili getirilirken hata oluştu'));
@@ -102,7 +121,7 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
   try {
     const { userId } = req.params;
     const updateData: UpdateUserRequest = req.body;
-    const authenticatedUserId = (req as any).userId; // Middleware'den gelen kullanıcı ID'si
+    const authenticatedUserId = (req as any).userId;
 
     if (!userId) {
       res.status(400).json(createResponse(false, 'Kullanıcı ID gereklidir'));
@@ -115,45 +134,71 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    // Güncelleme verilerini sanitize et
-    const sanitizedUpdateData: Partial<User> = {};
-    
-    if (updateData.firstName !== undefined) {
-      sanitizedUpdateData.firstName = sanitizeInput(updateData.firstName);
-    }
-    
-    if (updateData.lastName !== undefined) {
-      sanitizedUpdateData.lastName = sanitizeInput(updateData.lastName);
-    }
-    
-    if (updateData.bio !== undefined) {
-      sanitizedUpdateData.bio = sanitizeInput(updateData.bio);
-      if (sanitizedUpdateData.bio.length > 160) {
-        res.status(400).json(createResponse(false, 'Bio 160 karakterden uzun olamaz'));
+    const client = await pgPool.connect();
+    try {
+      // Güncelleme alanlarını hazırla
+      const updateFields: string[] = [];
+      const updateValues: any[] = [];
+      let paramIndex = 1;
+
+      if (updateData.firstName !== undefined) {
+        updateFields.push(`first_name = $${paramIndex++}`);
+        updateValues.push(sanitizeInput(updateData.firstName));
+      }
+
+      if (updateData.lastName !== undefined) {
+        updateFields.push(`last_name = $${paramIndex++}`);
+        updateValues.push(sanitizeInput(updateData.lastName));
+      }
+
+      if (updateData.bio !== undefined) {
+        const sanitizedBio = sanitizeInput(updateData.bio);
+        if (sanitizedBio.length > 160) {
+          res.status(400).json(createResponse(false, 'Bio 160 karakterden uzun olamaz'));
+          return;
+        }
+        updateFields.push(`bio = $${paramIndex++}`);
+        updateValues.push(sanitizedBio);
+      }
+
+      if (updateData.profileImage !== undefined) {
+        updateFields.push(`profile_picture_url = $${paramIndex++}`);
+        updateValues.push(updateData.profileImage);
+      }
+
+      if (updateData.isPrivate !== undefined) {
+        updateFields.push(`is_private = $${paramIndex++}`);
+        updateValues.push(updateData.isPrivate);
+      }
+
+      if (updateFields.length === 0) {
+        res.status(400).json(createResponse(false, 'Güncellenecek alan bulunamadı'));
         return;
       }
-    }
-    
-    if (updateData.profileImage !== undefined) {
-      sanitizedUpdateData.profileImage = updateData.profileImage;
-    }
-    
-    if (updateData.isPrivate !== undefined) {
-      sanitizedUpdateData.isPrivate = updateData.isPrivate;
-    }
 
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      userId,
-      sanitizedUpdateData,
-      { new: true, runValidators: true }
-    ).select('-passwordHash');
+      // Updated_at alanını ekle
+      updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
+      updateValues.push(userId);
 
-    if (!updatedUser) {
-      res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
-      return;
+      const updateQuery = `
+        UPDATE users 
+        SET ${updateFields.join(', ')}
+        WHERE id = $${paramIndex}
+        RETURNING id, username, email, first_name, last_name, bio, 
+                  profile_picture_url, is_private, updated_at
+      `;
+
+      const updatedUserResult = await client.query(updateQuery, updateValues);
+
+      if (updatedUserResult.rows.length === 0) {
+        res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
+        return;
+      }
+
+      res.status(200).json(createResponse(true, 'Kullanıcı profili güncellendi', updatedUserResult.rows[0]));
+    } finally {
+      client.release();
     }
-
-    res.status(200).json(createResponse(true, 'Kullanıcı profili güncellendi', updatedUser));
   } catch (error) {
     console.error('Kullanıcı profili güncelleme hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı profili güncellenirken hata oluştu'));
@@ -172,42 +217,51 @@ export const searchUsers = async (req: Request, res: Response): Promise<void> =>
 
     const pageNumber = parseInt(page as string) || 1;
     const limitNumber = parseInt(limit as string) || 20;
-    const skip = (pageNumber - 1) * limitNumber;
+    const offset = (pageNumber - 1) * limitNumber;
 
-    // Kullanıcı adı veya isimde arama yap
-    const searchRegex = new RegExp(sanitizeInput(query), 'i');
-    
-    const users = await UserModel.find({
-      $or: [
-        { username: searchRegex },
-        { firstName: searchRegex },
-        { lastName: searchRegex }
-      ]
-    })
-    .select('-passwordHash')
-    .limit(limitNumber)
-    .skip(skip)
-    .sort({ username: 1 });
+    const client = await pgPool.connect();
+    try {
+      const searchTerm = `%${sanitizeInput(query)}%`;
+      
+      // Kullanıcı arama sorgusu
+      const searchQuery = `
+        SELECT id, username, email, first_name, last_name, 
+               profile_picture_url, is_verified
+        FROM users 
+        WHERE username ILIKE $1 
+           OR first_name ILIKE $1 
+           OR last_name ILIKE $1
+        ORDER BY username
+        LIMIT $2 OFFSET $3
+      `;
 
-    const total = await UserModel.countDocuments({
-      $or: [
-        { username: searchRegex },
-        { firstName: searchRegex },
-        { lastName: searchRegex }
-      ]
-    });
+      const searchResult = await client.query(searchQuery, [searchTerm, limitNumber, offset]);
 
-    res.status(200).json({
-      success: true,
-      message: 'Kullanıcılar getirildi',
-      data: users,
-      pagination: {
-        page: pageNumber,
-        limit: limitNumber,
-        total,
-        totalPages: Math.ceil(total / limitNumber)
-      }
-    });
+      // Toplam sayıyı al
+      const countQuery = `
+        SELECT COUNT(*) as total
+        FROM users 
+        WHERE username ILIKE $1 
+           OR first_name ILIKE $1 
+           OR last_name ILIKE $1
+      `;
+      const countResult = await client.query(countQuery, [searchTerm]);
+      const total = parseInt(countResult.rows[0].total);
+
+      res.status(200).json({
+        success: true,
+        message: 'Kullanıcılar getirildi',
+        data: searchResult.rows,
+        pagination: {
+          page: pageNumber,
+          limit: limitNumber,
+          total,
+          totalPages: Math.ceil(total / limitNumber)
+        }
+      });
+    } finally {
+      client.release();
+    }
   } catch (error) {
     console.error('Kullanıcı arama hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı arama sırasında hata oluştu'));

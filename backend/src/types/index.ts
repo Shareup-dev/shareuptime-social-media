@@ -54,6 +54,9 @@ export interface Post {
 export interface CreatePostRequest {
   content: string;
   mediaUrls?: string[];
+  feeling?: string;
+  location?: string;
+  privacy?: 'public' | 'friends' | 'private';
 }
 
 // Takip tipleri

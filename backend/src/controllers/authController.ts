@@ -1,13 +1,15 @@
 import { Request, Response } from 'express';
-import { UserModel } from '../models';
+import { pgPool } from '../config/database';
 import { LoginRequest } from '../types';
 import { 
   verifyPassword, 
+  hashPassword,
   generateToken, 
   createResponse, 
   isValidEmail,
   sanitizeInput 
 } from '../utils';
+import bcrypt from 'bcrypt';
 
 // Kullanıcı girişi
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
@@ -25,34 +27,39 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Kullanıcıyı bul
-    const user = await UserModel.findOne({ 
-      email: email.toLowerCase() 
-    });
+    // PostgreSQL'den kullanıcıyı bul
+    const client = await pgPool.connect();
+    try {
+      const userQuery = 'SELECT id, email, username, password_hash, first_name, last_name, profile_picture_url, is_verified FROM users WHERE email = $1';
+      const userResult = await client.query(userQuery, [email.toLowerCase()]);
+      
+      if (userResult.rows.length === 0) {
+        res.status(401).json(createResponse(false, 'Geçersiz email veya şifre'));
+        return;
+      }
 
-    if (!user) {
-      res.status(401).json(createResponse(false, 'Geçersiz email veya şifre'));
-      return;
+      const user = userResult.rows[0];
+
+      // Şifreyi doğrula
+      const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+      if (!isPasswordValid) {
+        res.status(401).json(createResponse(false, 'Geçersiz email veya şifre'));
+        return;
+      }
+
+      // JWT token oluştur
+      const token = generateToken(user.id);
+
+      // Kullanıcı bilgilerini şifre olmadan döndür
+      const { password_hash, ...userWithoutPassword } = user;
+
+      res.status(200).json(createResponse(true, 'Giriş başarılı', {
+        user: userWithoutPassword,
+        token
+      }));
+    } finally {
+      client.release();
     }
-
-    // Şifreyi doğrula
-    const isPasswordValid = await verifyPassword(password, user.passwordHash);
-    if (!isPasswordValid) {
-      res.status(401).json(createResponse(false, 'Geçersiz email veya şifre'));
-      return;
-    }
-
-    // JWT token oluştur
-    const token = generateToken(user.id.toString());
-
-    // Kullanıcı bilgilerini şifre olmadan döndür
-    const userResponse = user.toObject();
-    const { passwordHash, ...userWithoutPassword } = userResponse;
-
-    res.status(200).json(createResponse(true, 'Giriş başarılı', {
-      user: userWithoutPassword,
-      token
-    }));
   } catch (error) {
     console.error('Kullanıcı girişi hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Giriş sırasında hata oluştu'));
@@ -62,8 +69,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 // Token doğrulama
 export const verifyTokenEndpoint = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Bu endpoint sadece middleware'den geçen istekler için çalışır
-    // Yani token zaten doğrulanmış demektir
     const userId = (req as any).userId;
 
     if (!userId) {
@@ -71,15 +76,21 @@ export const verifyTokenEndpoint = async (req: Request, res: Response): Promise<
       return;
     }
 
-    // Kullanıcı bilgilerini getir
-    const user = await UserModel.findById(userId).select('-passwordHash');
-    
-    if (!user) {
-      res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
-      return;
-    }
+    // PostgreSQL'den kullanıcı bilgilerini getir
+    const client = await pgPool.connect();
+    try {
+      const userQuery = 'SELECT id, email, username, first_name, last_name, bio, profile_picture_url, is_verified, created_at FROM users WHERE id = $1';
+      const userResult = await client.query(userQuery, [userId]);
+      
+      if (userResult.rows.length === 0) {
+        res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
+        return;
+      }
 
-    res.status(200).json(createResponse(true, 'Token geçerli', { user }));
+      res.status(200).json(createResponse(true, 'Token geçerli', { user: userResult.rows[0] }));
+    } finally {
+      client.release();
+    }
   } catch (error) {
     console.error('Token doğrulama hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Token doğrulama sırasında hata oluştu'));
@@ -103,29 +114,38 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    // Kullanıcıyı bul
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
-      return;
+    const client = await pgPool.connect();
+    try {
+      // Kullanıcıyı bul
+      const userQuery = 'SELECT id, password_hash FROM users WHERE id = $1';
+      const userResult = await client.query(userQuery, [userId]);
+      
+      if (userResult.rows.length === 0) {
+        res.status(404).json(createResponse(false, 'Kullanıcı bulunamadı'));
+        return;
+      }
+
+      const user = userResult.rows[0];
+
+      // Mevcut şifreyi doğrula
+      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password_hash);
+      if (!isCurrentPasswordValid) {
+        res.status(401).json(createResponse(false, 'Mevcut şifre hatalı'));
+        return;
+      }
+
+      // Yeni şifreyi hashle
+      const saltRounds = 12;
+      const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
+      
+      // Şifreyi güncelle
+      const updateQuery = 'UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2';
+      await client.query(updateQuery, [newPasswordHash, userId]);
+
+      res.status(200).json(createResponse(true, 'Şifre başarıyla değiştirildi'));
+    } finally {
+      client.release();
     }
-
-    // Mevcut şifreyi doğrula
-    const isCurrentPasswordValid = await verifyPassword(currentPassword, user.passwordHash);
-    if (!isCurrentPasswordValid) {
-      res.status(401).json(createResponse(false, 'Mevcut şifre hatalı'));
-      return;
-    }
-
-    // Yeni şifreyi hashle ve güncelle
-    const { hashPassword } = await import('../utils');
-    const newPasswordHash = await hashPassword(newPassword);
-    
-    await UserModel.findByIdAndUpdate(userId, { 
-      passwordHash: newPasswordHash 
-    });
-
-    res.status(200).json(createResponse(true, 'Şifre başarıyla değiştirildi'));
   } catch (error) {
     console.error('Şifre değiştirme hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Şifre değiştirme sırasında hata oluştu'));
@@ -142,21 +162,27 @@ export const requestPasswordReset = async (req: Request, res: Response): Promise
       return;
     }
 
-    const user = await UserModel.findOne({ 
-      email: email.toLowerCase() 
-    });
+    const client = await pgPool.connect();
+    try {
+      const userQuery = 'SELECT id, email FROM users WHERE email = $1';
+      const userResult = await client.query(userQuery, [email.toLowerCase()]);
 
-    // Güvenlik için, kullanıcı bulunamasa bile başarılı mesajı döndür
-    if (!user) {
-      res.status(200).json(createResponse(true, 'Eğer bu email kayıtlıysa, şifre sıfırlama talimatları gönderilecektir'));
-      return;
+      // Güvenlik için, kullanıcı bulunamasa bile başarılı mesajı döndür
+      if (userResult.rows.length === 0) {
+        res.status(200).json(createResponse(true, 'Eğer bu email kayıtlıysa, şifre sıfırlama talimatları gönderilecektir'));
+        return;
+      }
+
+      const user = userResult.rows[0];
+
+      // TODO: Burada email gönderme servisi entegre edilebilir
+      // Şimdilik sadece başarılı mesajı döndürüyoruz
+      console.log(`Şifre sıfırlama talebi: ${email} (User ID: ${user.id})`);
+      
+      res.status(200).json(createResponse(true, 'Şifre sıfırlama talimatları email adresinize gönderildi'));
+    } finally {
+      client.release();
     }
-
-    // TODO: Burada email gönderme servisi entegre edilebilir
-    // Şimdilik sadece başarılı mesajı döndürüyoruz
-    console.log(`Şifre sıfırlama talebi: ${email} (User ID: ${user.id})`);
-    
-    res.status(200).json(createResponse(true, 'Şifre sıfırlama talimatları email adresinize gönderildi'));
   } catch (error) {
     console.error('Şifre sıfırlama talebi hatası:', error);
     res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Şifre sıfırlama talebi sırasında hata oluştu'));
