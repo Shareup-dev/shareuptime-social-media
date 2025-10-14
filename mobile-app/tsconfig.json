@@ -30,7 +30,13 @@
       "@/screens/*": [
         "app/screens/*"
       ]
-    }
+    },
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "react-native"
+    ]
   },
   "include": [
     "app/**/*",
