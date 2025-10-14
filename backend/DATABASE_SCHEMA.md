@@ -2,7 +2,8 @@
 
 ## 📊 Veritabanı Şemaları
 
-Bu belge, ShareUpTime backend projesinde kullanılan veri modellerini ve veritabanı şemalarını detaylandırır.
+Bu belge, ShareUpTime backend projesinde kullanılan veri modellerini 
+ve veritabanı şemalarını detaylandırır.
 
 ## 🗃️ MongoDB Modelleri (Mongoose)
 
@@ -365,8 +366,11 @@ MATCH (u:User {userId: $userId})-[:FOLLOWS]->(following:User)
 RETURN following;
 
 // Ortak takipler
-MATCH (u1:User {userId: $userId1})-[:FOLLOWS]->(mutual:User)<-[:FOLLOWS]-(u2:User {userId: $userId2})
-RETURN mutual;
+```cypher
+MATCH (u1:User {userId: $userId1})-[:FOLLOWS]->(mutual:User)
+      <-[:FOLLOWS]-(u2:User {userId: $userId2})
+RETURN mutual
+```;
 
 // Takip önerileri (arkadaşın arkadaşları)
 MATCH (u:User {userId: $userId})-[:FOLLOWS]->()-[:FOLLOWS]->(suggested:User)
