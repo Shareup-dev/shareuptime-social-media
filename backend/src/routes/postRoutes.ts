@@ -7,6 +7,7 @@ import {
   updatePost, 
   deletePost 
 } from '../controllers/postController';
+import { getPostComments, createComment } from '../controllers/commentController';
 import { authenticateToken, optionalAuthentication, rateLimiter, validateRequired } from '../middleware';
 import { uploadPost, handleUploadError } from '../middleware/uploadMiddleware';
 
@@ -44,5 +45,9 @@ router.delete('/:postId',
   authenticateToken,
   deletePost
 );
+
+// Comments for posts
+router.get('/:postId/comments', getPostComments);
+router.post('/:postId/comments', authenticateToken, createComment);
 
 export default router;
