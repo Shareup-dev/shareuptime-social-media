@@ -73,6 +73,9 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       const newUser = newUserResult.rows[0];
 
       res.status(201).json(createResponse(true, 'Kullanıcı başarıyla oluşturuldu', newUser));
+    } catch (error) {
+      console.error('Kullanıcı kayıt hatası: Veritabanı bağlantısı sırasında bir hata oluştu:', error);
+      res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı kaydı sırasında hata oluştu'));
     } finally {
       client.release();
     }
@@ -115,6 +118,9 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
       }
 
       res.status(200).json(createResponse(true, 'Kullanıcı profili getirildi', userResult.rows[0]));
+    } catch (error) {
+      console.error('Kullanıcı profili getirme hatası: Veritabanı sorgusu sırasında bir hata oluştu:', error);
+      res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı profili getirilirken hata oluştu'));
     } finally {
       client.release();
     }
