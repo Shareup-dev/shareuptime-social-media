@@ -23,7 +23,11 @@
     }
   },
   "include": ["app", "App.tsx", "types"],
-  "exclude": ["node_modules", "dist"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "app/screens/ListOfReactions.screen.tsx"
+  ],
   "typeRoots": [
     "./node_modules/@types",
     "node_modules/@types"

@@ -32,6 +32,8 @@ class PostService {
     AuthAxios.post(`reply/${uid}/${commentId}`,data)
   likeUnlikeComment = (uid,cid,params) =>
     AuthAxios.put(`comment/${uid}/like-unlike/${cid}`,params)
+  likeUnlikeReply = (uid,rid,params) =>
+    AuthAxios.put(`reply/${uid}/like-unlike/${rid}`,params)
   editComment = (cid) => 
     AuthAxios.put(`comment/Edit_comment/${cid}`)
   getAllComments = (pid) =>
