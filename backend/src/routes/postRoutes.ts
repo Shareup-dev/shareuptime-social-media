@@ -48,6 +48,6 @@ router.delete('/:postId',
 
 // Comments for posts
 router.get('/:postId/comments', getPostComments);
-router.post('/:postId/comments', authenticateToken, createComment);
+router.post('/:postId/comments', authenticateToken, validateRequired(['content']), createComment);
 
 export default router;

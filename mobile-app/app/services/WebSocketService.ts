@@ -1,4 +1,5 @@
 import io, { Socket } from 'socket.io-client';
+import { WS_BASE_URL } from '@/config/env';
 import { store } from '../redux/store';
 
 export interface Message {
@@ -35,7 +36,7 @@ export class ShareUpTimeWebSocketClient {
       this.disconnect();
     }
 
-    this.socket = io('http://localhost:4000', {
+  this.socket = io(WS_BASE_URL, {
       auth: {
         token: this.token,
       },

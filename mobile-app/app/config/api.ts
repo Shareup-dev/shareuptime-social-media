@@ -1,3 +1,5 @@
+import { API_BASE_URL, REQUEST_TIMEOUT } from './env';
+
 interface ApiConfig {
   baseUrl: string;
   timeout: number;
@@ -45,8 +47,8 @@ interface ApiConfig {
 }
 
 const apiConfig: ApiConfig = {
-  baseUrl: 'http://localhost:4000/api',
-  timeout: 30000,
+  baseUrl: API_BASE_URL,
+  timeout: REQUEST_TIMEOUT,
   endpoints: {
     auth: {
       login: '/auth/login',
