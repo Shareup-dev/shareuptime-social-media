@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import OfflineNotice from '@/components/OfflineNotice';
 import ShareupAuthentication from '@/util/ShareupAuthentication';
 import store from '@/redux/store';
+import AppNavigator from '@/navigation/AppNavigator';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
             <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
             <OfflineNotice />
             <ShareupAuthentication />
+            <AppNavigator />
             <Toast />
           </NavigationContainer>
         </GestureHandlerRootView>

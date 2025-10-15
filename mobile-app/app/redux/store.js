@@ -16,7 +16,7 @@ import messagesReducer from "./messagesSlice";
 import ConversationsSlice from "./ConversationsSlice";
 import postFeelings from "./postFeelings";
 
-export default store = configureStore({
+const store = configureStore({
   reducer: {
     like: likeReducer,
     comments: commentsReducer,
@@ -31,7 +31,9 @@ export default store = configureStore({
     reelScreenDetector: reelScreenDetector.reducer,
     feedPosts: feedPostsReducer,
     messages: messagesReducer,
-    conversations: ConversationsSlice,
-    postFeel: postFeelings,
+    ConversationsSlice,
+    postFeelings,
   },
 });
+
+export default store;
