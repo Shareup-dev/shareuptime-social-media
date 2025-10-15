@@ -39,7 +39,7 @@ interface ApiConfig {
     };
     messages: {
       conversations: string;
-      send: string;
+      messages: string; // list & create under a conversation
     };
   };
 }
@@ -68,8 +68,8 @@ const apiConfig: ApiConfig = {
     posts: {
       feed: '/posts',
       create: '/posts',
-      like: '/posts/:id/like',
-      comments: '/posts/:id/comments',
+      like: '/posts/:postId/like',
+      comments: '/posts/:postId/comments',
       byUser: '/posts/user/:userId',
       byId: '/posts/:postId',
       update: '/posts/:postId',
@@ -85,7 +85,7 @@ const apiConfig: ApiConfig = {
     },
     messages: {
       conversations: '/messages/conversations',
-      send: '/messages/conversations/:id',
+      messages: '/messages/conversations/:conversationId/messages',
     },
   },
 };

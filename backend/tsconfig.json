@@ -33,8 +33,7 @@
       "@/routes/*": ["routes/*"],
       "@/middleware/*": ["middleware/*"],
       "@/config/*": ["config/*"]
-    },
-    "types": ["vitest"]
+    }
   },
   "include": [
     "src/**/*"

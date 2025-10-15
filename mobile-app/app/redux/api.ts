@@ -72,7 +72,7 @@ export const shareUpTimeApi = createApi({
       }
     >({
       query: (userData) => ({
-        url: '/auth/register',
+        url: '/users/register',
         method: 'POST',
         body: userData,
       }),
@@ -96,7 +96,7 @@ export const shareUpTimeApi = createApi({
     // Posts endpoints
     getFeedPosts: builder.query<any[], { page?: number; limit?: number }>({
       query: ({ page = 1, limit = 10 }) => 
-        `/posts/feed?page=${page}&limit=${limit}`,
+        `/posts?page=${page}&limit=${limit}`,
       providesTags: ['Post'],
     }),
 
@@ -120,7 +120,7 @@ export const shareUpTimeApi = createApi({
     // Follow endpoints
     followUser: builder.mutation<any, string>({
       query: (userId) => ({
-        url: `/follow/${userId}`,
+        url: `/follows/${userId}`,
         method: 'POST',
       }),
       invalidatesTags: ['User', 'Follow'],
@@ -128,7 +128,7 @@ export const shareUpTimeApi = createApi({
 
     unfollowUser: builder.mutation<any, string>({
       query: (userId) => ({
-        url: `/follow/${userId}`,
+        url: `/follows/${userId}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['User', 'Follow'],
@@ -161,7 +161,7 @@ export const shareUpTimeApi = createApi({
 
     getMessages: builder.query<any[], { conversationId: string; page?: number }>({
       query: ({ conversationId, page = 1 }) => 
-        `/messages/conversations/${conversationId}?page=${page}`,
+        `/messages/conversations/${conversationId}/messages?page=${page}`,
       providesTags: ['Message'],
     }),
 
@@ -171,7 +171,7 @@ export const shareUpTimeApi = createApi({
       type?: 'text' | 'media';
     }>({
       query: ({ conversationId, ...messageData }) => ({
-        url: `/messages/conversations/${conversationId}`,
+        url: `/messages/conversations/${conversationId}/messages`,
         method: 'POST',
         body: messageData,
       }),
