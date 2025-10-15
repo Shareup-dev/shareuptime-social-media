@@ -46,6 +46,9 @@ buck-out/
 .env
 android/app/debug.keystore
 
+# Allow committing example env files
+!.env.example
+
 # fastlane
 #
 # It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
