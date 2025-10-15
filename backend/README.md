@@ -52,6 +52,47 @@ Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScrip
    npm start
    ```
 
+## ⚡ Hızlı Başlangıç (Quick Start)
+
+Geliştirme ortamında arka ucu ve mobil Metro sunucusunu hızlıca başlatmak için:
+
+```bash
+# Backend
+cd backend
+npm install
+npm run dev # http://localhost:4000/health
+
+# Yeni bir terminalde Metro
+cd ../mobile-app
+npm install
+npm start  # http://localhost:8081
+```
+
+Mobil uygulamayı cihaz/emülatörde çalıştırmak için (isteğe bağlı):
+
+```bash
+# Android
+npm run android
+
+# iOS (macOS)
+npm run pod-install
+npm run ios
+```
+
+Varsayılan API tabanı ve WebSocket adresleri (mobile-app için):
+
+```
+API: http://localhost:4000/api
+WS:  http://localhost:4000
+```
+
+Sağlık kontrolleri:
+
+```
+GET http://localhost:4000/health
+GET http://localhost:4000/
+```
+
 ## 📁 Proje Yapısı
 
 ```
