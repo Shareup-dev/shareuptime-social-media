@@ -1,3 +1,6 @@
 # Ignore large files temporarily
 #*.tar.gz
 node_modules
+
+# Ignore local import staging
+_import/
