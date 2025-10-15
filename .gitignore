@@ -1,6 +1,24 @@
-# Ignore large files temporarily
-#*.tar.gz
 node_modules
 
-# Ignore local import staging
+# Local import staging
 _import/
+
+# Environment files (do not commit real secrets)
+.env
+.env.*
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Archives / large binaries
+*.tar.gz
+*.tgz
+*.zip
+
+# Build outputs (root-level if any)
+dist/
+build/
