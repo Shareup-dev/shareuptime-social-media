@@ -15,14 +15,12 @@ Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScrip
 - ✅ **Veritabanı Desteği**: MongoDB, PostgreSQL, Redis, Neo4J
 - ✅ **TypeScript**: Tip güvenliği ve modern JavaScript
 - ✅ **Production Docker**: Multi-stage Docker build
-- ✅ **Test Suite**: Jest ile unit ve integration testler
 - ✅ **Modüler Mimari**: Temiz kod ve bakım kolaylığı
 
 ## 📋 Gereksinimler
 
 - Node.js >= 18.0.0
 - npm >= 8.0.0
-- Docker & Docker Compose (for production deployment)
 - MongoDB (optional, for data persistence)
 - Redis (optional, for caching)
 - PostgreSQL (recommended, for relational data)
@@ -60,13 +58,29 @@ Geliştirme ortamında arka ucu ve mobil Metro sunucusunu hızlıca başlatmak i
 # Backend
 cd backend
 npm install
-npm run dev # http://localhost:4000/health
+npm run dev  # <http://localhost:4000/health>
 
 # Yeni bir terminalde Metro
 cd ../mobile-app
 npm install
-npm start  # http://localhost:8081
+npm start  # <http://localhost:8081>
 ```
+
+## 🐳 Docker ile Çalıştırma (Opsiyonel)
+
+Production benzeri ortamda Docker ile çalıştırmak için:
+
+```bash
+# Backend klasöründe
+docker compose -f docker-compose.prod.yml up --build -d
+
+# Logları görmek için
+docker compose -f docker-compose.prod.yml logs -f
+```
+
+Notlar:
+- .env dosyanızı `backend/.env` konumunda oluşturun (örnek için `.env.example`).
+- Dockerfile multi-stage build içerir.
 
 Mobil uygulamayı cihaz/emülatörde çalıştırmak için (isteğe bağlı):
 
@@ -223,9 +237,12 @@ MIT License - detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
 Bu proje kapsamlı dokümantasyona sahiptir:
 
-- **[API Dokümantasyonu](./API_DOCUMENTATION.md)** - Tüm endpoint'ler, request/response formatları ve örnekler
-- **[Veritabanı Şemaları](./DATABASE_SCHEMA.md)** - MongoDB, PostgreSQL, Redis ve Neo4J veri modelleri
-- **[Deployment Rehberi](./DEPLOYMENT.md)** - Production deployment, güvenlik ve monitoring
+- **[API Dokümantasyonu](./API_DOCUMENTATION.md)** - Tüm endpoint'ler,
+  request/response formatları ve örnekler
+- **[Veritabanı Şemaları](./DATABASE_SCHEMA.md)** - MongoDB, PostgreSQL,
+  Redis ve Neo4J veri modelleri
+- **[Deployment Rehberi](./DEPLOYMENT.md)** - Production deployment,
+  güvenlik ve monitoring
 - **[Environment Setup](./.env.example)** - Tüm environment değişkenleri
 
 ## 🛠️ Frontend Geliştirme İçin
