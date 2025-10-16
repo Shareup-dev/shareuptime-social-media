@@ -61,7 +61,7 @@ export default function SearchScreen({ navigation }) {
       <Separator style={styles.separator} />
       <FlatList
         contentContainerStyle={styles.groupsList}
-        ListHeaderComponent={() => <RecentSearchList options={recentList} />}
+        ListHeaderComponent={RecentListHeader({ options: recentList })}
         data={searchResult}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -80,6 +80,9 @@ export default function SearchScreen({ navigation }) {
     </Screen>
   );
 }
+
+// extracted to avoid nested component creation on each render
+const RecentListHeader = ({ options }) => <RecentSearchList options={options} />;
 const styles = StyleSheet.create({
   searchContainer: {
     paddingHorizontal: 5,

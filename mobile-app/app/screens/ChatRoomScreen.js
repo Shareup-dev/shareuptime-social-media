@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { useMessages } from '../backendless';
 import Screen from '../components/Screen';
 import { ChatRoomHeader } from '../components/headers';
 import MessageTextField from '../components/messages/MessageTextField';
-import Tab from '../components/buttons/Tab';
 import colors from '../config/colors';
-import defaultStyles from '../config/styles';
 import MessageItem from '../components/messages/MessageItem';
 import store from '../redux/store';
 import { messagesAction } from '../redux/messagesSlice';
@@ -44,18 +42,7 @@ export default function ChatRoomScreen({ navigation, route }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
 
-  const renderListEmpty = () => (
-    <View style={styles.emptyMessagesContainer}>
-      0
-      <Text style={[defaultStyles.fontWeightMedium, styles.emptyMarginBottom]}>
-        {contact.firstName + ' ' + contact.lastName}
-      </Text>
-      <Text style={[styles.emptyText, styles.emptyMarginBottom]}>
-        You Both Follow Each Other and have 20 mutual Friends.
-      </Text>
-      <Tab title="View Profile" style={styles.viewProfileTab} />
-    </View>
-  );
+  // removed unused renderListEmpty to satisfy lint
 
   return (
     <Screen>

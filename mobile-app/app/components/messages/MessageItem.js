@@ -29,9 +29,7 @@ export default function MessageItem({ item, profilePicture }) {
         <View
           style={[
             styles.contentContainer,
-            {
-              opacity: showTime ? 0.8 : 1,
-            },
+            showTime ? styles.opacitySentDim : styles.opacityFull,
             styles.sentStyle,
           ]}
         >
@@ -39,14 +37,12 @@ export default function MessageItem({ item, profilePicture }) {
         </View>
       </TouchableWithoutFeedback>
 
-      {showTime && (
-        <Animated.Text style={[styles.time, { alignSelf: 'flex-end' }]}>{time}</Animated.Text>
-      )}
+      {showTime && <Animated.Text style={[styles.time, styles.alignEnd]}>{time}</Animated.Text>}
     </View>
   );
 
   const renderReceivedMessage = () => (
-    <View style={[styles.container, { flexDirection: 'row' }]}>
+    <View style={[styles.container, styles.row]}>
       <UserProfilePicture size={35} profilePicture={profilePicture} style={styles.profilePicture} />
 
       <View>
@@ -54,9 +50,7 @@ export default function MessageItem({ item, profilePicture }) {
           <View
             style={[
               styles.contentContainer,
-              {
-                opacity: showTime ? 0.5 : 1,
-              },
+              showTime ? styles.opacityReceivedDim : styles.opacityFull,
               styles.receivedStyle,
             ]}
           >
@@ -64,9 +58,7 @@ export default function MessageItem({ item, profilePicture }) {
           </View>
         </TouchableWithoutFeedback>
 
-        {showTime && (
-          <Animated.Text style={[styles.time, { alignSelf: 'flex-start' }]}>{time}</Animated.Text>
-        )}
+        {showTime && <Animated.Text style={[styles.time, styles.alignStart]}>{time}</Animated.Text>}
       </View>
     </View>
   );
@@ -75,6 +67,12 @@ export default function MessageItem({ item, profilePicture }) {
 }
 
 const styles = StyleSheet.create({
+  row: { flexDirection: 'row' },
+  alignEnd: { alignSelf: 'flex-end' },
+  alignStart: { alignSelf: 'flex-start' },
+  opacityFull: { opacity: 1 },
+  opacitySentDim: { opacity: 0.8 },
+  opacityReceivedDim: { opacity: 0.5 },
   container: {
     margin: 5,
     marginHorizontal: 20,
