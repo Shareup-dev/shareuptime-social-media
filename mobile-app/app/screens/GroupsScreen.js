@@ -32,7 +32,7 @@ export default function GroupsScreen({ navigation }) {
   const [search, setSearch] = useState(initSearchVal);
 
   useEffect(() => {
-    navigation.addListener('focus', async (e) => {
+    navigation.addListener('focus', async (_) => {
       // setSearch(initSearchVal);
       await groupService
         .getGroupsOfOwner(userData.id)

@@ -6,8 +6,7 @@ import Icon from '../components/Icon';
 import authContext from '../authContext';
 import ListItem from '../components/lists/ListItem';
 import UserService from '../services/user.service';
-import store from '../redux/store';
-import { sentRequestsActions } from '../redux/sentRequests';
+// Removed unused imports: store, sentRequestsActions
 import colors from '../config/colors';
 import defaultStyles from '../config/styles';
 // import routes from '../navigation/routes';
@@ -24,7 +23,7 @@ export default function SentRequests({ navigation }) {
     if (mounted) {
       UserService.getFriendRequestSent(userState?.userData?.email).then((resp) => {
         setSentto(resp.data);
-        resp.data.forEach((request) => {});
+        // No-op loop removed
       });
     }
     return () => (mounted = false);
