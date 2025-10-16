@@ -32,12 +32,12 @@ export default function HangFlowScreen({ navigation, route }) {
       }
     }, [postType, userState.userData.email]),
   );
-  const getAllHang = (userEmail) => {
+  const getAllHang = (_userEmail) => {
     hangShareService.getAllHangData().then((res) => {
       setSavedData(res.data);
     });
   };
-  const getAllSwap = (userEmail) => {
+  const getAllSwap = (_userEmail) => {
     swapService.getAllSwap().then((res) => {
       setSavedData(res.data);
     });

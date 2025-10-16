@@ -11,7 +11,6 @@ import {
 import AppButton from '../components/buttons/Button';
 import { Header, HeaderTitle } from '../components/headers';
 import colors from '../config/colors';
-import constants from '../config/constants';
 import routes from '../navigation/routes';
 import Icon from '../components/Icon';
 

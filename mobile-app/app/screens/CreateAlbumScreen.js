@@ -14,7 +14,7 @@ import authContext from '../Contexts/authContext';
 import { postDataSliceAction } from '../redux/postDataSlice';
 import { useDispatch } from 'react-redux';
 
-export default function CreateAlbumScreen({ navigation, route }) {
+export default function CreateAlbumScreen({ navigation }) {
   const { userData: user } = useContext(authContext)?.userState;
   const privacyOptions = useMemo(() => common.privacyOptions, []);
   const [postPrivacyOption, setPostPrivacyOption] = useState(privacyOptions[0]); // object to present the current privacy option
