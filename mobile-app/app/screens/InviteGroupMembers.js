@@ -138,9 +138,6 @@ const InviteGroupMembers = ({ navigation, route }) => {
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.white,
-  },
   searchContainer: {
     paddingHorizontal: 30,
   },
@@ -162,12 +159,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   groupsList: { paddingTop: 20 },
-  listItem: {
-    marginBottom: 13,
-    marginHorizontal: 28,
-    borderRadius: 10,
-    backgroundColor: colors.white,
-  },
   noFriendsContainer: {
     marginTop: 125,
     alignItems: 'center',
@@ -196,7 +187,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
   },
   title: {
     fontSize: 18,

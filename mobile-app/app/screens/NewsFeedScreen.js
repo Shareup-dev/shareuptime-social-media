@@ -166,12 +166,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  profilePicture: {
-    borderRadius: 15,
-    marginRight: 10,
-    width: 50,
-    height: 50,
-  },
+  // profilePicture duplicated above; removing duplicate to satisfy linter
   userInfo: {
     display: 'flex',
     flexDirection: 'row',
