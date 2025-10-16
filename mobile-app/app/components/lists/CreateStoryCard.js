@@ -1,9 +1,9 @@
-import React from "react";
-import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 
-import colors from "../../config/colors";
-import routes from "../../navigation/routes";
-import Icon from "../Icon";
+import colors from '../../config/colors';
+import routes from '../../navigation/routes';
+import Icon from '../Icon';
 
 export default function CreateStoryCard({ navigation, style }) {
   return (
@@ -15,13 +15,13 @@ export default function CreateStoryCard({ navigation, style }) {
       <View style={[styles.container, style]}>
         <View style={styles.profileImgContainer}>
           <Image
-            source={require("../../assets/icons/user-icon.png")}
-            resizeMode={"contain"}
+            source={require('../../assets/icons/user-icon.png')}
+            resizeMode={'contain'}
             style={styles.profileImg}
           />
         </View>
 
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: 'center' }}>
           <Icon
             name="pluscircle"
             type="AntDesign"
@@ -45,14 +45,14 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.lighterGray,
     borderRadius: 15,
-    overflow: "hidden",
+    overflow: 'hidden',
     backgroundColor: colors.white,
   },
   profileImgContainer: { backgroundColor: colors.grayX11Gray, height: 100 },
   profileImg: {
-    margin: "25%",
-    height: "50%",
-    width: "50%",
+    margin: '25%',
+    height: '50%',
+    width: '50%',
     backgroundColor: colors.grayX11Gray,
   },
   addIcon: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   createStory: {
     fontSize: 10,
-    textAlign: "center",
+    textAlign: 'center',
     top: -10,
   },
 });

@@ -27,7 +27,6 @@ import PostOptionDrawer from '../components/drawers/PostOptionsDrawer';
 import SwapActionContainer from '../components/posts/SwapActionContainer';
 import constants from '../config/constants';
 
-
 export default function PostDetailScreen({ navigation, route }) {
   const { postData } = route.params;
   const { userState } = useContext(authContext);
@@ -102,7 +101,7 @@ export default function PostDetailScreen({ navigation, route }) {
   );
   const loadImages = () => {
     if (postData.media?.length !== 0) {
-      setImages(postData.media?.map(image => image.mediaPath));
+      setImages(postData.media?.map((image) => image.mediaPath));
     }
   };
   const acceptHang = () => {
@@ -114,28 +113,22 @@ export default function PostDetailScreen({ navigation, route }) {
   const handleReactions = async () => {
     postService
       .likePost(userState.userData?.id, postData.id)
-      .then(res => {
+      .then((res) => {
         setIsUserLiked(!isUserLiked);
         //setNumberOfReactions(res.data.numberOfReaction);
       }) //need to get likePostIds
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   };
   return (
     <Screen>
-      <SafeAreaView></SafeAreaView>
+      <SafeAreaView />
       <Header
         backgroundColor={colors.white}
         left={
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableWithoutFeedback onPress={() => navigation.goBack()} >
-              <View style={{ marginRight: 15 }}  >
-
-                <Icon
-                  name="chevron-back"
-                  type="Ionicons"
-                  size={25}
-                  backgroundSizeRatio={1}
-                />
+            <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+              <View style={{ marginRight: 15 }}>
+                <Icon name="chevron-back" type="Ionicons" size={25} backgroundSizeRatio={1} />
               </View>
             </TouchableWithoutFeedback>
             <View style={styles.userNameContainer}>
@@ -145,7 +138,7 @@ export default function PostDetailScreen({ navigation, route }) {
                   style={styles.profilePicture}
                 />
                 <TouchableOpacity
-                  onPress={_ => navigation.navigate(routes.GROUP_FEED, postData.group)}
+                  onPress={(_) => navigation.navigate(routes.GROUP_FEED, postData.group)}
                 >
                   <Image
                     source={{
@@ -155,30 +148,31 @@ export default function PostDetailScreen({ navigation, route }) {
                       borderRadius: 15,
                       width: 25,
                       height: 25,
-                       zIndex: 1,
-                       position: 'absolute',
+                      zIndex: 1,
+                      position: 'absolute',
                       marginBottom: 10,
                       marginLeft: 1,
-                       top: -16,
-                       left: 25,
-
+                      top: -16,
+                      left: 25,
                     }}
-                  /></TouchableOpacity>
+                  />
+                </TouchableOpacity>
               </View>
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate(
-                    routes.USER_PROFILE,
-                    postData.userdata.email,
-                  )
-                }>
-                <Text style={styles.userName}>
-                  {postData.userdata.firstName}
-                </Text>
-                {postData.group ?
-                  <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'flex-start' }}>
-                    
-                  </View> : <></>}
+                onPress={() => navigation.navigate(routes.USER_PROFILE, postData.userdata.email)}
+              >
+                <Text style={styles.userName}>{postData.userdata.firstName}</Text>
+                {postData.group ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'flex-start',
+                    }}
+                  />
+                ) : (
+                  <></>
+                )}
                 <View style={styles.postDateContainer}>
                   <Text style={styles.postDate}>{postData.published}</Text>
                   <Text style={{ fontWeight: 'bold' }}> .</Text>
@@ -191,14 +185,19 @@ export default function PostDetailScreen({ navigation, route }) {
                     style={styles.privacy}
                   />
                 </View>
-                <View style = {{flexDirection: "row", alignItems: 'center', justifyContent: 'flex-start' }}>
-                
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                  }}
+                >
                   <TouchableOpacity
-                      onPress={_ => navigation.navigate(routes.GROUP_FEED, postData.group)}
-                    >
-                      <Text style={styles.group}>{postData.group?.name}</Text>
-                    </TouchableOpacity>
-                  </View>
+                    onPress={(_) => navigation.navigate(routes.GROUP_FEED, postData.group)}
+                  >
+                    <Text style={styles.group}>{postData.group?.name}</Text>
+                  </TouchableOpacity>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -208,7 +207,8 @@ export default function PostDetailScreen({ navigation, route }) {
             style={styles.menuButton}
             onPress={() => {
               setIsOptionsVisible(true);
-            }}>
+            }}
+          >
             <Icon
               name="options"
               type="SimpleLineIcons"
@@ -242,7 +242,7 @@ export default function PostDetailScreen({ navigation, route }) {
             ImageComponentStyle={styles.image}
             imageLoadingColor={colors.iondigoDye}
             // parentWidth={sliderWidth / 1.04}
-            onCurrentImagePressed={index => {
+            onCurrentImagePressed={(index) => {
               setCurrentImage(images[index]);
               setImageViewerVisible(true);
             }}
@@ -250,16 +250,13 @@ export default function PostDetailScreen({ navigation, route }) {
 
           // <Image source={{ uri: images[0] }} style={styles.image} />
         )}
-        {((postData.allPostsType === constants.postTypes.SWAP) || (postData.allPostsType === constants.postTypes.HANG_SHARE)) && (
+        {(postData.allPostsType === constants.postTypes.SWAP ||
+          postData.allPostsType === constants.postTypes.HANG_SHARE) && (
           <SwapActionContainer
-
             item={postData}
-            onPress={
-              postData.allPostsType === constants.postTypes.SWAP
-                ? acceptSwap
-                : acceptHang
-            }
-          />)}
+            onPress={postData.allPostsType === constants.postTypes.SWAP ? acceptSwap : acceptHang}
+          />
+        )}
 
         <Separator style={styles.separator} />
         <View style={styles.actionsContainer}>
@@ -421,6 +418,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 13,
     //marginTop:10,
-    color:colors.dimGray
+    color: colors.dimGray,
   },
 });

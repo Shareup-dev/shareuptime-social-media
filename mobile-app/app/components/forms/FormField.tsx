@@ -28,13 +28,8 @@ const AppFormField: React.FC<AppFormFieldProps> = ({
   style,
   ...otherProps
 }) => {
-  const { 
-    setFieldTouched, 
-    setFieldValue, 
-    errors, 
-    touched, 
-    values 
-  } = useFormikContext<Record<string, any>>();
+  const { setFieldTouched, setFieldValue, errors, touched, values } =
+    useFormikContext<Record<string, any>>();
 
   const fieldValue = values[name];
   const fieldError = errors[name] as string;
@@ -52,10 +47,7 @@ const AppFormField: React.FC<AppFormFieldProps> = ({
         error={fieldError}
         {...otherProps}
       />
-      <ErrorMessage 
-        error={fieldError} 
-        visible={fieldTouched} 
-      />
+      <ErrorMessage error={fieldError} visible={fieldTouched} />
     </View>
   );
 };

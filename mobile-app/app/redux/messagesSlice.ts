@@ -77,7 +77,7 @@ const messagesSlice = createSlice({
       state.error = null;
     },
     addMessage: (state, action: PayloadAction<Message>) => {
-      const existingIndex = state.messages.findIndex(msg => msg.id === action.payload.id);
+      const existingIndex = state.messages.findIndex((msg) => msg.id === action.payload.id);
       if (existingIndex === -1) {
         state.messages.unshift(action.payload);
       } else {
@@ -86,24 +86,24 @@ const messagesSlice = createSlice({
     },
     addMessages: (state, action: PayloadAction<Message[]>) => {
       const newMessages = action.payload.filter(
-        newMsg => !state.messages.some(existingMsg => existingMsg.id === newMsg.id)
+        (newMsg) => !state.messages.some((existingMsg) => existingMsg.id === newMsg.id),
       );
       state.messages.push(...newMessages);
       state.isLoading = false;
     },
     updateMessage: (state, action: PayloadAction<{ id: string; updates: Partial<Message> }>) => {
       const { id, updates } = action.payload;
-      const messageIndex = state.messages.findIndex(msg => msg.id === id);
+      const messageIndex = state.messages.findIndex((msg) => msg.id === id);
       if (messageIndex !== -1) {
         state.messages[messageIndex] = { ...state.messages[messageIndex], ...updates };
       }
     },
     removeMessage: (state, action: PayloadAction<string>) => {
-      state.messages = state.messages.filter(msg => msg.id !== action.payload);
+      state.messages = state.messages.filter((msg) => msg.id !== action.payload);
     },
     markAsRead: (state, action: PayloadAction<string[]>) => {
       const messageIds = action.payload;
-      state.messages.forEach(msg => {
+      state.messages.forEach((msg) => {
         if (messageIds.includes(msg.id)) {
           msg.isRead = true;
         }
@@ -111,7 +111,7 @@ const messagesSlice = createSlice({
     },
     markAsDelivered: (state, action: PayloadAction<string[]>) => {
       const messageIds = action.payload;
-      state.messages.forEach(msg => {
+      state.messages.forEach((msg) => {
         if (messageIds.includes(msg.id)) {
           msg.isDelivered = true;
         }

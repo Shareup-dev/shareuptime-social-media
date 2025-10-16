@@ -1,20 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Text,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {HeaderWithBackArrow} from '../components/headers';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text, Image, TouchableOpacity } from 'react-native';
+import { HeaderWithBackArrow } from '../components/headers';
 import colors from '../config/colors';
 import fileStorage from '../config/fileStorage';
 // import routes from '../navigation/routes';
 import groupService from '../services/group.service';
 
-export default function MemberRequest({navigation, route}) {
-  const {params: groupData} = route;
+export default function MemberRequest({ navigation, route }) {
+  const { params: groupData } = route;
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(0);
 
@@ -23,37 +16,32 @@ export default function MemberRequest({navigation, route}) {
       setLoading(1);
       groupService
         .listOfRequests(groupData.id)
-        .then(res => setRequests(res.data))
-        .catch(e => console.error(e.message))
-        .finally(_ => setLoading(2));
+        .then((res) => setRequests(res.data))
+        .catch((e) => console.error(e.message))
+        .finally((_) => setLoading(2));
     };
     fetchMemberRequests();
   }, []);
 
-  const acceptMemberRequest = id => {
+  const acceptMemberRequest = (id) => {
     groupService
       .acceptMemberRequest(id)
       .then(
-        res =>
-          res.status === 200 &&
-          setRequests(prev => prev.filter(item => item.id !== id)),
+        (res) => res.status === 200 && setRequests((prev) => prev.filter((item) => item.id !== id)),
       )
-      .catch(e => console.error(e.message));
+      .catch((e) => console.error(e.message));
   };
 
-  const rejectMemberRequest = id => {
+  const rejectMemberRequest = (id) => {
     groupService
       .rejectMemberRequest(id)
       .then(
-        res =>
-          res.status === 200 &&
-          setRequests(prev => prev.filter(item => item.id !== id)),
+        (res) => res.status === 200 && setRequests((prev) => prev.filter((item) => item.id !== id)),
       )
-      .catch(e => console.error(e.message));
+      .catch((e) => console.error(e.message));
   };
 
-  const Item = ({item}) => {
-
+  const Item = ({ item }) => {
     return (
       <View
         style={{
@@ -62,16 +50,18 @@ export default function MemberRequest({navigation, route}) {
           alignContent: 'center',
           borderBottomColor: '#cacaca60',
           borderBottomWidth: 1,
-        }}>
+        }}
+      >
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <Image
             source={
               item?.group?.image
-                ? {uri: fileStorage.baseUrl + item?.group?.image}
+                ? { uri: fileStorage.baseUrl + item?.group?.image }
                 : require('../assets/images/group-texture.png')
             }
             style={styles.img}
@@ -81,17 +71,19 @@ export default function MemberRequest({navigation, route}) {
             <Text>requesting to join </Text>
           </View>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
             onPress={() => acceptMemberRequest(item.id)}
             activeOpacity={0.6}
-            style={[styles.btn, {backgroundColor: colors.iondigoDye}]}>
-            <Text style={{color: '#fff'}}>Accept</Text>
+            style={[styles.btn, { backgroundColor: colors.iondigoDye }]}
+          >
+            <Text style={{ color: '#fff' }}>Accept</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => rejectMemberRequest(item.id)}
             activeOpacity={0.6}
-            style={styles.btn}>
+            style={styles.btn}
+          >
             <Text>Reject</Text>
           </TouchableOpacity>
         </View>
@@ -116,7 +108,8 @@ export default function MemberRequest({navigation, route}) {
             marginHorizontal: 5,
             fontSize: 16,
             textAlign: 'center',
-          }}>
+          }}
+        >
           There is no requests to display
         </Text>
       ) : (
@@ -127,7 +120,8 @@ export default function MemberRequest({navigation, route}) {
               marginHorizontal: 5,
               fontSize: 16,
               textAlign: 'center',
-            }}>
+            }}
+          >
             New requests
           </Text>
 
@@ -135,7 +129,7 @@ export default function MemberRequest({navigation, route}) {
             showsVerticalScrollIndicator={false}
             data={requests}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => <Item item={item} />}
+            renderItem={({ item }) => <Item item={item} />}
           />
         </View>
       )}

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -19,39 +19,38 @@ import GroupService from '../services/group.service';
 import Icon from '../components/Icon';
 import AppButton from '../components/buttons/Button';
 import Loading from '../components/Loading';
-import {Header, HeaderTitle} from '../components/headers';
+import { Header, HeaderTitle } from '../components/headers';
 
-const InviteGroupMembers = ({navigation, route}) => {
-  const {params: groupData} = route;
+const InviteGroupMembers = ({ navigation, route }) => {
+  const { params: groupData } = route;
 
   const [users, setusers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [invitedTo, setinvitedTo] = useState([]);
-  const {userData: loggedInUser} = useContext(authContext).userState;
+  const { userData: loggedInUser } = useContext(authContext).userState;
   useEffect(() => {
     const getUsers = () => {
       setLoading(true);
       UserService.getUsers()
-        .then(resp => {
-          let allUsers = resp.data.filter(data => data.id !== loggedInUser.id);
+        .then((resp) => {
+          let allUsers = resp.data.filter((data) => data.id !== loggedInUser.id);
           setusers(allUsers);
         })
-        .catch(e => console.error(e))
-        .finally(_ => setLoading(false));
+        .catch((e) => console.error(e))
+        .finally((_) => setLoading(false));
     };
     getUsers();
   }, []);
 
-  const handleInviteFriend = member => {
-    if (invitedTo.filter(invitedMember => member.id === invitedMember.id)[0]) {
+  const handleInviteFriend = (member) => {
+    if (invitedTo.filter((invitedMember) => member.id === invitedMember.id)[0]) {
       return;
     }
     GroupService.inviteToJoin(groupData.id, loggedInUser.id, member.id)
-      .then(res => {
-        if (res.status === 200)
-          setinvitedTo(previouslyInvited => [...previouslyInvited, member]);
+      .then((res) => {
+        if (res.status === 200) setinvitedTo((previouslyInvited) => [...previouslyInvited, member]);
       })
-      .catch(e => e);
+      .catch((e) => e);
   };
 
   return (
@@ -60,18 +59,12 @@ const InviteGroupMembers = ({navigation, route}) => {
         backgroundColor={colors.white}
         left={
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-            <Icon
-              name="chevron-back"
-              type="Ionicons"
-              size={25}
-              backgroundSizeRatio={1}
-            />
+            <Icon name="chevron-back" type="Ionicons" size={25} backgroundSizeRatio={1} />
           </TouchableWithoutFeedback>
         }
         middle={<HeaderTitle>Invite People</HeaderTitle>}
         right={
-          <TouchableOpacity
-            onPress={() => navigation.navigate(routes.GROUP_FEED, groupData)}>
+          <TouchableOpacity onPress={() => navigation.navigate(routes.GROUP_FEED, groupData)}>
             <Text>Done</Text>
           </TouchableOpacity>
         }
@@ -96,26 +89,22 @@ const InviteGroupMembers = ({navigation, route}) => {
             )}
             data={users}
             keyExtractor={(item, i) => i.toString()}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <ListItem
                 user={item}
                 image={item.profilePicturePath}
                 title={item.firstName}
-                handleClose={() =>
-                  setusers(prev => prev.filter(({id}) => id !== item.id))
-                }
+                handleClose={() => setusers((prev) => prev.filter(({ id }) => id !== item.id))}
                 tabTitle={
-                  invitedTo.filter(user => user.email === item.email)[0]
-                    ? 'Invited'
-                    : 'Invite'
+                  invitedTo.filter((user) => user.email === item.email)[0] ? 'Invited' : 'Invite'
                 }
                 color={
-                  invitedTo.filter(user => user.email === item.email)[0]
+                  invitedTo.filter((user) => user.email === item.email)[0]
                     ? colors.iondigoDye
                     : colors.lighterGray
                 }
                 fontColor={
-                  invitedTo.filter(user => user.email === item.email)[0]
+                  invitedTo.filter((user) => user.email === item.email)[0]
                     ? colors.white
                     : colors.dark
                 }
@@ -172,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.LightGray,
     marginTop: 20,
   },
-  groupsList: {paddingTop: 20},
+  groupsList: { paddingTop: 20 },
   listItem: {
     marginBottom: 13,
     marginHorizontal: 28,

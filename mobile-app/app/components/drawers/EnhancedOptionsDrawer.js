@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, Text} from 'react-native';
+import { View, StyleSheet, Dimensions, Text } from 'react-native';
 
 import BottomSheet from '../BottomSheet';
 import DrawerList from './DrawerList';
@@ -8,7 +8,7 @@ import colors from '../../config/colors';
 
 const height = Dimensions.get('window').height;
 
-export default function EnhancedOptionsDrawer({options, forwardedRef}) {
+export default function EnhancedOptionsDrawer({ options, forwardedRef }) {
   const renderHeader = () => (
     <View style={[styles.header]}>
       <View style={defaultStyle.tip} />
@@ -31,8 +31,8 @@ export default function EnhancedOptionsDrawer({options, forwardedRef}) {
 }
 
 const styles = StyleSheet.create({
-  container: {backgroundColor: colors.white},
-  contentContainer: {alignItems: 'center', backgroundColor: colors.white},
+  container: { backgroundColor: colors.white },
+  contentContainer: { alignItems: 'center', backgroundColor: colors.white },
   header: {
     padding: 10,
     backgroundColor: colors.white,

@@ -69,13 +69,13 @@ const feedPostsSlice = createSlice({
     },
     addFeedPosts: (state, action: PayloadAction<Post[]>) => {
       const newPosts = action.payload.filter(
-        newPost => !state.posts.some(existingPost => existingPost.id === newPost.id)
+        (newPost) => !state.posts.some((existingPost) => existingPost.id === newPost.id),
       );
       state.posts.push(...newPosts);
       state.isLoading = false;
     },
     addFeedPost: (state, action: PayloadAction<Post>) => {
-      const existingIndex = state.posts.findIndex(post => post.id === action.payload.id);
+      const existingIndex = state.posts.findIndex((post) => post.id === action.payload.id);
       if (existingIndex === -1) {
         state.posts.unshift(action.payload);
       } else {
@@ -84,35 +84,35 @@ const feedPostsSlice = createSlice({
     },
     updatePost: (state, action: PayloadAction<{ id: string; updates: Partial<Post> }>) => {
       const { id, updates } = action.payload;
-      const postIndex = state.posts.findIndex(post => post.id === id);
+      const postIndex = state.posts.findIndex((post) => post.id === id);
       if (postIndex !== -1) {
         state.posts[postIndex] = { ...state.posts[postIndex], ...updates };
       }
     },
     removePost: (state, action: PayloadAction<string>) => {
-      state.posts = state.posts.filter(post => post.id !== action.payload);
+      state.posts = state.posts.filter((post) => post.id !== action.payload);
     },
     toggleLike: (state, action: PayloadAction<string>) => {
-      const post = state.posts.find(post => post.id === action.payload);
+      const post = state.posts.find((post) => post.id === action.payload);
       if (post) {
         post.isLiked = !post.isLiked;
         post.likeCount += post.isLiked ? 1 : -1;
       }
     },
     toggleBookmark: (state, action: PayloadAction<string>) => {
-      const post = state.posts.find(post => post.id === action.payload);
+      const post = state.posts.find((post) => post.id === action.payload);
       if (post) {
         post.isBookmarked = !post.isBookmarked;
       }
     },
     incrementCommentCount: (state, action: PayloadAction<string>) => {
-      const post = state.posts.find(post => post.id === action.payload);
+      const post = state.posts.find((post) => post.id === action.payload);
       if (post) {
         post.commentCount += 1;
       }
     },
     decrementCommentCount: (state, action: PayloadAction<string>) => {
-      const post = state.posts.find(post => post.id === action.payload);
+      const post = state.posts.find((post) => post.id === action.payload);
       if (post) {
         post.commentCount = Math.max(0, post.commentCount - 1);
       }

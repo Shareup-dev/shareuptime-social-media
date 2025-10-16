@@ -1,7 +1,7 @@
-import authStorage from "../auth/storage";
-import cache from "../util/cache";
-import { create } from "apisauce";
-import settings from "../config/settings";
+import authStorage from '../auth/storage';
+import cache from '../util/cache';
+import { create } from 'apisauce';
+import settings from '../config/settings';
 
 const apiClient = create({
   baseURL: `${settings.apiUrl}`,
@@ -10,7 +10,7 @@ const apiClient = create({
 apiClient.addAsyncRequestTransform(async (request) => {
   const token = await authStorage.getToken();
   if (!token) return;
-  request.headers["x-auth-token"] = token;
+  request.headers['x-auth-token'] = token;
 });
 
 const get = apiClient.get;

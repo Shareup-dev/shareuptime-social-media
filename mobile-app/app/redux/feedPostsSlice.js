@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const feedPostsSlice = createSlice({
-  name: "feedPosts",
+  name: 'feedPosts',
   initialState: [],
   reducers: {
     setFeedPosts: (previousState, newFeedPost) => {

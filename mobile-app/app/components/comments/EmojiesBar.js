@@ -1,49 +1,49 @@
-import React from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import React from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
 
-import EmojiTab from "./EmojiTab";
-import colors from "../../config/colors";
+import EmojiTab from './EmojiTab';
+import colors from '../../config/colors';
 
 const emojisList = [
   {
     id: 1,
-    emoji: "😀",
+    emoji: '😀',
   },
   {
     id: 2,
-    emoji: "😂",
+    emoji: '😂',
   },
   {
     id: 3,
-    emoji: "🥰",
+    emoji: '🥰',
   },
   {
     id: 4,
-    emoji: "😍",
+    emoji: '😍',
   },
   {
     id: 5,
-    emoji: "🤩",
+    emoji: '🤩',
   },
   {
     id: 6,
-    emoji: "😜",
+    emoji: '😜',
   },
   {
     id: 7,
-    emoji: "😢",
+    emoji: '😢',
   },
   {
     id: 8,
-    emoji: "😤",
+    emoji: '😤',
   },
   {
     id: 9,
-    emoji: "😣",
+    emoji: '😣',
   },
   {
     id: 10,
-    emoji: "😡",
+    emoji: '😡',
   },
 ];
 
@@ -63,9 +63,9 @@ export default function EmojiesBar(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
     height: 45,
     backgroundColor: colors.lighterGray,
   },

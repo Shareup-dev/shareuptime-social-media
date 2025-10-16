@@ -72,7 +72,7 @@ export const getOrCreateConversation = async (req: Request, res: Response): Prom
       `;
 
       const participantValues = [conversationId];
-      allParticipants.forEach((participantId, index) => {
+      allParticipants.forEach((participantId, _index) => {
         participantValues.push(uuidv4()); // participant ID
         participantValues.push(participantId); // user ID
         participantValues.push(participantId === currentUserId ? 'admin' : 'member'); // role
@@ -221,7 +221,7 @@ export const sendMessage = async (req: Request, res: Response): Promise<void> =>
         RETURNING *
       `;
 
-      const newMessageResult = await client.query(insertMessageQuery, [
+      const _newMessageResult = await client.query(insertMessageQuery, [
         messageId,
         conversationId,
         senderId,

@@ -134,7 +134,7 @@ const AppNavigator: React.FC = () => {
           component={AccountScreen}
           options={{
             tabBarIcon: ({ size, color }) => (
-              <TouchableWithoutFeedback 
+              <TouchableWithoutFeedback
                 onPress={() => setIsDrawerVisible(true)}
                 accessible={true}
                 accessibilityRole="button"
@@ -157,10 +157,7 @@ const AppNavigator: React.FC = () => {
         />
       </Tab.Navigator>
 
-      <Drawer 
-        isVisible={isDrawerVisible} 
-        setIsVisible={setIsDrawerVisible} 
-      />
+      <Drawer isVisible={isDrawerVisible} setIsVisible={setIsDrawerVisible} />
     </>
   );
 };

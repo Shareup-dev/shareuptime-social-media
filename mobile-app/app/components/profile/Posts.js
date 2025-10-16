@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 
-import Tab from "../buttons/Tab";
-import WritePost from "../WritePost";
-import colors from "../../config/colors";
-import Card from "../lists/Card";
+import Tab from '../buttons/Tab';
+import WritePost from '../WritePost';
+import colors from '../../config/colors';
+import Card from '../lists/Card';
 
 export default function Posts({ navigation }) {
   return (
@@ -37,7 +37,7 @@ export default function Posts({ navigation }) {
         />
         <Tab
           title="Live Locations"
-          iconImage={require("../../assets/icons/globe-location-icon.png")}
+          iconImage={require('../../assets/icons/globe-location-icon.png')}
           style={styles.smallButtons}
           titleStyle={styles.smallButtonsTitle}
         />
@@ -53,21 +53,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
     borderRadius: 10,
-    width: "65%",
+    width: '65%',
     height: 35,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   managePostsButtonTitle: {
     fontSize: 14,
   },
   separator: {
-    width: "100%",
+    width: '100%',
     height: 2,
     backgroundColor: colors.lighterGray,
   },
   TabContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 15,
   },
   smallButtons: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import routes from './routes';
 import NewsFeedScreen from '../screens/NewsFeedScreen';
@@ -27,12 +27,13 @@ export default function NewsFeedNavigator() {
       screenOptions={{
         gestureEnabled: true,
         gestureDirection: 'horizontal',
-      }}>
+      }}
+    >
       <Stack.Screen
         name={routes.FEED}
         component={NewsFeedScreen}
         options={{
-          header: ({navigation}) => <CustomHeaderBar navigation={navigation} />,
+          header: ({ navigation }) => <CustomHeaderBar navigation={navigation} />,
         }}
       />
       <Stack.Screen
@@ -72,7 +73,6 @@ export default function NewsFeedNavigator() {
           headerShown: false,
         }}
       />
-    
 
       <Stack.Screen
         name={routes.GROUP_FEED}

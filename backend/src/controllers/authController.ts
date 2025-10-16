@@ -3,14 +3,7 @@ import { Request, Response } from 'express';
 
 import { pgPool } from '../config/database';
 import { LoginRequest } from '../types';
-import {
-  verifyPassword,
-  hashPassword,
-  generateToken,
-  createResponse,
-  isValidEmail,
-  sanitizeInput,
-} from '../utils';
+import { generateToken, createResponse, isValidEmail } from '../utils';
 
 // Kullanıcı girişi
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
@@ -53,7 +46,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       const token = generateToken(user.id);
 
       // Kullanıcı bilgilerini şifre olmadan döndür
-      const { password_hash, ...userWithoutPassword } = user;
+      const { password_hash: _passwordHash, ...userWithoutPassword } = user;
 
       res.status(200).json(
         createResponse(true, 'Giriş başarılı', {

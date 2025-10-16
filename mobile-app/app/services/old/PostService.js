@@ -9,8 +9,7 @@ let authAxios = null;
 
 const authenticate = async () => {
   await AuthService.getCurrentUser().then(
-    res => {
-
+    (res) => {
       authAxios = axios.create({
         baseURL: `${baseURL}/api/v1/`,
         headers: {
@@ -19,7 +18,7 @@ const authenticate = async () => {
         },
       });
     },
-    error => {
+    (error) => {
       console.error(error);
     },
   );
@@ -33,7 +32,7 @@ class PostService {
     return result;
   };
 
-  getNewsFeed = async email => {
+  getNewsFeed = async (email) => {
     authenticate();
     try {
       const result = await authAxios.get('newsFeed/' + email);
@@ -44,7 +43,7 @@ class PostService {
     }
   };
 
-  getPostsForUser = async email => {
+  getPostsForUser = async (email) => {
     authenticate();
     try {
       const result = await authAxios.get('/posts/email/' + email);
@@ -56,13 +55,13 @@ class PostService {
   };
 
   //ToDO: Create a api to get a post by id.
-  getPostById = async postId => {
+  getPostById = async (postId) => {
     authenticate();
     const result = await authAxios.get(`posts/post-by-id/${postId}`);
     return result;
   };
 
-  getSavedPostForUser = async email => {
+  getSavedPostForUser = async (email) => {
     authenticate();
     const result = await authAxios.get(`posts/${email}/saved_posts`);
     return result;
@@ -80,7 +79,7 @@ class PostService {
     return result;
   };
 
-  deletePost = async postid => {
+  deletePost = async (postid) => {
     const result = await authAxios.delete(`posts/${postid}`);
     return result;
   };
@@ -89,20 +88,16 @@ class PostService {
     let newComment = {
       content: comment.content,
     };
-  
 
     try {
-      const result = await authAxios.post(
-        `comment/${userid}/${postid}`,
-        newComment,
-      );
+      const result = await authAxios.post(`comment/${userid}/${postid}`, newComment);
       return result;
     } catch (error) {
       console.error('Error occurred while posting comment: ', error);
     }
   };
 
-  deleteComment = async commentid => {
+  deleteComment = async (commentid) => {
     const result = await authAxios.delete(`comment/${commentid}`);
     return result;
   };
@@ -113,34 +108,28 @@ class PostService {
     const result = await authAxios.post(`swaps/${userId}`, formData);
     return result;
   };
-  getSwapComment = async swapId => {
+  getSwapComment = async (swapId) => {
     const result = await authAxios.get(`/comment/swap/${swapId}`);
     return result;
   };
   addSwapComment = async (userId, swapId, commentText) => {
-  
     let commentData = new FormData();
     commentData.append('commentText', commentText);
-    const result = await authAxios.post(
-      `/comment/swap/${userId}/${swapId}`,
-      commentData,
-    );
+    const result = await authAxios.post(`/comment/swap/${userId}/${swapId}`, commentData);
     return result;
   };
-  getSwapById = async swapId => {
+  getSwapById = async (swapId) => {
     const result = await authAxios.get(`/swap/${swapId}`);
     return result;
   };
 
-  createPostFormData = content => {
+  createPostFormData = (content) => {
     const formData = new FormData();
 
     formData.append('content', content.text);
 
     if (content.images.length !== 0) {
-
-
-      content.images.forEach(image => {
+      content.images.forEach((image) => {
         const splitPathArr = image.split('/');
 
         formData.append(`files`, {
@@ -154,7 +143,6 @@ class PostService {
     if (content.groupId) {
       formData.append('groupid', content.groupId);
     }
-
 
     return formData;
   };

@@ -1,21 +1,12 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
-import Button from "../buttons/LinkButton";
-import colors from "../../config/colors";
+import Button from '../buttons/LinkButton';
+import colors from '../../config/colors';
 
-export default function HeaderButton({
-  title,
-  onPress,
-  isActive = false,
-  style,
-}) {
+export default function HeaderButton({ title, onPress, isActive = false, style }) {
   return isActive ? (
-    <Button
-      title={title}
-      onPress={onPress}
-      style={[styles.activeButton, style]}
-    />
+    <Button title={title} onPress={onPress} style={[styles.activeButton, style]} />
   ) : (
     <Button title={title} style={[styles.inactiveButton, style]} />
   );

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 export default function useApi(apiFunc) {
   const [data, setData] = useState([]);
@@ -15,5 +15,5 @@ export default function useApi(apiFunc) {
     return response;
   };
 
-  return {data, error, loading, request};
+  return { data, error, loading, request };
 }

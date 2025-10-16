@@ -1,19 +1,12 @@
-import React from "react";
-import { useFormikContext } from "formik";
+import React from 'react';
+import { useFormikContext } from 'formik';
 
-import TextInput from "../TextInput";
-import ErrorMessage from "./ErrorMessage";
-import { View } from "react-native";
+import TextInput from '../TextInput';
+import ErrorMessage from './ErrorMessage';
+import { View } from 'react-native';
 
-export default function AppFormField({
-  name,
-  width,
-  centerText,
-  style,
-  ...otherProps
-}) {
-  const { setFieldTouched, setFieldValue, errors, touched, values } =
-    useFormikContext();
+export default function AppFormField({ name, width, centerText, style, ...otherProps }) {
+  const { setFieldTouched, setFieldValue, errors, touched, values } = useFormikContext();
 
   return (
     <View style={style}>

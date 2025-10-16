@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text } from 'react-native';
 import * as Yup from 'yup';
 
-import {Form, FormField, SubmitButton} from '../components/forms';
+import { Form, FormField, SubmitButton } from '../components/forms';
 import routes from '../navigation/routes';
 
 import defaultStyles from '../config/styles';
@@ -13,14 +13,14 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
 });
 
-export default function ForgotPassword({navigation}) {
+export default function ForgotPassword({ navigation }) {
   const [Loading, setLoading] = useState(false);
 
   // Sending OTP to email to reset password
   const sendOTP = (values, setFieldError) => {
     authService
       .passwordResetOTP(values.email)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           navigation.navigate(routes.PASSWORD_RESET_OTP, {
             ...values,
@@ -29,24 +29,23 @@ export default function ForgotPassword({navigation}) {
           setFieldError('email', 'Error while sending OTP');
         }
       })
-      .catch(e => setFieldError('email', 'Error while sending OTP'))
+      .catch((e) => setFieldError('email', 'Error while sending OTP'))
       .finally(() => setLoading(false));
   };
 
   const handleSubmit = async (values, props) => {
-    const {setFieldError} = props;
+    const { setFieldError } = props;
     setLoading(true);
 
     //checking if the user account exist
     authService
       .verifyUser(values.email)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           sendOTP(values, setFieldError);
-        } else
-          setFieldError('email', 'Account not exist. Please check your Email');
+        } else setFieldError('email', 'Account not exist. Please check your Email');
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.message === 'Request failed with status code 404')
           setFieldError('email', 'Account not exist. Please check your Email');
         else setFieldError('email', 'Unexpected Error.');
@@ -61,7 +60,8 @@ export default function ForgotPassword({navigation}) {
           email: '',
         }}
         onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
+        validationSchema={validationSchema}
+      >
         <FormField
           autoCapitalize="none"
           autoCorrect={false}
@@ -76,7 +76,7 @@ export default function ForgotPassword({navigation}) {
         <SubmitButton
           title={Loading ? `Verifying` : `Find my account`}
           disabled={Loading}
-          style={[styles.submitButton, {opacity: Loading ? 0.5 : 1}]}
+          style={[styles.submitButton, { opacity: Loading ? 0.5 : 1 }]}
         />
       </Form>
     </RegistrationContainer>

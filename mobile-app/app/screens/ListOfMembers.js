@@ -1,23 +1,16 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  SectionList,
-  Text,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 'react-native';
 import DownModal from '../components/drawers/DownModal';
 import AuthContext from '../authContext';
-import {HeaderWithBackArrow} from '../components/headers';
+import { HeaderWithBackArrow } from '../components/headers';
 import Icon from '../components/Icon';
 import fileStorage from '../config/fileStorage';
 import groupService from '../services/group.service';
 import AppTextField from '../components/TextField';
 
-export default function ListOfMembers({navigation, route}) {
-  const {userData} = useContext(AuthContext).userState;
-  const {params: groupData} = route;
+export default function ListOfMembers({ navigation, route }) {
+  const { userData } = useContext(AuthContext).userState;
+  const { params: groupData } = route;
 
   const initSearchVal = {
     keyword: '',
@@ -46,16 +39,16 @@ export default function ListOfMembers({navigation, route}) {
     fetchData();
   }, []);
 
-  const SearchMembers = _ => {
+  const SearchMembers = (_) => {
     if (search.keyword) {
-      setSearch(prev => ({...prev, loading: 1}));
+      setSearch((prev) => ({ ...prev, loading: 1 }));
       groupService
         .search(search.keyword)
-        .then(res => setSearch(prev => ({...prev, result: res.data})))
-        .catch(e => console.error(e.message))
-        .finally(_ => setSearch(prev => ({...prev, loading: 2})));
+        .then((res) => setSearch((prev) => ({ ...prev, result: res.data })))
+        .catch((e) => console.error(e.message))
+        .finally((_) => setSearch((prev) => ({ ...prev, loading: 2 })));
     } else {
-      setSearch(prev => ({...prev, loading: 0, result: []}));
+      setSearch((prev) => ({ ...prev, loading: 0, result: [] }));
     }
   };
   const handleClearSearch = () => {
@@ -63,57 +56,54 @@ export default function ListOfMembers({navigation, route}) {
   };
 
   const fetchData = () => {
-    setMembers(prev => ({...prev, loading: 1}));
+    setMembers((prev) => ({ ...prev, loading: 1 }));
 
-    Promise.all([
-      groupService.getAdmins(groupData.id),
-      groupService.getMembers(groupData.id),
-    ])
-      .then(res =>
-        setMembers(prev => ({
+    Promise.all([groupService.getAdmins(groupData.id), groupService.getMembers(groupData.id)])
+      .then((res) =>
+        setMembers((prev) => ({
           ...prev,
           sections: [
-            {title: 'Admin', data: [groupData?.owner, ...res[0].data]},
-            {title: 'Members', data: res[1].data},
+            { title: 'Admin', data: [groupData?.owner, ...res[0].data] },
+            { title: 'Members', data: res[1].data },
           ],
         })),
       )
-      .catch(e => console.error(e))
-      .finally(_ => setMembers(prev => ({...prev, loading: 2})));
+      .catch((e) => console.error(e))
+      .finally((_) => setMembers((prev) => ({ ...prev, loading: 2 })));
   };
 
   const addAdmin = () => {
     const uid = selectedMember.member?.id;
     groupService
       .addAdmin(groupData.id, uid)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           fetchData();
         }
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   };
 
-  const removeFromGroup = _ => {
+  const removeFromGroup = (_) => {
     groupService
       .deleteMember(userData.id, selectedMember.member?.id, groupData.id)
       .then(
-        res =>
+        (res) =>
           res.status === 200 &&
-          setMembers(prev => ({
+          setMembers((prev) => ({
             ...prev,
             sections: [
               ...prev.sections[0],
               {
                 title: 'Members',
                 data: prev.sections[1]?.data.filter(
-                  item => item.id !== selectedMember.member?.id,
+                  (item) => item.id !== selectedMember.member?.id,
                 ),
               },
             ],
           })),
       )
-      .catch(e => e);
+      .catch((e) => e);
   };
 
   const checkOwner = (uid = userData.id) => {
@@ -121,7 +111,7 @@ export default function ListOfMembers({navigation, route}) {
     else return false;
   };
 
-  const Item = ({item, title}) => {
+  const Item = ({ item, title }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.6}
@@ -137,16 +127,18 @@ export default function ListOfMembers({navigation, route}) {
             member: item,
             role: title,
           });
-        }}>
+        }}
+      >
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <Image
             source={
               item.image
-                ? {uri: fileStorage.baseUrl + item.image}
+                ? { uri: fileStorage.baseUrl + item.image }
                 : require('../assets/images/group-texture.png')
             }
             style={styles.img}
@@ -163,7 +155,7 @@ export default function ListOfMembers({navigation, route}) {
   const DropDownMenu = () => {
     return (
       <View style={styles.menuContainer}>
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <View
             style={{
               backgroundColor: '#cacaca',
@@ -175,9 +167,7 @@ export default function ListOfMembers({navigation, route}) {
         </View>
         <TouchableOpacity style={styles.menu} onPress={() => addAdmin()}>
           <Text style={styles.menuText}>
-            {selectedMember.role === 'Admin'
-              ? 'Remove from admin'
-              : 'Make admin'}
+            {selectedMember.role === 'Admin' ? 'Remove from admin' : 'Make admin'}
           </Text>
           <Text>
             {selectedMember.role === 'Admin'
@@ -187,9 +177,8 @@ export default function ListOfMembers({navigation, route}) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menu}
-          onPress={_ =>
-            checkOwner(selectedMember.member?.id) ? null : removeFromGroup()
-          }>
+          onPress={(_) => (checkOwner(selectedMember.member?.id) ? null : removeFromGroup())}
+        >
           <Text style={styles.menuText}>
             {checkOwner(selectedMember.member?.id) ? 'Left group' : 'Remove'}
           </Text>
@@ -216,20 +205,13 @@ export default function ListOfMembers({navigation, route}) {
               iconName="search1"
               iconType="AntDesign"
               style={styles.searchbar}
-              onChangeText={val => setSearch(prev => ({...prev, keyword: val}))}
+              onChangeText={(val) => setSearch((prev) => ({ ...prev, keyword: val }))}
               onSubmitEditing={SearchMembers}
               value={search.keyword}
               returnKeyType="search"
               endComponent={
-                <TouchableOpacity
-                  style={{marginLeft: 10}}
-                  onPress={handleClearSearch}>
-                  <Icon
-                    name="close"
-                    noBackground
-                    size={35}
-                    style={{paddingHorizontal: 5}}
-                  />
+                <TouchableOpacity style={{ marginLeft: 10 }} onPress={handleClearSearch}>
+                  <Icon name="close" noBackground size={35} style={{ paddingHorizontal: 5 }} />
                 </TouchableOpacity>
               }
             />
@@ -240,15 +222,12 @@ export default function ListOfMembers({navigation, route}) {
         />
       </View>
       <View style={styles.listContainer}>
-
         <SectionList
           showsVerticalScrollIndicator={false}
           sections={members.sections}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, section}) => (
-            <Item item={item} title={section.title} />
-          )}
-          renderSectionHeader={({section: {title}}) => (
+          renderItem={({ item, section }) => <Item item={item} title={section.title} />}
+          renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.header}>{title}</Text>
           )}
         />

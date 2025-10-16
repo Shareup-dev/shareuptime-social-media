@@ -22,8 +22,7 @@ let authAxios = null;
 // };
 const authenticate = async () => {
   await AuthService.getCurrentUser().then(
-    res => {
-
+    (res) => {
       authAxios = axios.create({
         baseURL: baseURL,
         headers: {
@@ -32,7 +31,7 @@ const authenticate = async () => {
         },
       });
     },
-    error => {
+    (error) => {
       console.error(error);
     },
   );
@@ -40,7 +39,7 @@ const authenticate = async () => {
 authenticate();
 
 class FriendService {
-  getFriends = async email => {
+  getFriends = async (email) => {
     try {
       authenticate();
       const result = await authAxios.get('/friends/' + email);
@@ -71,16 +70,12 @@ class FriendService {
   };
 
   declineRequest = async (uid, fid) => {
-    const result = await authAxios.post(
-      `/${uid}/decline_friend_request/${fid}`,
-    );
+    const result = await authAxios.post(`/${uid}/decline_friend_request/${fid}`);
     return result;
   };
 
   unsendRequest = async (uid, fid) => {
-    const result = await authAxios.post(
-      `/${uid}/decline_friend_request/${fid}`,
-    );
+    const result = await authAxios.post(`/${uid}/decline_friend_request/${fid}`);
     return result;
   };
 }

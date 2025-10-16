@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Animated, Keyboard, Platform, PixelRatio } from "react-native";
+import React, { useEffect } from 'react';
+import { Animated, Keyboard, Platform, PixelRatio } from 'react-native';
 
 const DURATION_TIME = 200;
 
@@ -8,12 +8,12 @@ export default function useAnimatedKeyboardEvent(initialValue, finalValue) {
 
   useEffect(() => {
     const keyboardWillShowSub = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
-      keyboardWillShow
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      keyboardWillShow,
     );
     const keyboardWillHideSub = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-      keyboardWillHide
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      keyboardWillHide,
     );
     return () => {
       keyboardWillShowSub.remove();

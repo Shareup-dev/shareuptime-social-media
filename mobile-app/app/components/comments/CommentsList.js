@@ -1,6 +1,6 @@
-import React, {useRef} from 'react';
-import {FlatList, Text, View} from 'react-native';
-import {CommentCard} from '.';
+import React, { useRef } from 'react';
+import { FlatList, Text, View } from 'react-native';
+import { CommentCard } from '.';
 
 export default function CommentsList({
   data,
@@ -12,7 +12,7 @@ export default function CommentsList({
   const commentsListRef = useRef();
 
   const scrollToListBottom = () => {
-    commentsListRef.current.scrollToEnd({animated: true});
+    commentsListRef.current.scrollToEnd({ animated: true });
   };
 
   return (
@@ -23,7 +23,7 @@ export default function CommentsList({
       onContentSizeChange={scrollToListBottom}
       refreshing={refreshing}
       onRefresh={onRefreshing}
-      renderItem={({item}) => (
+      renderItem={({ item }) => (
         <CommentCard
           navigation={navigation}
           comment={item}
@@ -32,7 +32,7 @@ export default function CommentsList({
         />
       )}
       ListEmptyComponent={
-        <View style={{alignItems: 'center', marginTop: 5, minHeight: 200}}>
+        <View style={{ alignItems: 'center', marginTop: 5, minHeight: 200 }}>
           <Text>{refreshing ? `Loading...` : `No comments found`}</Text>
         </View>
       }

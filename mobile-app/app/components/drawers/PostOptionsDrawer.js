@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
-import Modal from "react-native-modal";
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
+import Modal from 'react-native-modal';
 
-import ListItem from "../lists/ListItem";
-import Icon from "../Icon";
-import colors from "../../config/colors";
-import DownModal from "./DownModal";
-import DrawerList from "./DrawerList";
+import ListItem from '../lists/ListItem';
+import Icon from '../Icon';
+import colors from '../../config/colors';
+import DownModal from './DownModal';
+import DrawerList from './DrawerList';
 
 export default function PostOptionDrawer({
   options,
@@ -17,7 +17,7 @@ export default function PostOptionDrawer({
   postId,
   postText,
 }) {
-  const [optionsList, setOptionsList] = useState(() => options)//.slice(0, -1));
+  const [optionsList, setOptionsList] = useState(() => options); //.slice(0, -1));
   //const [lastItem, setLastItem] = useState(() => options.slice(-1).pop());
 
   return (
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 25,
     backgroundColor: colors.LightGray,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   title: {
     fontSize: 17,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   listItemTitle: {
-    fontWeight: "normal",
+    fontWeight: 'normal',
     color: colors.mediumGray,
   },
   lastItemTitle: {

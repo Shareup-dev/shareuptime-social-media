@@ -1,21 +1,12 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableWithoutFeedback,
-  Text,
-  Touchable,
-
-} from 'react-native';
+import { StyleSheet, View, Image, TouchableWithoutFeedback, Text, Touchable } from 'react-native';
 
 import colors from '../../config/colors';
 import Tab from '../buttons/Tab';
 import Icon from '../Icon';
 import defaultStyles from '../../config/styles';
 import fileStorage from '../../config/fileStorage';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function ListItem({
   email,
@@ -40,19 +31,12 @@ export default function ListItem({
   handleClose,
   displayFirstButton = true,
   isBottomSheet = false,
-
 }) {
-
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={[styles.listItem, style]}>
         {IconComponent}
-        {image && (
-          <Image
-            style={styles.image}
-            source={{ uri: fileStorage.baseUrl + image }}
-          />
-        )}
+        {image && <Image style={styles.image} source={{ uri: fileStorage.baseUrl + image }} />}
         <View style={styles.detailsContainer}>
           <Text
             numberOfLines={1}
@@ -63,10 +47,7 @@ export default function ListItem({
           {subTitle && (
             <Text
               numberOfLines={2}
-              style={[
-                defaultStyles.listItemSubTitle,
-                defaultStyles.fontWeightMedium,
-              ]}
+              style={[defaultStyles.listItemSubTitle, defaultStyles.fontWeightMedium]}
             >
               {subTitle}
             </Text>
@@ -100,12 +81,7 @@ export default function ListItem({
             )}
             {!secondBtn && showCloseButton && (
               <TouchableOpacity onPress={handleClose}>
-              <Icon
-                name="close"
-                type="AntDesign"
-                backgroundSizeRatio={0.5}
-                size={30}
-              />
+                <Icon name="close" type="AntDesign" backgroundSizeRatio={0.5} size={30} />
               </TouchableOpacity>
             )}
           </View>
@@ -117,8 +93,8 @@ export default function ListItem({
 
 const styles = StyleSheet.create({
   listItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
     paddingVertical: 17,
   },
@@ -126,8 +102,8 @@ const styles = StyleSheet.create({
   image: { height: 50, width: 50, borderRadius: 35 },
   title: defaultStyles.listItemTitle,
   leftContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   tab: {
     borderRadius: 7,

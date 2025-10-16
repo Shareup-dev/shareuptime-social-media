@@ -1,11 +1,11 @@
-import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {HeaderWithBackArrow} from '../components/headers';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {TabView} from '../components/Reactions';
+import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { HeaderWithBackArrow } from '../components/headers';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TabView } from '../components/Reactions';
 import postService from '../services/post.service';
-import {useFetch} from '../hooks';
-import {Texts} from '../Materials/Text';
+import { useFetch } from '../hooks';
+import { Texts } from '../Materials/Text';
 
 enum contentTypeEnum {
   post = 'post',
@@ -19,23 +19,23 @@ interface Props {
   contentType: contentTypeEnum;
 }
 
-const ListOfReactions: React.FC<Props> = props => {
+const ListOfReactions: React.FC<Props> = (props) => {
   const {
     navigation,
     route: {
-      params: {id, contentType = 'post'},
+      params: { id, contentType = 'post' },
     },
   } = props;
 
   const findContentType = () => {
     switch (contentType) {
-      case contentTypeEnum['post']:
+      case contentTypeEnum.post:
         return postService.listOfReactions(id);
 
-      case contentTypeEnum['comment']:
+      case contentTypeEnum.comment:
         return postService.listOfCommentReactions(id);
 
-      case contentTypeEnum['reply']:
+      case contentTypeEnum.reply:
         return postService.listOfReactions(id);
 
       default:
@@ -48,9 +48,7 @@ const ListOfReactions: React.FC<Props> = props => {
   const [reactions, setReactions] = useState<Array<{}>>([]);
 
   useEffect(() => {
-    setReactions(
-      Object.entries(data).filter(([key, value]: any) => value.length > 0),
-    );
+    setReactions(Object.entries(data).filter(([key, value]: any) => value.length > 0));
   }, [data]);
 
   const goBack = () => navigation.goBack();
@@ -77,7 +75,7 @@ const ListOfReactions: React.FC<Props> = props => {
 
 export default ListOfReactions;
 
-const {height} = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   loadingContainer: {

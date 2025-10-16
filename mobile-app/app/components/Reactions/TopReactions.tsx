@@ -1,9 +1,9 @@
-import {ColorValue, StyleSheet, View, ViewStyle} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Texts} from '../../Materials/Text';
-import {findEmoji} from '../../Constants/reactions';
+import { ColorValue, StyleSheet, View, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Texts } from '../../Materials/Text';
+import { findEmoji } from '../../Constants/reactions';
 import Icon from '../Icon';
-import {TouchableOpacity} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import routes from '../../navigation/routes';
 
 interface Props {
@@ -25,7 +25,7 @@ interface Props {
   contentType: string;
 }
 
-const TopThreeReactions: React.FC<Props> = props => {
+const TopThreeReactions: React.FC<Props> = (props) => {
   const {
     reactionsList,
     topReactionsCount = 3,
@@ -62,12 +62,11 @@ const TopThreeReactions: React.FC<Props> = props => {
           id: contentId,
           contentType,
         })
-      }>
+      }
+    >
       {topReactions.length ? (
         topReactions.map((item, i) => (
-          <View
-            key={i}
-            style={[styles.container, {backgroundColor: overlayColor}]}>
+          <View key={i} style={[styles.container, { backgroundColor: overlayColor }]}>
             <Texts size={emojiSize}>{` ${findEmoji(item[0])}`}</Texts>
           </View>
         ))
@@ -84,9 +83,7 @@ const TopThreeReactions: React.FC<Props> = props => {
         />
       )}
 
-      <Texts
-        size={emojiSize}
-        color={overlayColor === '#fff' ? '#333' : '#fff'}>{` ${
+      <Texts size={emojiSize} color={overlayColor === '#fff' ? '#333' : '#fff'}>{` ${
         getTotalCount() ? getTotalCount() : allowNagativeVal ? '0' : ''
       }`}</Texts>
     </TouchableOpacity>
@@ -103,8 +100,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignItems:'center',
-    
+    alignItems: 'center',
   },
   icon: {},
 });

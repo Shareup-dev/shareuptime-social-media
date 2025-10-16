@@ -1,1 +1,1 @@
-data[activeIndex].video
+data[activeIndex].video;

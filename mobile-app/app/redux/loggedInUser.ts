@@ -51,11 +51,14 @@ const loggedInUserSlice = createSlice({
         state.user = { ...state.user, ...action.payload };
       }
     },
-    updateUserStats: (state, action: PayloadAction<{
-      followerCount?: number;
-      followingCount?: number;
-      postCount?: number;
-    }>) => {
+    updateUserStats: (
+      state,
+      action: PayloadAction<{
+        followerCount?: number;
+        followingCount?: number;
+        postCount?: number;
+      }>,
+    ) => {
       if (state.user) {
         if (action.payload.followerCount !== undefined) {
           state.user.followerCount = action.payload.followerCount;
@@ -71,12 +74,7 @@ const loggedInUserSlice = createSlice({
   },
 });
 
-export const {
-  setUser,
-  logOut,
-  setLoading,
-  updateUserProfile,
-  updateUserStats,
-} = loggedInUserSlice.actions;
+export const { setUser, logOut, setLoading, updateUserProfile, updateUserStats } =
+  loggedInUserSlice.actions;
 
 export default loggedInUserSlice;

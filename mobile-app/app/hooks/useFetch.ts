@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 const useFetch = (serviceFunction: Function) => {
   const [records, setRecords] = useState<Array<{}>>([]);
@@ -8,7 +8,7 @@ const useFetch = (serviceFunction: Function) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const {data} = await serviceFunction();
+        const { data } = await serviceFunction();
         setRecords(data);
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : String(e));

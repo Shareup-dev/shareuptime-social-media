@@ -121,7 +121,7 @@ app.use((req, res, next) => {
 });
 
 // Ana route
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({
     success: true,
     message: 'ShareUpTime Backend API Çalışıyor!',
@@ -261,7 +261,7 @@ app.use((req, res) => {
 });
 
 // Global error handler
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Sunucu hatası:', {
     error: err.message,
     stack: err.stack,
@@ -304,7 +304,7 @@ const startServer = async () => {
     // Cache service'i initialize et
     const { CacheService } = await import('./services/cacheService');
     await CacheService.initialize();
-  } catch (dbError) {
+  } catch (_dbError) {
     console.warn('⚠️  Veritabanı modülü yüklenemedi, temel API özellikleri çalışacak');
   }
 

@@ -7,7 +7,7 @@ let authAxios = null;
 
 const authenticate = async () => {
   await AuthService.getCurrentUser().then(
-    res => {
+    (res) => {
       authAxios = axios.create({
         baseURL: `${baseURL}/api/v1/`,
         headers: {
@@ -16,7 +16,7 @@ const authenticate = async () => {
         },
       });
     },
-    error => {
+    (error) => {
       console.error(error);
     },
   );

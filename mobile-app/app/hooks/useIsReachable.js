@@ -1,9 +1,9 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 export default useIsReachable = () => {
   //   const [isReachable, setIsReachable] = useState(false);
 
-  const checkIfReachable = async url => {
+  const checkIfReachable = async (url) => {
     const timeout = new Promise((resolve, reject) => {
       setTimeout(reject, 5000, 'Request timed out');
     });
@@ -18,5 +18,5 @@ export default useIsReachable = () => {
     }
   };
 
-  return {checkIfReachable};
+  return { checkIfReachable };
 };

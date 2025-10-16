@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
-import colors from "../config/colors";
+import colors from '../config/colors';
 
 export default function Separator({ text, style, color = colors.lighterGray }) {
   const inside = () => {
@@ -11,7 +11,7 @@ export default function Separator({ text, style, color = colors.lighterGray }) {
           <Text style={styles.text}>{text}</Text>
         </View>
       );
-    else return <View></View>;
+    else return <View />;
   };
 
   return (
@@ -26,12 +26,12 @@ export default function Separator({ text, style, color = colors.lighterGray }) {
 const styles = StyleSheet.create({
   text: {
     width: 50,
-    textAlign: "center",
+    textAlign: 'center',
     color: colors.dimGray,
   },
   outer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   inner: {
     flex: 1,

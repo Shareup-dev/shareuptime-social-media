@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -18,11 +18,7 @@ import authContext from '../Contexts/authContext';
 import Card from '../components/lists/Card';
 import ImageView from 'react-native-image-viewing';
 
-import {
-  ImagesAndVideosEmpty,
-  TagsEmpty,
-  ProfileTop,
-} from '../components/profile';
+import { ImagesAndVideosEmpty, TagsEmpty, ProfileTop } from '../components/profile';
 import SwapCard from '../components/lists/SwapCard';
 import postService from '../services/post.service';
 import profileService from '../services/profile.service';
@@ -34,30 +30,30 @@ const IMAGE_VIDEOS = 'images&videos';
 const TAGS = 'tags';
 
 const tabs = [
-  {name: POSTS, icon: {name: 'rss', type: 'Feather'}},
-  {name: IMAGE_VIDEOS, icon: {name: 'grid', type: 'Feather'}},
-  {name: TAGS, icon: {image: require('../assets/icons/tag-icon.png')}},
+  { name: POSTS, icon: { name: 'rss', type: 'Feather' } },
+  { name: IMAGE_VIDEOS, icon: { name: 'grid', type: 'Feather' } },
+  { name: TAGS, icon: { image: require('../assets/icons/tag-icon.png') } },
 ];
 
-export default function UserProfileScreen({navigation, route}) {
+export default function UserProfileScreen({ navigation, route }) {
   const {
-    params: {user},
+    params: { user },
   } = route;
   const [currentTab, setCurrentTab] = useState(POSTS);
 
   const {
-    userState: {userData: loginUser},
+    userState: { userData: loginUser },
   } = useContext(authContext);
 
-  const [userStatus, setUserStatus] = useState({state: user, loading: false});
+  const [userStatus, setUserStatus] = useState({ state: user, loading: false });
 
   useEffect(() => {
     const fetchUserProfile = () => {
-      setUserStatus(prev => ({...prev, loading: true}));
+      setUserStatus((prev) => ({ ...prev, loading: true }));
       FriendService.userStatus(user.id, loginUser.id)
-        .then(({data}) => setUserStatus(prev => ({...prev, state: data})))
-        .catch(e => console.error(e.message))
-        .finally(_ => setUserStatus(prev => ({...prev, loading: false})));
+        .then(({ data }) => setUserStatus((prev) => ({ ...prev, state: data })))
+        .catch((e) => console.error(e.message))
+        .finally((_) => setUserStatus((prev) => ({ ...prev, loading: false })));
     };
     fetchUserProfile();
   }, []);
@@ -73,7 +69,7 @@ export default function UserProfileScreen({navigation, route}) {
 
   const [tags, setTags] = useState([]);
 
-  const handleTapped = name => {
+  const handleTapped = (name) => {
     setCurrentTab(name);
   };
 
@@ -84,13 +80,13 @@ export default function UserProfileScreen({navigation, route}) {
       profileService.getAllMedia(user.id),
       userService.getUserById(user.id),
     ])
-      .then(res => {
+      .then((res) => {
         setPosts(res[0].data);
         setMedia(res[1].data);
         setUserDetails(res[2].data);
       })
-      .catch(e => console.error(e.message))
-      .finally(_ => {
+      .catch((e) => console.error(e.message))
+      .finally((_) => {
         setLoading(false);
       });
   }, []);
@@ -109,7 +105,7 @@ export default function UserProfileScreen({navigation, route}) {
     />
   );
 
-  const PostsItem = ({item}) =>
+  const PostsItem = ({ item }) =>
     item.hasOwnProperty('swaped') ? (
       /**
        * The Swap Should from backend as instance of post
@@ -120,12 +116,11 @@ export default function UserProfileScreen({navigation, route}) {
       <Card user={item.userdata} postData={item} navigation={navigation} />
     );
 
-  const {width} = Dimensions.get('window');
-  const ImagesAndVideosItem = ({item, index}) => (
-    <TouchableOpacity
-      onPress={_ => setImageSlider({state: true, index: index})}>
+  const { width } = Dimensions.get('window');
+  const ImagesAndVideosItem = ({ item, index }) => (
+    <TouchableOpacity onPress={(_) => setImageSlider({ state: true, index: index })}>
       <Image
-        source={{uri: item.mediaPath}}
+        source={{ uri: item.mediaPath }}
         style={{
           width: (width - 28) / 3,
           borderRadius: 3,
@@ -136,7 +131,7 @@ export default function UserProfileScreen({navigation, route}) {
       />
     </TouchableOpacity>
   );
-  const TagsItems = ({item}) => <View></View>;
+  const TagsItems = ({ item }) => <View />;
 
   return (
     <Screen style={styles.container}>
@@ -156,7 +151,7 @@ export default function UserProfileScreen({navigation, route}) {
 
       <ImageView
         visible={imageSlider.state}
-        images={media.map(({media}) => ({uri: media.mediaPath}))}
+        images={media.map(({ media }) => ({ uri: media.mediaPath }))}
         keyExtractor={(item, index) => index.toString()}
         imageIndex={imageSlider.index}
         onRequestClose={() => {
@@ -168,7 +163,7 @@ export default function UserProfileScreen({navigation, route}) {
         <FlatList
           data={posts}
           ve={true}
-          renderItem={({item}) => {
+          renderItem={({ item }) => {
             return <PostsItem item={item} />;
           }}
           keyExtractor={(post, index) => index.toString()}
@@ -180,15 +175,11 @@ export default function UserProfileScreen({navigation, route}) {
             ) : (
               <>
                 <ActivityIndicator size={30} />
-                <Text
-                  style={[
-                    styles.listEmptyText,
-                    {marginVertical: 5},
-                  ]}>{`Loading..`}</Text>
+                <Text style={[styles.listEmptyText, { marginVertical: 5 }]}>{`Loading..`}</Text>
               </>
             )
           }
-          ListFooterComponent={() => <View style={styles.listFooter}></View>}
+          ListFooterComponent={() => <View style={styles.listFooter} />}
         />
       )}
 
@@ -196,11 +187,9 @@ export default function UserProfileScreen({navigation, route}) {
         <FlatList
           data={media}
           numColumns={3}
-          style={{marginHorizontal: 2}}
+          style={{ marginHorizontal: 2 }}
           showsVerticalScrollIndicator={false}
-          renderItem={({item, index}) => (
-            <ImagesAndVideosItem item={item} index={index} />
-          )}
+          renderItem={({ item, index }) => <ImagesAndVideosItem item={item} index={index} />}
           keyExtractor={(item, index) => index.toString()}
           ListHeaderComponent={ListHeader}
           ListEmptyComponent={ImagesAndVideosEmpty}
@@ -212,10 +201,10 @@ export default function UserProfileScreen({navigation, route}) {
           data={tags}
           showsVerticalScrollIndicator={false}
           renderItem={TagsItems}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           ListHeaderComponent={ListHeader}
           ListEmptyComponent={TagsEmpty}
-          ListFooterComponent={() => <View style={styles.listFooter}></View>}
+          ListFooterComponent={() => <View style={styles.listFooter} />}
         />
       )}
     </Screen>

@@ -1,21 +1,15 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  Animated,
-} from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, StyleSheet, Text, TouchableWithoutFeedback, Animated } from 'react-native';
 import moment from 'moment';
 import colors from '../../config/colors';
 import AuthContext from '../../authContext';
 import UserProfilePicture from '../UserProfilePicture';
 
-export default function MessageItem({item, profilePicture}) {
+export default function MessageItem({ item, profilePicture }) {
   const [time, setTime] = useState();
   const [showTime, setShowTime] = useState(false);
 
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const messageTime = moment().format('llll');
@@ -39,26 +33,21 @@ export default function MessageItem({item, profilePicture}) {
               opacity: showTime ? 0.8 : 1,
             },
             styles.sentStyle,
-          ]}>
+          ]}
+        >
           <Text style={[styles.text, styles.sentText]}>{item.messageData}</Text>
         </View>
       </TouchableWithoutFeedback>
 
       {showTime && (
-        <Animated.Text style={[styles.time, {alignSelf: 'flex-end'}]}>
-          {time}
-        </Animated.Text>
+        <Animated.Text style={[styles.time, { alignSelf: 'flex-end' }]}>{time}</Animated.Text>
       )}
     </View>
   );
 
   const renderReceivedMessage = () => (
-    <View style={[styles.container, {flexDirection: 'row'}]}>
-      <UserProfilePicture
-        size={35}
-        profilePicture={profilePicture}
-        style={styles.profilePicture}
-      />
+    <View style={[styles.container, { flexDirection: 'row' }]}>
+      <UserProfilePicture size={35} profilePicture={profilePicture} style={styles.profilePicture} />
 
       <View>
         <TouchableWithoutFeedback onPress={handelShowTime}>
@@ -69,25 +58,20 @@ export default function MessageItem({item, profilePicture}) {
                 opacity: showTime ? 0.5 : 1,
               },
               styles.receivedStyle,
-            ]}>
-            <Text style={[styles.text, styles.receivedText]}>
-              {item.messageData}
-            </Text>
+            ]}
+          >
+            <Text style={[styles.text, styles.receivedText]}>{item.messageData}</Text>
           </View>
         </TouchableWithoutFeedback>
 
         {showTime && (
-          <Animated.Text style={[styles.time, {alignSelf: 'flex-start'}]}>
-            {time}
-          </Animated.Text>
+          <Animated.Text style={[styles.time, { alignSelf: 'flex-start' }]}>{time}</Animated.Text>
         )}
       </View>
     </View>
   );
 
-  return user.id == item.publisher
-    ? renderSentMessage()
-    : renderReceivedMessage();
+  return user.id == item.publisher ? renderSentMessage() : renderReceivedMessage();
 }
 
 const styles = StyleSheet.create({

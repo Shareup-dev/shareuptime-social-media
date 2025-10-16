@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -15,34 +15,31 @@ import colors from '../../config/colors';
 import LinkButton from '../buttons/LinkButton';
 import Icon from '../Icon';
 import UserProfilePicture from '../UserProfilePicture';
-import {CommentText} from './';
+import { CommentText } from './';
 import AuthContext from '../../Contexts/authContext';
 import postService from '../../services/post.service';
 import Separator from '../Separator';
 import CommentsList from './CommentsList';
 import CommentsContext from '../../Contexts/commentsContext';
 import DownModal from '../drawers/DownModal';
-import {ReactionBar, TopReactions} from '../Reactions';
-import {Texts, Title} from '../../Materials/Text';
+import { ReactionBar, TopReactions } from '../Reactions';
+import { Texts, Title } from '../../Materials/Text';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default function CommentCard(props) {
   const {
-    userState: {userData},
+    userState: { userData },
   } = useContext(AuthContext);
-  const {setSelectedComment, setIsReply, focusTextField, isReplied} =
-    useContext(CommentsContext);
-  const {comment, replyComment, onRefreshing, navigation} = props;
+  const { setSelectedComment, setIsReply, focusTextField, isReplied } = useContext(CommentsContext);
+  const { comment, replyComment, onRefreshing, navigation } = props;
   const time = moment(comment.published, 'DD MMMM YYYY hh:mm:ss').fromNow();
 
   const [openModal, setOpenModal] = useState(false);
   const [editable, setEditable] = useState(false);
   const [content, setContent] = useState(comment.content);
   const [reactionCount, setReactionCount] = useState(comment.numberOfReaction);
-  const [listOfReaction, setlistOfReaction] = useState(
-    comment.countOfEachReaction,
-  );
+  const [listOfReaction, setlistOfReaction] = useState(comment.countOfEachReaction);
 
   const [collapseReply, setCollapseReply] = useState(false);
   const [replies, setReplies] = useState({
@@ -57,14 +54,14 @@ export default function CommentCard(props) {
   }, [isReplied]);
 
   const getAllReplies = () => {
-    setReplies(prev => ({...prev, loading: true}));
+    setReplies((prev) => ({ ...prev, loading: true }));
     postService
       .getAllReply(userData.id, comment.id)
-      .then(({data}) => {
-        setReplies(prev => ({...prev, state: data}));
+      .then(({ data }) => {
+        setReplies((prev) => ({ ...prev, state: data }));
       })
-      .catch(e => console.error(e))
-      .finally(() => setReplies(prev => ({...prev, loading: false})));
+      .catch((e) => console.error(e))
+      .finally(() => setReplies((prev) => ({ ...prev, loading: false })));
   };
 
   const handleCollapseReply = () => {
@@ -75,7 +72,7 @@ export default function CommentCard(props) {
     setCollapseReply(false);
   };
 
-  const addReplyHandler = comment => {
+  const addReplyHandler = (comment) => {
     setSelectedComment(comment);
     setIsReply(true);
     focusTextField();
@@ -96,16 +93,16 @@ export default function CommentCard(props) {
     if (replyComment) {
       postService
         .deleteReply(comment.id)
-        .then(res => onRefreshing())
-        .catch(e => console.error(e));
+        .then((res) => onRefreshing())
+        .catch((e) => console.error(e));
     } else {
       postService
         .deleteComment(comment.id)
-        .then(res => {
+        .then((res) => {
           onRefreshing();
           Keyboard.dismiss();
         })
-        .catch(e => console.error(e));
+        .catch((e) => console.error(e));
     }
     // scrollToListBottom();
   };
@@ -130,29 +127,29 @@ export default function CommentCard(props) {
     if (replyComment) {
       postService
         .editReply(comment.id, content)
-        .then(res => {
+        .then((res) => {
           if (res.status === 200) {
             onRefreshing();
           }
 
           setEditable(false);
         })
-        .catch(e => console.error(e.message));
+        .catch((e) => console.error(e.message));
     } else {
       postService
         .editComment(comment.id, content)
-        .then(res => {
+        .then((res) => {
           if (res.status === 200) {
             onRefreshing();
           }
           setEditable(false);
         })
-        .catch(e => console.error(e.message));
+        .catch((e) => console.error(e.message));
     }
   };
 
   return (
-    <View style={{paddingHorizontal: 25}}>
+    <View style={{ paddingHorizontal: 25 }}>
       <View style={[styles.commentContainer]}>
         {/** Left */}
 
@@ -161,9 +158,7 @@ export default function CommentCard(props) {
           profilePicture={comment.user.profilePicturePath}
         />
 
-        <TouchableOpacity
-          style={styles.contentContainer}
-          onLongPress={() => openModalHandler()}>
+        <TouchableOpacity style={styles.contentContainer} onLongPress={() => openModalHandler()}>
           <Title color={'#585858'} size={15}>
             {comment.user.firstName}
           </Title>
@@ -183,7 +178,7 @@ export default function CommentCard(props) {
                   }}
                   multiline
                   value={content}
-                  onChangeText={val => setContent(val)}
+                  onChangeText={(val) => setContent(val)}
                 />
                 <View
                   style={{
@@ -191,18 +186,15 @@ export default function CommentCard(props) {
                     maxWidth: width / 1.6,
                     flexDirection: 'row',
                     justifyContent: 'flex-end',
-                  }}>
+                  }}
+                >
                   <LinkButton
                     onPress={editCommentHandler}
                     title={'Update'}
                     fontSize={14}
-                    style={{marginHorizontal: 15}}
+                    style={{ marginHorizontal: 15 }}
                   />
-                  <LinkButton
-                    title={'Cancel'}
-                    fontSize={14}
-                    onPress={_ => setEditable(false)}
-                  />
+                  <LinkButton title={'Cancel'} fontSize={14} onPress={(_) => setEditable(false)} />
                 </View>
               </>
             ) : (
@@ -214,7 +206,7 @@ export default function CommentCard(props) {
 
       <View style={[styles.commentDetailsContainer]}>
         <ReactionBar
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           contentType={replyComment ? 'reply' : 'comment'}
           isLiked={replyComment ? comment.replyLiked : comment.commentLiked}
           contentId={comment.id}
@@ -225,7 +217,7 @@ export default function CommentCard(props) {
         <TopReactions
           contentType={replyComment ? 'reply' : 'comment'}
           emojiSize={12}
-          style={{marginHorizontal: 10}}
+          style={{ marginHorizontal: 10 }}
           reactionsList={listOfReaction}
           navigation={navigation}
           contentId={comment.id}
@@ -244,11 +236,11 @@ export default function CommentCard(props) {
       </View>
 
       {comment.numberOfReplies > 0 && (
-        <View style={{marginLeft: 25}}>
+        <View style={{ marginLeft: 25 }}>
           <LinkButton
             onBlur={handleCollapseReply}
             title={collapseReply ? `-Hide reply` : `-Show reply`}
-            style={[styles.reply, {marginBottom: 10}]}
+            style={[styles.reply, { marginBottom: 10 }]}
             onPress={handleCollapseReply}
           />
         </View>
@@ -264,10 +256,10 @@ export default function CommentCard(props) {
           />
         </>
       ) : null}
-      <Separator style={[styles.separator, {marginLeft: replyCommentMargin}]} />
-      <DownModal isVisible={openModal} setIsVisible={_ => setOpenModal(false)}>
+      <Separator style={[styles.separator, { marginLeft: replyCommentMargin }]} />
+      <DownModal isVisible={openModal} setIsVisible={(_) => setOpenModal(false)}>
         <View style={styles.menuContainer}>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <View
               style={{
                 backgroundColor: '#cacaca',
@@ -279,10 +271,11 @@ export default function CommentCard(props) {
           </View>
           <TouchableOpacity
             style={styles.menu}
-            onPress={_ => {
+            onPress={(_) => {
               setEditable(true);
               setOpenModal(false);
-            }}>
+            }}
+          >
             <View>
               <Text style={styles.menuText}>Edit</Text>
               <Text>Edit the Comment</Text>

@@ -1,8 +1,8 @@
-import React, {useContext, useState} from 'react';
-import {StyleSheet, Text, Alert, TouchableOpacity} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import * as Yup from 'yup';
 
-import {Form, FormField, SubmitButton} from '../components/forms';
+import { Form, FormField, SubmitButton } from '../components/forms';
 import routes from '../navigation/routes';
 
 import defaultStyles from '../config/styles';
@@ -13,15 +13,12 @@ import authContext from '../authContext';
 import Loading from '../components/Loading';
 
 const validationSchema = Yup.object().shape({
-  otp: Yup.string('Invalid Code')
-    .required()
-    .label('Verification code')
-    .length(6),
+  otp: Yup.string('Invalid Code').required().label('Verification code').length(6),
 });
 
-export default function SignupVerification({navigation, route}) {
-  const {authActions} = useContext(authContext);
-  const {params} = route;
+export default function SignupVerification({ navigation, route }) {
+  const { authActions } = useContext(authContext);
+  const { params } = route;
 
   const [message, setMessage] = useState({
     text: 'Shareup has sent you a verification code to the email',
@@ -34,32 +31,28 @@ export default function SignupVerification({navigation, route}) {
 
   React.useEffect(
     () =>
-      navigation.addListener('beforeRemove', e => {
+      navigation.addListener('beforeRemove', (e) => {
         // Prevent default behavior of leaving the screen
         e.preventDefault();
 
         // Prompt the user before leaving the screen
-        Alert.alert(
-          'Discard changes?',
-          'Are you sure to discard and leave the screen?',
-          [
-            {text: "Don't leave", style: 'cancel', onPress: () => {}},
-            {
-              text: 'Discard',
-              style: 'destructive',
-              onPress: () => navigation.dispatch(e.data.action),
-            },
-          ],
-        );
+        Alert.alert('Discard changes?', 'Are you sure to discard and leave the screen?', [
+          { text: "Don't leave", style: 'cancel', onPress: () => {} },
+          {
+            text: 'Discard',
+            style: 'destructive',
+            onPress: () => navigation.dispatch(e.data.action),
+          },
+        ]);
       }),
     [navigation],
   );
 
   const resendOTP = () => {
-    setMessage({...message, isSending: true});
+    setMessage({ ...message, isSending: true });
     authService
       .verifyEmailOTP(params.username)
-      .then(res =>
+      .then((res) =>
         res.status === 200
           ? setMessage({
               isSending: false,
@@ -68,7 +61,7 @@ export default function SignupVerification({navigation, route}) {
             })
           : null,
       )
-      .catch(e =>
+      .catch((e) =>
         setMessage({
           isSending: false,
           text: 'Verification code not send',
@@ -80,42 +73,36 @@ export default function SignupVerification({navigation, route}) {
   const handleSubmit = async (values, props) => {
     setLoading(true);
     setTimeout(() => {
-      const {setFieldError} = props;
+      const { setFieldError } = props;
       authService
         .verifyEmailConfirmOTP(params.username, values.otp)
-        .then(async res => {
+        .then(async (res) => {
           if (res.status === 200) {
-            if (params.jwt)
-              await authActions.signup(params.username, params.jwt);
+            if (params.jwt) await authActions.signup(params.username, params.jwt);
             else {
-              authService
-                .login(params.username, params.password)
-                .then(async result => {
-                  if (result.status === 200) {
-                    await authActions.login(
-                      result.data.username,
-                      result.data.jwt,
-                    );
-                    Toast.show({
-                      position: 'bottom',
-                      visibilityTime: 5000,
-                      type: 'success',
-                      text1: 'Success',
-                      text2: 'Logged in Successfully 👋',
-                    });
-                  }
-                });
+              authService.login(params.username, params.password).then(async (result) => {
+                if (result.status === 200) {
+                  await authActions.login(result.data.username, result.data.jwt);
+                  Toast.show({
+                    position: 'bottom',
+                    visibilityTime: 5000,
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Logged in Successfully 👋',
+                  });
+                }
+              });
             }
           }
         })
-        .catch(e => {
+        .catch((e) => {
           if (e.message === 'Request failed with status code 400') {
             setFieldError('otp', 'Incorrect code');
           } else if (e.message === 'Request failed with status code 408') {
             setFieldError('otp', 'Code expired');
           } else setFieldError('otp', 'Unexpected error.');
         })
-        .finally(_ => setLoading(false));
+        .finally((_) => setLoading(false));
     }, 2000);
   };
 
@@ -126,7 +113,8 @@ export default function SignupVerification({navigation, route}) {
           otp: '',
         }}
         onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
+        validationSchema={validationSchema}
+      >
         <>
           {params.fromLogin && (
             <Text
@@ -134,16 +122,18 @@ export default function SignupVerification({navigation, route}) {
                 fontWeight: '600',
                 color: 'crimson',
                 marginVertical: 10,
-              }}>
+              }}
+            >
               Your account not verified. Please confirm your Email
             </Text>
           )}
           <Text
             style={
               message.type === 'success'
-                ? {color: 'green'}
+                ? { color: 'green' }
                 : message.type === 'error' && 'crimson'
-            }>
+            }
+          >
             {message.text}
           </Text>
           <FormField
@@ -165,32 +155,28 @@ export default function SignupVerification({navigation, route}) {
               paddingVertical: 6,
               borderRadius: 30,
             }}
-            disabled={message.isSending}>
-            <Text
-              style={{color: colors.iondigoDye, fontWeight: '700'}}
-              onPress={resendOTP}>
+            disabled={message.isSending}
+          >
+            <Text style={{ color: colors.iondigoDye, fontWeight: '700' }} onPress={resendOTP}>
               {message.isSending ? 'Sending..' : 'Re-send'}
             </Text>
           </TouchableOpacity>
 
           {timeOver && (
-            <TouchableOpacity activeOpacity={0.7} style={{marginVertical: 5}}>
+            <TouchableOpacity activeOpacity={0.7} style={{ marginVertical: 5 }}>
               <Text
                 style={{
                   fontWeight: '700',
                   fontSize: 18,
                   color: colors.iondigoDye,
-                }}>
+                }}
+              >
                 Send again
               </Text>
             </TouchableOpacity>
           )}
 
-          <SubmitButton
-            title="Verify"
-            disabled={loading}
-            style={styles.submitButton}
-          />
+          <SubmitButton title="Verify" disabled={loading} style={styles.submitButton} />
         </>
       </Form>
     </RegistrationContainer>

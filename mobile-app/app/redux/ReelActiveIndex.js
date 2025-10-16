@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   activeIndex: 0,
 };
 
 export const reelActiveIndex = createSlice({
-  name: "activeIndex",
+  name: 'activeIndex',
   initialState,
   reducers: {
-    onActiveIndexChanged: (state,action) => {
-      state.activeIndex = action.payload
-    }, 
+    onActiveIndexChanged: (state, action) => {
+      state.activeIndex = action.payload;
+    },
   },
 });
 

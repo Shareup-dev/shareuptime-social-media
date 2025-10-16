@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -20,28 +20,26 @@ import PostOptionDrawer from '../drawers/PostOptionsDrawer';
 import constants from '../../config/constants';
 
 import onShareHandler from '../Share';
-import {postDataSliceAction} from '../../redux/postDataSlice';
+import { postDataSliceAction } from '../../redux/postDataSlice';
 
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import SwapCard from './SwapCard';
-import {Texts, Title} from '../../Materials/Text';
+import { Texts, Title } from '../../Materials/Text';
 import Tab from '../buttons/Tab';
-import {ReactionBar, TopReactions} from '../Reactions';
+import { ReactionBar, TopReactions } from '../Reactions';
 
 export default function SharedPostCard(props) {
-  const {postData, navigation, user, ...rest} = props;
+  const { postData, navigation, user, ...rest } = props;
   const dispatch = useDispatch();
-  const [feel,setFeel] = useState(postData.feelings)
+  const [feel, setFeel] = useState(postData.feelings);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
-  const [listOfReactions, setListOfReactions] = useState(
-    postData.countOfEachReaction,
-  );
+  const [listOfReactions, setListOfReactions] = useState(postData.countOfEachReaction);
 
   const actionsTabSizeRatio = 0.5;
 
   const {
-    userState: {userData},
+    userState: { userData },
   } = React.useContext(AuthContext);
 
   const [date, setDate] = useState(
@@ -78,7 +76,7 @@ export default function SharedPostCard(props) {
     },
     {
       title: userData?.id !== postData.userdata?.id ? '' : 'Edit',
-      icon: {image: require('../../assets/post-options-icons/swap-icon.png')},
+      icon: { image: require('../../assets/post-options-icons/swap-icon.png') },
       onPress: () => {
         dispatch(postDataSliceAction.setEditPost(true));
         dispatch(postDataSliceAction.setPostData(postData));
@@ -121,9 +119,9 @@ export default function SharedPostCard(props) {
     {
       title:
         userData?.id !== postData.userdata?.id ? (
-          <Text style={{color: colors.dark}}>Report</Text>
+          <Text style={{ color: colors.dark }}>Report</Text>
         ) : (
-          <Text style={{color: colors.red}}>Delete</Text>
+          <Text style={{ color: colors.red }}>Delete</Text>
         ),
       icon: {
         image:
@@ -132,9 +130,7 @@ export default function SharedPostCard(props) {
             : require('../../assets/post-options-icons/delete-red-icon.png'),
       },
       onPress: () => {
-        userData?.id !== postData.userdata?.id
-          ? alert('Report')
-          : showDeleteAlert();
+        userData?.id !== postData.userdata?.id ? alert('Report') : showDeleteAlert();
       },
     },
   ];
@@ -162,13 +158,13 @@ export default function SharedPostCard(props) {
   const deletePost = async () => {
     postService
       .deletePost(item.id)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           dispatch(feedPostsAction.removeFeedPost(postData.id));
           navigation.navigate(routes.FEED);
         }
       })
-      .catch(e => alert(e));
+      .catch((e) => alert(e));
   };
 
   const showShareList = () =>
@@ -185,7 +181,8 @@ export default function SharedPostCard(props) {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <View style={styles.userInfo}>
             <TouchableOpacity
               onPress={() =>
@@ -196,7 +193,8 @@ export default function SharedPostCard(props) {
                   : navigation.navigate(routes.FRIEND_PROFILE, {
                       user: postData.userdata,
                     })
-              }>
+              }
+            >
               <Image
                 source={{
                   uri: postData.userdata.profilePicturePath,
@@ -207,9 +205,7 @@ export default function SharedPostCard(props) {
 
             <View style={styles.userNameContainer}>
               <TouchableOpacity>
-                <Title style={styles.userName}>
-                  {postData.userdata.firstName}
-                </Title>
+                <Title style={styles.userName}>{postData.userdata.firstName}</Title>
               </TouchableOpacity>
 
               <Texts light>{date}</Texts>
@@ -260,7 +256,7 @@ export default function SharedPostCard(props) {
     );
   };
 
-  const renderCard = item => {
+  const renderCard = (item) => {
     switch (item.post.allPostsType) {
       case constants.postTypes.SWAP:
         return (
@@ -320,11 +316,11 @@ export default function SharedPostCard(props) {
       {postData.post ? (
         <View>{renderCard(postData)}</View>
       ) : (
-        <View style={{alignItems: 'center', paddingVertical: 10}}>
+        <View style={{ alignItems: 'center', paddingVertical: 10 }}>
           <Text>Post unavailable</Text>
         </View>
       )}
-      <View style={{paddingHorizontal: 15, paddingTop: 15}}>
+      <View style={{ paddingHorizontal: 15, paddingTop: 15 }}>
         <View style={styles.actionsBar}>
           <ReactionBar
             contentId={postData.id}
@@ -344,34 +340,44 @@ export default function SharedPostCard(props) {
         </View>
 
         {/********************************* Post Feelings and tags ****************************************/}
-      <View style={{ flexDirection: "row", alignItems: 'center', flexWrap: 'wrap' }}>
-        {postData?.feelings && (
-        <View style={styles.row}>
-          <BetterImage
-            noBackground
-            source={feel.img}
-            style={styles.feelImg}
-          />
-          <Texts size={13} color={'#333'} style={{fontWeight:'bold'}}>{feel.name}</Texts>
-        </View>)}
-        {postData?.activity && (
-        <View style={styles.row}>
-          <Icon name={feel.icon} color={feel.color} />
-          <Texts size={13} color={'#333'} style={{fontWeight:'bold'}}>{feel.name}</Texts>
-          </View>)}
-        {postData?.taggedList.length !== 0 && (
-          <View style={{ flexDirection: 'row' }}>
-            <Texts size={14} color={colors.dimGray}  > -with </Texts>
-            <TouchableOpacity onPress={()=> showShareList(constants.constant.SHOW_TAGLIST)}>
-              <Texts size={14} color={'#333'} style={{fontWeight:'bold'}} > 
-              {postData.taggedList[0]?.firstName}{postData.taggedList[0]?.lastName} and {(postData.taggedList.length - 1 === 1) ? postData.taggedList[1]?.firstName + postData.taggedList[1]?.lastName : `${postData.taggedList.length - 1} others`} 
+        <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
+          {postData?.feelings && (
+            <View style={styles.row}>
+              <BetterImage noBackground source={feel.img} style={styles.feelImg} />
+              <Texts size={13} color={'#333'} style={{ fontWeight: 'bold' }}>
+                {feel.name}
               </Texts>
+            </View>
+          )}
+          {postData?.activity && (
+            <View style={styles.row}>
+              <Icon name={feel.icon} color={feel.color} />
+              <Texts size={13} color={'#333'} style={{ fontWeight: 'bold' }}>
+                {feel.name}
+              </Texts>
+            </View>
+          )}
+          {postData?.taggedList.length !== 0 && (
+            <View style={{ flexDirection: 'row' }}>
+              <Texts size={14} color={colors.dimGray}>
+                {' '}
+                -with{' '}
+              </Texts>
+              <TouchableOpacity onPress={() => showShareList(constants.constant.SHOW_TAGLIST)}>
+                <Texts size={14} color={'#333'} style={{ fontWeight: 'bold' }}>
+                  {postData.taggedList[0]?.firstName}
+                  {postData.taggedList[0]?.lastName} and{' '}
+                  {postData.taggedList.length - 1 === 1
+                    ? postData.taggedList[1]?.firstName + postData.taggedList[1]?.lastName
+                    : `${postData.taggedList.length - 1} others`}
+                </Texts>
               </TouchableOpacity>
-          </View>)}
-      </View>
-      
+            </View>
+          )}
+        </View>
+
         {postData.content !== '' && (
-          <Texts truncate style={{marginTop: 10}} color={'#333'}>
+          <Texts truncate style={{ marginTop: 10 }} color={'#333'}>
             {postData.content}
           </Texts>
         )}
@@ -379,7 +385,8 @@ export default function SharedPostCard(props) {
           style={styles.menuButton}
           onPress={() => {
             setIsOptionsVisible(true);
-          }}>
+          }}
+        >
           <Icon
             name="options"
             type="SimpleLineIcons"
@@ -421,8 +428,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   userNameContainer: {
-    
-     alignItems: 'flex-start', 
+    alignItems: 'flex-start',
   },
   actionsContainer: {
     flexDirection: 'row',

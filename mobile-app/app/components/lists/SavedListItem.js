@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
-import { StyleSheet, View, TouchableWithoutFeedback, Alert, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Alert,
+  Image,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import colors from '../../config/colors';
 import Icon from '../Icon';
@@ -26,7 +35,6 @@ export default function SavedListItem({
   const [images, setImages] = useState([]);
   const [currentImage, setCurrentImage] = useState();
   const [imageViewerVisible, setImageViewerVisible] = useState(false);
-
 
   const options = [
     {
@@ -59,21 +67,19 @@ export default function SavedListItem({
   );
   const loadImages = () => {
     if (postData.media?.length !== 0) {
-      setImages(postData.media?.map(image => image.mediaPath));
+      setImages(postData.media?.map((image) => image.mediaPath));
     }
-
   };
 
   // rerenders the post when interaction
   const reloadPost = async () => {
     PostService.getPostByPostId(postData.id)
-      .then(res => {
+      .then((res) => {
         //setComments(res.data.comments)
         setNumberOfComments(res.data.numberOfComments);
         setNumberOfReactions(res.data.numberOfReaction);
       })
-      .catch(e => console.error(e))
-
+      .catch((e) => console.error(e));
   };
 
   const showDeleteAlert = () =>
@@ -89,63 +95,69 @@ export default function SavedListItem({
       },
     ]);
 
-
-
   //.................... POST ACTION METHOD .............................//
 
   const deletePost = async () => {
-    PostService.savePost(userData?.id, itemId).then(res => {
-      if (res.status === 200){
+    PostService.savePost(userData?.id, itemId).then((res) => {
+      if (res.status === 200) {
         alert('post saved...');
-      }else if (res.status === 201){
+      } else if (res.status === 201) {
         alert('Removed...');
       }
-      
     });
   };
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View
-        style={[styles.card, style]}>
+      <View style={[styles.card, style]}>
         {currentImage && (
-          <ImageView
-            visible={imageViewerVisible}
-            images={[{ uri: currentImage }]}
-            imageIndex={0}
-          />
+          <ImageView visible={imageViewerVisible} images={[{ uri: currentImage }]} imageIndex={0} />
         )}
 
         {/** Post Image */}
 
-        {images?.length !== 0 && (
-          <Image source={{ uri: images[0] }} style={styles.image} />
-        )}
+        {images?.length !== 0 && <Image source={{ uri: images[0] }} style={styles.image} />}
 
         <View style={styles.contentView}>
-          {postData.content !== "" && <Texts size={15} truncate={true} style={styles.postText} >{postData.content}</Texts>}
+          {postData.content !== '' && (
+            <Texts size={15} truncate={true} style={styles.postText}>
+              {postData.content}
+            </Texts>
+          )}
           <View style={styles.content}>
-            <UserProfilePicture size={20} userProfilePicture={postData.userdata.profilePicturePath} />
-            <Texts style={{
-              color: colors.dimGray,
-              marginLeft: 5,
-            }}>{postData.userdata.firstName}</Texts>
+            <UserProfilePicture
+              size={20}
+              userProfilePicture={postData.userdata.profilePicturePath}
+            />
+            <Texts
+              style={{
+                color: colors.dimGray,
+                marginLeft: 5,
+              }}
+            >
+              {postData.userdata.firstName}
+            </Texts>
           </View>
-          <Texts style={styles.content}>{postData.allPostsType} . {postData.published}</Texts>
+          <Texts style={styles.content}>
+            {postData.allPostsType} . {postData.published}
+          </Texts>
         </View>
-        <View style={{
-          flex: 1,
-          alignSelf: 'flex-end',
-          // marginRight:5,
-          // alignContent:"flex-end",
-          alignItems: 'flex-end',
-          // justifyContent:'flex-end',
-        }}>
+        <View
+          style={{
+            flex: 1,
+            alignSelf: 'flex-end',
+            // marginRight:5,
+            // alignContent:"flex-end",
+            alignItems: 'flex-end',
+            // justifyContent:'flex-end',
+          }}
+        >
           <TouchableOpacity
             style={styles.menuButton}
             onPress={() => {
               setIsOptionsVisible(true);
-            }}>
+            }}
+          >
             <Icon
               name="options"
               type="SimpleLineIcons"
@@ -177,7 +189,7 @@ const styles = StyleSheet.create({
     // width: "94%",
     backgroundColor: colors.white,
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
     overflow: 'hidden',
     //padding: 7,
     marginLeft: 15,
@@ -186,7 +198,6 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius,
     marginRight: 15,
 
-
     // marginRight:10,
   },
   image: {
@@ -194,26 +205,22 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: borderRadius,
     resizeMode: 'cover',
-
   },
   contentView: {
-    flexDirection: "column",
+    flexDirection: 'column',
     marginRight: 10,
     marginLeft: 10,
     justifyContent: 'center',
     borderRadius: borderRadius,
     // width: "60%",
     alignSelf: 'center',
-    flexShrink:true,
-      
-   
-
+    flexShrink: true,
   },
 
   content: {
     fontSize: 12,
     marginTop: 5,
-    flexDirection:"row",
+    flexDirection: 'row',
     color: colors.dimGray,
     alignItems: 'center',
   },
@@ -221,11 +228,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     //marginTop: 25,
-   // marginLeft: 5,
+    // marginLeft: 5,
   },
   optionsIcon: {
     alignSelf: 'flex-end',
-
   },
   menuButton: {
     padding: 3,

@@ -1,9 +1,9 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import * as Yup from 'yup';
-import {ErrorMessage, Form, FormField, SubmitButton} from '../components/forms';
+import { ErrorMessage, Form, FormField, SubmitButton } from '../components/forms';
 import Toast from 'react-native-toast-message';
 
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Text from '../components/Text';
 import AuthService from '../services/auth.service';
 import Icon from '../components/Icon';
@@ -15,7 +15,7 @@ import RegistrationContainer from '../components/forms/RegistrationContainer';
 
 import routes from '../navigation/routes';
 
-const SignupStepTwo = ({navigation, route}) => {
+const SignupStepTwo = ({ navigation, route }) => {
   const prevStepValues = route?.params;
 
   const [agreed, setagreed] = useState(false);
@@ -24,7 +24,7 @@ const SignupStepTwo = ({navigation, route}) => {
   const [registerError, setRegisterError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const {isReachable, checkIfReachable} = useIsReachable();
+  const { isReachable, checkIfReachable } = useIsReachable();
 
   const validationSchema = Yup.object().shape({
     gender: Yup.string().required(),
@@ -33,15 +33,12 @@ const SignupStepTwo = ({navigation, route}) => {
       .required()
       .label('Re-Enter Password')
       .when('password', {
-        is: val => (val && val.length > 0 ? true : false),
-        then: Yup.string().oneOf(
-          [Yup.ref('password')],
-          'Password not matched.',
-        ),
+        is: (val) => (val && val.length > 0 ? true : false),
+        then: Yup.string().oneOf([Yup.ref('password')], 'Password not matched.'),
       }),
   });
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values) => {
     if (!agreed) {
       Toast.show({
         position: 'bottom',
@@ -61,17 +58,17 @@ const SignupStepTwo = ({navigation, route}) => {
       return setRegisterFailed(true);
     }
 
-    const userCompleteData = {...prevStepValues, ...values};
+    const userCompleteData = { ...prevStepValues, ...values };
 
     AuthService.signup(userCompleteData)
-      .then(async res => {
-        const {jwt, username} = res.data;
+      .then(async (res) => {
+        const { jwt, username } = res.data;
         navigation.navigate(routes.SIGNUP_VERIFICATION, {
           jwt,
           username,
         });
       })
-      .catch(e =>
+      .catch((e) =>
         Toast.show({
           position: 'bottom',
           visibilityTime: 5000,
@@ -97,11 +94,9 @@ const SignupStepTwo = ({navigation, route}) => {
             gender: '',
           }}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}>
-          <FormRadio
-            name="gender"
-            style={[styles.formField, styles.formRadio]}
-          />
+          onSubmit={handleSubmit}
+        >
+          <FormRadio name="gender" style={[styles.formField, styles.formRadio]} />
 
           <FormField
             autoCorrect={false}
@@ -120,10 +115,8 @@ const SignupStepTwo = ({navigation, route}) => {
             textContentType="password" // Only for ios
             style={styles.formField}
           />
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <TouchableOpacity
-              style={styles.agree}
-              onPress={() => setagreed(!agreed)}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity style={styles.agree} onPress={() => setagreed(!agreed)}>
               <Icon
                 name={agreed ? 'check-box' : 'check-box-outline-blank'}
                 type={'MaterialIcons'}
@@ -132,16 +125,10 @@ const SignupStepTwo = ({navigation, route}) => {
                 style={styles.checkIcon}
               />
             </TouchableOpacity>
-            <Text style={{marginLeft: 10}}>
-              {'Agree to terms & conditions'}
-            </Text>
+            <Text style={{ marginLeft: 10 }}>{'Agree to terms & conditions'}</Text>
           </View>
 
-          <SubmitButton
-            disabled={loading}
-            title="Register"
-            style={styles.submitButton}
-          />
+          <SubmitButton disabled={loading} title="Register" style={styles.submitButton} />
         </Form>
       </RegistrationContainer>
     </>

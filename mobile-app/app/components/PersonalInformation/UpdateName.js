@@ -1,5 +1,5 @@
-import {Formik} from 'formik';
-import React, {useContext, useState} from 'react';
+import { Formik } from 'formik';
+import React, { useContext, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,34 +11,33 @@ import {
   Keyboard,
 } from 'react-native';
 import AuthContext from '../../Contexts/authContext';
-import {HeaderWithBackArrow} from '../../components/headers';
+import { HeaderWithBackArrow } from '../../components/headers';
 import colors from '../../config/colors';
 import * as Yup from 'yup';
 import Loading from '../../components/Loading';
 import userService from '../../services/user.service';
 
-export default function UpdateName({navigation}) {
+export default function UpdateName({ navigation }) {
   const {
-    userState: {userData, username},
+    userState: { userData, username },
     authActions,
   } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = values => {
+  const handleSubmit = (values) => {
     setLoading(true);
     Keyboard.dismiss();
     userService
       .editProfile(username, values)
-      .then(({status, data}) => {
+      .then(({ status, data }) => {
         if (status === 200) {
-
           authActions.updateUserInfo(data);
           setLoading(false);
           navigation.goBack();
         }
       })
-      .catch(e => console.error(e.message));
+      .catch((e) => console.error(e.message));
   };
 
   const validation = Yup.object().shape({
@@ -48,34 +47,25 @@ export default function UpdateName({navigation}) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <HeaderWithBackArrow
-        onBackButton={_ => navigation.goBack()}
-        title="Name"
-      />
+      <HeaderWithBackArrow onBackButton={(_) => navigation.goBack()} title="Name" />
       {loading && <Loading text="Saving.." modal />}
-      <TouchableOpacity
-      activeOpacity={1}
-        style={{flex: 1}}
-        onPress={_ => Keyboard.dismiss()}>
-        <Formik
-          initialValues={userData}
-          onSubmit={handleSubmit}
-          validationSchema={validation}>
-          {({values, handleChange, handleSubmit, handleBlur, errors}) => (
+      <TouchableOpacity activeOpacity={1} style={{ flex: 1 }} onPress={(_) => Keyboard.dismiss()}>
+        <Formik initialValues={userData} onSubmit={handleSubmit} validationSchema={validation}>
+          {({ values, handleChange, handleSubmit, handleBlur, errors }) => (
             <View style={styles.card}>
               <Text style={styles.label}>First Name</Text>
               <TextInput
-                value={values['firstName']}
+                value={values.firstName}
                 onBlur={handleBlur('firstName')}
                 onChangeText={handleChange('firstName')}
-                style={[styles.input,{borderColor: errors['firstName'] ? "crimson":"#cacaca" }]}
+                style={[styles.input, { borderColor: errors.firstName ? 'crimson' : '#cacaca' }]}
               />
               {/* <Text style={styles.error}>{errors['firstName']}</Text> */}
 
               <Text style={styles.label}>Last Name</Text>
               <TextInput
-                style={[styles.input,{borderColor: errors['lastName'] ? "crimson":"#cacaca" }]}
-                value={values['lastName']}
+                style={[styles.input, { borderColor: errors.lastName ? 'crimson' : '#cacaca' }]}
+                value={values.lastName}
                 onBlur={handleBlur('lastName')}
                 onChangeText={handleChange('lastName')}
               />
@@ -93,7 +83,7 @@ export default function UpdateName({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: { flex: 1 },
   btnText: {
     color: '#fff',
     fontSize: 14,

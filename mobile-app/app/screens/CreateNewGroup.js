@@ -1,6 +1,6 @@
-import React, {useContext, useState} from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import React, { useContext, useState } from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import Screen from '../components/Screen';
 import AppButton from '../components/buttons/Button';
@@ -10,19 +10,19 @@ import colors from '../config/colors';
 import defaultStyles from '../config/styles';
 import routes from '../navigation/routes';
 import ChoosePrivacyDrawer from '../components/drawers/ChoosePrivacyDrawer';
-import {Header, HeaderCloseIcon, HeaderTitle} from '../components/headers';
+import { Header, HeaderCloseIcon, HeaderTitle } from '../components/headers';
 
 import * as Yup from 'yup';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import GroupService from '../services/group.service';
 import AuthContext from '../authContext';
 
-export default function CreateNewGroup({navigation}) {
+export default function CreateNewGroup({ navigation }) {
   const [privacy, setPrivacy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isPrivacyDrawerVisible, setIsPrivacyDrawerVisible] = useState(false);
 
-  const {userData} = useContext(AuthContext).userState;
+  const { userData } = useContext(AuthContext).userState;
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required().label('Name'),
@@ -30,15 +30,15 @@ export default function CreateNewGroup({navigation}) {
     // privacySetting: Yup.string().required().label('Privacy option'),
   });
 
-  const handleSubmit = values => {
+  const handleSubmit = (values) => {
     setLoading(true);
     GroupService.createGroup(userData.id, {
       ...values,
       privacySetting: privacy,
     })
-      .then(res => navigation.navigate(routes.SET_GROUP_PHOTO, res.data))
-      .catch(e => console.error(e))
-      .finally(_ => setLoading(false));
+      .then((res) => navigation.navigate(routes.SET_GROUP_PHOTO, res.data))
+      .catch((e) => console.error(e))
+      .finally((_) => setLoading(false));
   };
 
   return (
@@ -56,8 +56,9 @@ export default function CreateNewGroup({navigation}) {
               privacySetting: '',
             }}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}>
-            {({setFieldValue, handleSubmit, handleBlur, errors, values}) => {
+            onSubmit={handleSubmit}
+          >
+            {({ setFieldValue, handleSubmit, handleBlur, errors, values }) => {
               return (
                 <>
                   <View style={styles.input}>
@@ -68,10 +69,10 @@ export default function CreateNewGroup({navigation}) {
                     <AppTextInput
                       style={styles.inputField}
                       backgroundColor={'white'}
-                      onChangeText={val => setFieldValue('name', val)}
+                      onChangeText={(val) => setFieldValue('name', val)}
                       onBlur={() => handleBlur('name')}
-                      value={values['name']}
-                      error={errors['name']}
+                      value={values.name}
+                      error={errors.name}
                     />
                   </View>
                   <View style={styles.input}>
@@ -82,9 +83,9 @@ export default function CreateNewGroup({navigation}) {
                     <TextInput
                       multiline={true}
                       numberOfLines={10}
-                      onChangeText={val => setFieldValue('description', val)}
+                      onChangeText={(val) => setFieldValue('description', val)}
                       onBlur={() => handleBlur('description')}
-                      value={values['description']}
+                      value={values.description}
                       style={[styles.inputField, styles.groupDescription]}
                     />
                     <Text
@@ -92,24 +93,20 @@ export default function CreateNewGroup({navigation}) {
                         color: 'crimson',
                         textAlign: 'right',
                         paddingHorizontal: 30,
-                      }}>
-                      {errors['description']}
+                      }}
+                    >
+                      {errors.description}
                     </Text>
                   </View>
                   <View
                     onTouchEnd={() => {
                       setIsPrivacyDrawerVisible(!isPrivacyDrawerVisible);
                     }}
-                    style={styles.input}>
+                    style={styles.input}
+                  >
                     <Text style={styles.title}>Privacy</Text>
-                    <Text style={styles.subTitle}>
-                      Choose the privacy setting of group
-                    </Text>
-                    <View
-                      style={[
-                        styles.privacySelector,
-                        {width: '88%', marginHorizontal: 30},
-                      ]}>
+                    <Text style={styles.subTitle}>Choose the privacy setting of group</Text>
+                    <View style={[styles.privacySelector, { width: '88%', marginHorizontal: 30 }]}>
                       <View style={defaultStyles.row}>
                         <Icon
                           type={!privacy ? 'Entypo' : 'Ionicons'}
@@ -148,7 +145,7 @@ export default function CreateNewGroup({navigation}) {
                   <AppButton
                     title={'Next'}
                     width={'50%'}
-                    style={{alignSelf: 'center', marginTop: 20}}
+                    style={{ alignSelf: 'center', marginTop: 20 }}
                     onPress={handleSubmit}
                     disabled={loading}
                   />

@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 let initialState = {};
 const userSlice = createSlice({
@@ -9,7 +9,7 @@ const userSlice = createSlice({
     setUser: (state, user) => {
       return (state = user);
     },
-    checkCurrentState: state => {
+    checkCurrentState: (state) => {
       return state;
     },
   },

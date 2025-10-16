@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import AppCamera from '../components/Camera';
 import Screen from '../components/Screen';
 

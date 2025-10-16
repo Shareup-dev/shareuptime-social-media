@@ -1,9 +1,9 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { RadioButton } from "react-native-paper";
-import colors from "../../config/colors";
-import Icon from "../Icon";
-import Separator from "../Separator";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { RadioButton } from 'react-native-paper';
+import colors from '../../config/colors';
+import Icon from '../Icon';
+import Separator from '../Separator';
 
 export default function RadioItem({ item }) {
   return (
@@ -26,20 +26,20 @@ export default function RadioItem({ item }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   radioLabel: {
-    width: "90%",
+    width: '90%',
   },
   radioButton: {
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
   },
   radioDescription: {
-    position: "absolute",
-    top: "65%",
-    left: "10%",
+    position: 'absolute',
+    top: '65%',
+    left: '10%',
     color: colors.mediumGray,
   },
   separator: {

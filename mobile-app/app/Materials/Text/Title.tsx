@@ -1,20 +1,14 @@
 import React from 'react';
-import {ColorValue, Text, TextStyle} from 'react-native';
+import { ColorValue, Text, TextStyle } from 'react-native';
 
 type Props = {
-  children: String;
+  children: string;
   style?: TextStyle;
   size?: number;
   color?: ColorValue;
 };
 
-const Title: React.FC<Props> = ({
-  children,
-  style,
-  size = 16,
-  color = '#333',
-  ...rest
-}) => {
+const Title: React.FC<Props> = ({ children, style, size = 16, color = '#333', ...rest }) => {
   return (
     <Text
       {...rest}
@@ -26,7 +20,8 @@ const Title: React.FC<Props> = ({
           fontWeight: '700',
           textTransform: 'capitalize',
         },
-      ]}>
+      ]}
+    >
       {children}
     </Text>
   );

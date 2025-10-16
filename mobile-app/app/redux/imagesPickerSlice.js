@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   pickerVisible: false,
@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const imagesPickerSlice = createSlice({
-  name: "imagesPicker",
+  name: 'imagesPicker',
   initialState,
   reducers: {
     setImages: (state, action) => {
@@ -27,12 +27,7 @@ const imagesPickerSlice = createSlice({
   },
 });
 
-export const {
-  setImages,
-  openImagePicker,
-  closeImagePicker,
-  addImage,
-  removeImage,
-} = imagesPickerSlice.actions;
+export const { setImages, openImagePicker, closeImagePicker, addImage, removeImage } =
+  imagesPickerSlice.actions;
 
 export default imagesPickerSlice.reducer;

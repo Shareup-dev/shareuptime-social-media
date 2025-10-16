@@ -16,11 +16,7 @@ const AppForm = <T extends FormikValues = FormikValues>({
   children,
 }: AppFormProps<T>) => {
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      validationSchema={validationSchema}
-    >
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
       {() => <>{children}</>}
     </Formik>
   );

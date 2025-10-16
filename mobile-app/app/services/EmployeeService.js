@@ -26,12 +26,12 @@ class EmployeeService {
     // return axios.get(EMPLOYEE_API_BASE_URL)
   };
 
-  createEmployee = async employee => {
+  createEmployee = async (employee) => {
     const result = await authAxios.post('/', employee);
     return result;
   };
 
-  getEmployeeById = async employeeId => {
+  getEmployeeById = async (employeeId) => {
     const result = await authAxios.get('/' + employeeId);
     return result;
   };
@@ -41,7 +41,7 @@ class EmployeeService {
     return result;
   };
 
-  deleteEmployee = async employeeId => {
+  deleteEmployee = async (employeeId) => {
     const result = await authAxios.delete('/' + employeeId);
     return result;
     // return axios.delete(EMPLOYEE_API_BASE_URL + '/' + employeeId);

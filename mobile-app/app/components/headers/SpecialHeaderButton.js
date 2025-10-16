@@ -1,12 +1,8 @@
-import React from "react";
-import { View, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
-import colors from "../../config/colors";
+import React from 'react';
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
+import colors from '../../config/colors';
 
-export default function SpecialHeaderButton({
-  title,
-  isActive = true,
-  onPress,
-}) {
+export default function SpecialHeaderButton({ title, isActive = true, onPress }) {
   return isActive ? (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={[styles.button, styles.active]}>
@@ -25,8 +21,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     height: 32,
     borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   active: {
     backgroundColor: colors.iondigoDye,
@@ -37,6 +33,6 @@ const styles = StyleSheet.create({
   title: {
     color: colors.white,
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

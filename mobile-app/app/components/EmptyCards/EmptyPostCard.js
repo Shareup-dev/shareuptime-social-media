@@ -1,7 +1,7 @@
-import React, {useEffect, useRef} from 'react';
-import {Animated, StyleSheet, View} from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
 
-export default React.memo(function EmptyPostCard({count = 3}) {
+export default React.memo(function EmptyPostCard({ count = 3 }) {
   const array = Array(count).fill(0, 0, count);
   const fadeAnim = useRef(new Animated.Value(0.5)).current;
 
@@ -10,7 +10,7 @@ export default React.memo(function EmptyPostCard({count = 3}) {
       toValue: 1,
       duration: 800,
       useNativeDriver: true,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       if (finished) fadeOut();
     });
   };
@@ -20,7 +20,7 @@ export default React.memo(function EmptyPostCard({count = 3}) {
       toValue: 0.4,
       useNativeDriver: true,
       duration: 800,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       if (finished) fadeIn();
     });
   };
@@ -33,52 +33,26 @@ export default React.memo(function EmptyPostCard({count = 3}) {
     <View style={styles.container}>
       {array.map((ele, i) => (
         <View key={i} View style={[styles.card]}>
-          <Animated.View style={[styles.img, {opacity: fadeAnim}]} />
+          <Animated.View style={[styles.img, { opacity: fadeAnim }]} />
           <View style={styles.bottomCard}>
             <View style={styles.profileContainer}>
-              <Animated.View style={[styles.profile, {opacity: fadeAnim}]} />
+              <Animated.View style={[styles.profile, { opacity: fadeAnim }]} />
               <View>
                 <Animated.View
-                  style={[
-                    styles.name,
-                    {height: 15, opacity: fadeAnim, width: 80},
-                  ]}
+                  style={[styles.name, { height: 15, opacity: fadeAnim, width: 80 }]}
                 />
                 <Animated.View
-                  style={[
-                    styles.name,
-                    {height: 10, opacity: fadeAnim, width: 110},
-                  ]}
+                  style={[styles.name, { height: 10, opacity: fadeAnim, width: 110 }]}
                 />
               </View>
             </View>
             <View style={styles.row}>
-              <Animated.View
-                style={[
-                  styles.name,
-                  {height: 12, opacity: fadeAnim, width: 40},
-                ]}
-              />
-              <Animated.View
-                style={[
-                  styles.name,
-                  {height: 10, opacity: fadeAnim, width: 100},
-                ]}
-              />
+              <Animated.View style={[styles.name, { height: 12, opacity: fadeAnim, width: 40 }]} />
+              <Animated.View style={[styles.name, { height: 10, opacity: fadeAnim, width: 100 }]} />
             </View>
             <View style={styles.row}>
-              <Animated.View
-                style={[
-                  styles.name,
-                  {height: 10, opacity: fadeAnim, width: 120},
-                ]}
-              />
-              <Animated.View
-                style={[
-                  styles.name,
-                  {height: 10, opacity: fadeAnim, width: 30},
-                ]}
-              />
+              <Animated.View style={[styles.name, { height: 10, opacity: fadeAnim, width: 120 }]} />
+              <Animated.View style={[styles.name, { height: 10, opacity: fadeAnim, width: 30 }]} />
             </View>
           </View>
         </View>

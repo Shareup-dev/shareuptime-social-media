@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Icon from '../components/Icon';
 import Card from '../components/lists/Card';
@@ -19,7 +19,7 @@ import colors from '../config/colors';
 import GroupService from '../services/group.service';
 import routes from '../navigation/routes';
 
-import {HeaderWithBackArrow} from '../components/headers';
+import { HeaderWithBackArrow } from '../components/headers';
 import Tab from '../components/buttons/Tab';
 import fileStorage from '../config/fileStorage';
 
@@ -27,10 +27,10 @@ import AuthContext from '../authContext';
 import DownModal from '../components/drawers/DownModal';
 
 const windowWidth = Dimensions.get('screen').width;
-const GroupFeedScreen = ({navigation, route}) => {
-  const posts = useSelector(state => state.groupPosts);
-  const {userData} = useContext(AuthContext).userState;
-  const {params: groupData} = route;
+const GroupFeedScreen = ({ navigation, route }) => {
+  const posts = useSelector((state) => state.groupPosts);
+  const { userData } = useContext(AuthContext).userState;
+  const { params: groupData } = route;
 
   const [group, setGroup] = useState(groupData);
   const [isMember, setIsMember] = useState(false);
@@ -45,42 +45,42 @@ const GroupFeedScreen = ({navigation, route}) => {
         GroupService.getGroupById(groupData.id),
         GroupService.checkIsMember(groupData.id, userData.id),
       ])
-        .then(res => {
+        .then((res) => {
           setGroup(res[0].data);
           setIsMember(res[1].data);
         })
-        .catch(e => console.error(e))
-        .finally(_ => setLoading(false));
+        .catch((e) => console.error(e))
+        .finally((_) => setLoading(false));
     };
     getGroupInfo();
   }, [route.params]);
 
-  const deleteGroup = _ => {
+  const deleteGroup = (_) => {
     Alert.alert('Delete group?', 'Are you sure to this group?', [
-      {text: 'Cancel', style: 'cancel', onPress: () => {}},
+      { text: 'Cancel', style: 'cancel', onPress: () => {} },
       {
         text: 'Delete',
         style: 'destructive',
         onPress: () =>
           GroupService.deleteGroup(userData.id, groupData.id)
-            .then(_ => {
+            .then((_) => {
               handleCloseModel();
               navigation.popToTop();
             })
-            .catch(e => console.error(e.message)),
+            .catch((e) => console.error(e.message)),
       },
     ]);
   };
 
   const handleJoinGroup = () => {
     GroupService.joinRequest(userData.id, groupData.id)
-      .then(res => setRequested(true))
-      .catch(e => e);
+      .then((res) => setRequested(true))
+      .catch((e) => e);
   };
   const handleExitGroup = () => {
     GroupService.leavegroup(userData.id, groupData.id)
-      .then(res => setIsMember(false))
-      .catch(e => e);
+      .then((res) => setIsMember(false))
+      .catch((e) => e);
   };
 
   const handleCloseModel = () => {
@@ -94,7 +94,7 @@ const GroupFeedScreen = ({navigation, route}) => {
   const DropDownMenu = () => {
     return (
       <View style={styles.menuContainer}>
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <View
             style={{
               backgroundColor: '#cacaca',
@@ -107,10 +107,11 @@ const GroupFeedScreen = ({navigation, route}) => {
         <TouchableOpacity
           style={styles.menu}
           activeOpacity={0.6}
-          onPress={_ => {
+          onPress={(_) => {
             navigation.navigate(routes.EDIT_GROUP, groupData);
             setMenuOpen(false);
-          }}>
+          }}
+        >
           <Text style={styles.menuText}>Edit</Text>
           <Text>Change the name and Description</Text>
         </TouchableOpacity>
@@ -120,15 +121,17 @@ const GroupFeedScreen = ({navigation, route}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menu}
-          onPress={_ => {
+          onPress={(_) => {
             navigation.navigate(routes.UPDATE_GROUP_PHOTO, groupData);
             setMenuOpen(false);
-          }}>
+          }}
+        >
           <Text style={styles.menuText}>Cover image</Text>
           <Text
             style={{
               maxWidth: windowWidth / 2,
-            }}>
+            }}
+          >
             Change cover image
           </Text>
         </TouchableOpacity>
@@ -146,9 +149,7 @@ const GroupFeedScreen = ({navigation, route}) => {
         rightComponent={
           <>
             {checkOwner() && (
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={_ => setMenuOpen(prev => !prev)}>
+              <TouchableOpacity activeOpacity={0.6} onPress={(_) => setMenuOpen((prev) => !prev)}>
                 <Icon type="SimpleLineIcons" name="options" />
               </TouchableOpacity>
             )}
@@ -176,7 +177,7 @@ const GroupFeedScreen = ({navigation, route}) => {
                 }
               />
               <View style={styles.detailContainer}>
-                <View style={{marginHorizontal: 20}}>
+                <View style={{ marginHorizontal: 20 }}>
                   <Text style={styles.title}>{group.name}</Text>
                   <Text style={styles.subTitle}>{group.description}</Text>
                   <View
@@ -184,12 +185,14 @@ const GroupFeedScreen = ({navigation, route}) => {
                       flexDirection: 'row',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                    }}>
+                    }}
+                  >
                     <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                      }}>
+                      }}
+                    >
                       <Icon name={group.privacySetting ? 'lock' : 'earth'} />
                       <Text style={styles.subTitle}>
                         {group.privacySetting ? 'Private' : 'Public'} Group
@@ -200,10 +203,9 @@ const GroupFeedScreen = ({navigation, route}) => {
                       disabled={!isMember && !checkOwner()}
                       onPress={() => {
                         navigation.navigate(routes.LIST_OF_MEMBERS, groupData);
-                      }}>
-                      <Text style={{fontWeight: '600', fontSize: 15}}>
-                        Members
-                      </Text>
+                      }}
+                    >
+                      <Text style={{ fontWeight: '600', fontSize: 15 }}>Members</Text>
                     </TouchableOpacity>
                   </View>
 
@@ -242,7 +244,7 @@ const GroupFeedScreen = ({navigation, route}) => {
                       }}
                     />
                   )}
-                  <View style={styles.membersCard}></View>
+                  <View style={styles.membersCard} />
                   {/* <AppButton
                     icon={
                       <Icon
@@ -264,11 +266,7 @@ const GroupFeedScreen = ({navigation, route}) => {
                   /> */}
                 </View>
                 {checkOwner() || isMember ? (
-                  <WritePost
-                    groupPost={true}
-                    groupId={group.id}
-                    navigation={navigation}
-                  />
+                  <WritePost groupPost={true} groupId={group.id} navigation={navigation} />
                 ) : (
                   <View
                     style={{
@@ -287,11 +285,11 @@ const GroupFeedScreen = ({navigation, route}) => {
             </View>
           );
         }}
-        keyExtractor={post => {
+        keyExtractor={(post) => {
           return post.id.toString();
         }}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <Card
             postId={item.id}
             userId={item.user.id}

@@ -1,46 +1,34 @@
-import {StyleSheet, Text, Platform, View, TextInput} from 'react-native';
+import { StyleSheet, Text, Platform, View, TextInput } from 'react-native';
 
 import Screen from '../components/Screen';
-import {Header, HeaderButton, HeaderTitle} from '../components/headers';
+import { Header, HeaderButton, HeaderTitle } from '../components/headers';
 import Separator from '../components/Separator';
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import colors from '../config/colors';
 import authContext from '../authContext';
 import LinkButton from '../components/buttons/LinkButton';
 import Section from '../components/Section';
 import UserProfilePicture from '../components/UserProfilePicture';
 import TextField from '../components/TextField';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import UserService from '../services/user.service';
 import authApi from '../api/auth';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {loggedInUserActions} from '../redux/loggedInUser';
-import {
-  ToastAndroid,
-  Button,
-  StatusBar,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { loggedInUserActions } from '../redux/loggedInUser';
+import { ToastAndroid, Button, StatusBar, TouchableOpacity, Image } from 'react-native';
 import useImagePicker from '../hooks/useImagePicker';
 import settings from '../config/settings';
 
-export default function EditProfileScreen({navigation}) {
-  const {user, setUser} = useContext(authContext);
-  const {file, pickImage, clearFile} = useImagePicker();
+export default function EditProfileScreen({ navigation }) {
+  const { user, setUser } = useContext(authContext);
+  const { file, pickImage, clearFile } = useImagePicker();
   const [displayImage, setDisplayImage] = useState(false);
   const [enteredBio, setEnteredBio] = useState(user.aboutme);
-  const [enteredCurrenttown, setEnteredCurrenttown] = useState(
-    user.currenttown,
-  );
+  const [enteredCurrenttown, setEnteredCurrenttown] = useState(user.currenttown);
   const [enteredhometown, setEnteredhometown] = useState(user.hometown);
-  const [enteredRelation, setEnteredRelation] = useState(
-    user.relationshipstatus,
-  );
+  const [enteredRelation, setEnteredRelation] = useState(user.relationshipstatus);
   const [enteredinterests, setEnteredinterests] = useState(user.interests);
-  const [imageVal, setImage] = useState(
-    settings.apiUrl + user.profilePicturePath,
-  );
+  const [imageVal, setImage] = useState(settings.apiUrl + user.profilePicturePath);
   const [imageFile, setSelectedImageFile] = useState(null);
 
   // const addImage = async () => {
@@ -56,8 +44,6 @@ export default function EditProfileScreen({navigation}) {
   // };
 
   async function EditProfileImagw() {
-   
-
     const formData = new FormData();
     formData.append('profilePicture', {
       name: 'profilePicture2',
@@ -65,29 +51,22 @@ export default function EditProfileScreen({navigation}) {
       uri: imageFile.uri,
     });
 
-
-    await UserService.uploadProfilePicture(user.email, formData).then(
-      async res => {
-
-        if (res.data) {
-          setUser(res.data);
-          await EncryptedStorage.setItem('user', JSON.stringify(res.data));
-          showToast();
-        }
-      },
-    );
+    await UserService.uploadProfilePicture(user.email, formData).then(async (res) => {
+      if (res.data) {
+        setUser(res.data);
+        await EncryptedStorage.setItem('user', JSON.stringify(res.data));
+        showToast();
+      }
+    });
   }
   async function EditUser() {
-    let storedUser2 = await UserService.editProfile(user.email, user).then(
-      async res => {
-    
-        if (res.data) {
-          setUser(res.data);
-          await EncryptedStorage.setItem('user', JSON.stringify(res.data));
-          showToast();
-        }
-      },
-    );
+    let storedUser2 = await UserService.editProfile(user.email, user).then(async (res) => {
+      if (res.data) {
+        setUser(res.data);
+        await EncryptedStorage.setItem('user', JSON.stringify(res.data));
+        showToast();
+      }
+    });
   }
 
   const showToast = () => {
@@ -101,9 +80,7 @@ export default function EditProfileScreen({navigation}) {
   };
   // getUser();
 
-  function sendValues(enteredBio) {
-  
-  }
+  function sendValues(enteredBio) {}
   function callFun() {
     // addImage();
   }
@@ -113,18 +90,10 @@ export default function EditProfileScreen({navigation}) {
       <Header
         left={
           <View style={styles.leftAndRight}>
-            <HeaderButton
-              title="Cancel"
-              isActive={true}
-              onPress={() => navigation.goBack()}
-            />
+            <HeaderButton title="Cancel" isActive={true} onPress={() => navigation.goBack()} />
           </View>
         }
-        middle={
-          <HeaderTitle titleStyle={styles.headerTitle}>
-            Edit Profile
-          </HeaderTitle>
-        }
+        middle={<HeaderTitle titleStyle={styles.headerTitle}>Edit Profile</HeaderTitle>}
         right={
           <View style={styles.leftAndRight}>
             <HeaderButton title="Done" isActive={true} />
@@ -142,13 +111,13 @@ export default function EditProfileScreen({navigation}) {
             onAdd={() => {
               user.profilePicturePath = imageVal;
               EditProfileImagw();
-        
-            }}>
+            }}
+          >
             <TouchableOpacity onPress={callFun}>
               <Image
-                source={{uri: imageVal}}
+                source={{ uri: imageVal }}
                 style={[
-                  {width: 100, height: 100, borderRadius: 100 / 2},
+                  { width: 100, height: 100, borderRadius: 100 / 2 },
                   styles.userProfilePicture,
                 ]}
               />
@@ -162,14 +131,15 @@ export default function EditProfileScreen({navigation}) {
             onAdd={() => {
               user.aboutme = enteredBio;
               EditUser();
-            }}>
+            }}
+          >
             <TextInput
               placeholder="Describe yourself..."
               textAlign="center"
               multiline
               placeholderTextColor={colors.mediumGray}
               value={enteredBio}
-              onChangeText={text => setEnteredBio(text)}
+              onChangeText={(text) => setEnteredBio(text)}
             />
           </Section>
 
@@ -182,14 +152,14 @@ export default function EditProfileScreen({navigation}) {
               user.hometown = enteredhometown;
               user.relationshipstatus = enteredRelation;
               EditUser();
-         
-            }}>
+            }}
+          >
             <TextField
               placeholder="Current town / city"
               iconImage={require('../assets/icons/home-icon.png')}
               backgroundColor={colors.white}
               value={enteredCurrenttown}
-              onChangeText={text => setEnteredCurrenttown(text)}
+              onChangeText={(text) => setEnteredCurrenttown(text)}
             />
 
             <TextField
@@ -197,14 +167,14 @@ export default function EditProfileScreen({navigation}) {
               iconImage={require('../assets/icons/location-icon.png')}
               backgroundColor={colors.white}
               value={enteredhometown}
-              onChangeText={text => setEnteredhometown(text)}
+              onChangeText={(text) => setEnteredhometown(text)}
             />
             <TextField
               placeholder="Relationship status"
               iconImage={require('../assets/icons/double-heart-icon.png')}
               backgroundColor={colors.white}
               value={enteredRelation}
-              onChangeText={text => setEnteredRelation(text)}
+              onChangeText={(text) => setEnteredRelation(text)}
             />
           </Section>
 
@@ -215,15 +185,15 @@ export default function EditProfileScreen({navigation}) {
             onAdd={() => {
               user.interests = enteredinterests;
               EditUser();
-       
-            }}>
+            }}
+          >
             <TextInput
               placeholder="Add your hobbies..."
               textAlign="center"
               multiline
               placeholderTextColor={colors.mediumGray}
               value={enteredinterests}
-              onChangeText={text => setEnteredinterests(text)}
+              onChangeText={(text) => setEnteredinterests(text)}
             />
           </Section>
 

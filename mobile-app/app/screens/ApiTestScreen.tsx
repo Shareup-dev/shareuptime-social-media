@@ -50,56 +50,48 @@ const ApiTestScreen: React.FC = () => {
           response: success ? 'OK' : 'Failed',
           responseTime: 0,
         }));
-        
+
         setResults(results);
         setSummary({
           total: results.length,
-          passed: results.filter(r => r.success).length,
-          failed: results.filter(r => !r.success).length,
+          passed: results.filter((r) => r.success).length,
+          failed: results.filter((r) => !r.success).length,
           averageResponseTime: 0,
         });
 
         Alert.alert(
           'Test Completed',
-          `${results.filter(r => r.success).length}/${results.length} endpoints passed`
+          `${results.filter((r) => r.success).length}/${results.length} endpoints passed`,
         );
       } else {
         Alert.alert(
           'Tests Failed',
-          testResult.backendConnected ? 'Integration not ready' : 'Backend connection failed'
+          testResult.backendConnected ? 'Integration not ready' : 'Backend connection failed',
         );
       }
     } catch (error) {
-      Alert.alert(
-        '❌ Error',
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      );
+      Alert.alert('❌ Error', error instanceof Error ? error.message : 'Unknown error occurred');
     } finally {
       setIsRunning(false);
     }
   }, []);
 
   const renderTestResult = (result: TestResult, index: number) => (
-    <View key={index} style={[
-      styles.resultItem,
-      { backgroundColor: result.success ? testColors.lightGreen : testColors.lightRed }
-    ]}>
+    <View
+      key={index}
+      style={[
+        styles.resultItem,
+        { backgroundColor: result.success ? testColors.lightGreen : testColors.lightRed },
+      ]}
+    >
       <View style={styles.resultHeader}>
-        <Text style={styles.resultIcon}>
-          {result.success ? '✅' : '❌'}
-        </Text>
+        <Text style={styles.resultIcon}>{result.success ? '✅' : '❌'}</Text>
         <Text style={styles.resultEndpoint}>
           {result.method} {result.endpoint}
         </Text>
-        <Text style={styles.resultTime}>
-          {result.responseTime}ms
-        </Text>
+        <Text style={styles.resultTime}>{result.responseTime}ms</Text>
       </View>
-      {result.error && (
-        <Text style={styles.errorText}>
-          {result.error}
-        </Text>
-      )}
+      {result.error && <Text style={styles.errorText}>{result.error}</Text>}
     </View>
   );
 
@@ -115,15 +107,11 @@ const ApiTestScreen: React.FC = () => {
         </View>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Passed:</Text>
-          <Text style={[styles.summaryValue, { color: testColors.green }]}>
-            {summary.passed}
-          </Text>
+          <Text style={[styles.summaryValue, { color: testColors.green }]}>{summary.passed}</Text>
         </View>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Failed:</Text>
-          <Text style={[styles.summaryValue, { color: colors.red }]}>
-            {summary.failed}
-          </Text>
+          <Text style={[styles.summaryValue, { color: colors.red }]}>{summary.failed}</Text>
         </View>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Avg Response:</Text>
@@ -165,7 +153,7 @@ const ApiTestScreen: React.FC = () => {
             {results.map(renderTestResult)}
           </>
         )}
-        
+
         {results.length === 0 && !isRunning && (
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateText}>

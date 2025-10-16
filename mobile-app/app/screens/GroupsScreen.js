@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -14,14 +14,14 @@ import TextField from '../components/TextField';
 import Tab from '../components/buttons/Tab';
 import Text from '../components/Text';
 import colors from '../config/colors';
-import {HeaderWithBackArrow} from '../components/headers';
+import { HeaderWithBackArrow } from '../components/headers';
 import routes from '../navigation/routes';
 import fileStorage from '../config/fileStorage';
 import authContext from '../authContext';
 import groupService from '../services/group.service';
 
-export default function GroupsScreen({navigation}) {
-  const {userData} = useContext(authContext).userState;
+export default function GroupsScreen({ navigation }) {
+  const { userData } = useContext(authContext).userState;
   const [groups, setGroups] = useState([]);
 
   const initSearchVal = {
@@ -32,46 +32,46 @@ export default function GroupsScreen({navigation}) {
   const [search, setSearch] = useState(initSearchVal);
 
   useEffect(() => {
-    navigation.addListener('focus', async e => {
+    navigation.addListener('focus', async (e) => {
       // setSearch(initSearchVal);
       await groupService
         .getGroupsOfOwner(userData.id)
-        .then(res => setGroups(res.data))
-        .catch(e => console.error(e.message));
+        .then((res) => setGroups(res.data))
+        .catch((e) => console.error(e.message));
     });
   }, [navigation]);
 
-  const deleteGroup = gid => {
+  const deleteGroup = (gid) => {
     Alert.alert('Delete group?', 'Are you sure to this group?', [
-      {text: 'Cancel', style: 'cancel', onPress: () => {}},
+      { text: 'Cancel', style: 'cancel', onPress: () => {} },
       {
         text: 'Delete',
         style: 'destructive',
         onPress: () =>
           groupService
             .deleteGroup(userData.id, gid)
-            .then(_ => setGroups(prev => prev.filter(item => item.id !== gid)))
-            .catch(e => console.error(e.message)),
+            .then((_) => setGroups((prev) => prev.filter((item) => item.id !== gid)))
+            .catch((e) => console.error(e.message)),
       },
     ]);
   };
-  const searchGroups = _ => {
+  const searchGroups = (_) => {
     if (search.keyword) {
-      setSearch(prev => ({...prev, loading: 1}));
+      setSearch((prev) => ({ ...prev, loading: 1 }));
       groupService
         .search(search.keyword)
-        .then(res => setSearch(prev => ({...prev, result: res.data})))
-        .catch(e => console.error(e.message))
-        .finally(_ => setSearch(prev => ({...prev, loading: 2})));
+        .then((res) => setSearch((prev) => ({ ...prev, result: res.data })))
+        .catch((e) => console.error(e.message))
+        .finally((_) => setSearch((prev) => ({ ...prev, loading: 2 })));
     } else {
-      setSearch(prev => ({...prev, loading: 0, result: []}));
+      setSearch((prev) => ({ ...prev, loading: 0, result: [] }));
     }
   };
   const handleClearSearch = () => {
     setSearch(initSearchVal);
   };
 
-  const ManageGroupCard = ({item}) => {
+  const ManageGroupCard = ({ item }) => {
     return (
       <View
         style={{
@@ -82,7 +82,8 @@ export default function GroupsScreen({navigation}) {
           borderColor: '#cacaca',
           borderWidth: 0.3,
           marginVertical: 5,
-        }}>
+        }}
+      >
         <TouchableOpacity
           activeOpacity={0.6}
 
@@ -92,67 +93,67 @@ export default function GroupsScreen({navigation}) {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-            }}>
+            }}
+          >
             <Image
               source={
                 item.image
-                  ? {uri: fileStorage.baseUrl + item.image}
+                  ? { uri: fileStorage.baseUrl + item.image }
                   : require('../assets/images/group-texture.png')
               }
               style={styles.img}
             />
             <View style={styles.item}>
               <Text style={[styles.title]}>{item.name}</Text>
-              <Text style={{fontSize: 13}}>{item.description}</Text>
+              <Text style={{ fontSize: 13 }}>{item.description}</Text>
             </View>
           </View>
         </TouchableOpacity>
         <View style={styles.actionContainer}>
           <TouchableOpacity
             activeOpacity={0.6}
-            style={{flexDirection: 'row', alignItems: 'center'}}
-            onPress={_ => navigation.navigate(routes.MEMBER_REQUEST, item)}>
-            <Icon
-              name={'md-people-sharp'}
-              noBackground
-              size={50}
-              type="Ionicons"
-            />
-            <Text style={{fontSize: 16}}>Member Requests</Text>
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+            onPress={(_) => navigation.navigate(routes.MEMBER_REQUEST, item)}
+          >
+            <Icon name={'md-people-sharp'} noBackground size={50} type="Ionicons" />
+            <Text style={{ fontSize: 16 }}>Member Requests</Text>
           </TouchableOpacity>
-          <Text></Text>
+          <Text />
         </View>
         <View style={styles.actionContainer}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Icon name={'report'} noBackground size={50} type="Octicons" />
-            <Text style={{fontSize: 16}}>Reports</Text>
+            <Text style={{ fontSize: 16 }}>Reports</Text>
           </View>
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => deleteGroup(item.id)}
-            style={{flexDirection: 'row', alignItems: 'center'}}>
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+          >
             <Icon name={'delete'} noBackground size={50} />
-            <Text style={{fontSize: 16}}>Delete this group</Text>
+            <Text style={{ fontSize: 16 }}>Delete this group</Text>
           </TouchableOpacity>
-          <Text></Text>
+          <Text />
         </View>
       </View>
     );
   };
 
-  const SearchResultCard = ({item}) => (
+  const SearchResultCard = ({ item }) => (
     <TouchableOpacity
       activeOpacity={0.6}
-      onPress={() => navigation.navigate(routes.GROUP_FEED, item)}>
+      onPress={() => navigation.navigate(routes.GROUP_FEED, item)}
+    >
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-        }}>
+        }}
+      >
         <Image
           source={
             item.image
-              ? {uri: fileStorage.baseUrl + item.image}
+              ? { uri: fileStorage.baseUrl + item.image }
               : require('../assets/images/group-texture.png')
           }
           style={styles.searchCardImg}
@@ -175,20 +176,13 @@ export default function GroupsScreen({navigation}) {
             iconName="search1"
             iconType="AntDesign"
             style={styles.searchbar}
-            onChangeText={val => setSearch(prev => ({...prev, keyword: val}))}
+            onChangeText={(val) => setSearch((prev) => ({ ...prev, keyword: val }))}
             onSubmitEditing={searchGroups}
             value={search.keyword}
             returnKeyType="search"
             endComponent={
-              <TouchableOpacity
-                style={{marginLeft: 10}}
-                onPress={handleClearSearch}>
-                <Icon
-                  name="close"
-                  noBackground
-                  size={35}
-                  style={{paddingHorizontal: 5}}
-                />
+              <TouchableOpacity style={{ marginLeft: 10 }} onPress={handleClearSearch}>
+                <Icon name="close" noBackground size={35} style={{ paddingHorizontal: 5 }} />
               </TouchableOpacity>
             }
           />
@@ -228,28 +222,26 @@ export default function GroupsScreen({navigation}) {
         /> */}
       </View>
 
-      <ScrollView
-        style={styles.listContainer}
-        showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={false}>
         {search.loading === 2 && (
           <>
-            <Text style={[{marginVertical: 5}, styles.title]}>
-              {`Search Results`}
-            </Text>
+            <Text style={[{ marginVertical: 5 }, styles.title]}>{`Search Results`}</Text>
             <View
               style={{
                 backgroundColor: '#fdfdfd',
                 paddingHorizontal: 15,
                 paddingVertical: 10,
                 borderRadius: 10,
-              }}>
+              }}
+            >
               {search.result.length === 0 && (
                 <Text
                   style={{
                     textAlign: 'center',
                     marginVertical: 15,
                     fontSize: 15,
-                  }}>{`Groups not found`}</Text>
+                  }}
+                >{`Groups not found`}</Text>
               )}
               {search.result.map((result, i) => (
                 <SearchResultCard item={result} key={i} />
@@ -259,18 +251,16 @@ export default function GroupsScreen({navigation}) {
         )}
 
         {!groups.length ? (
-          <Text style={{textAlign: 'center', fontSize: 12}}>
+          <Text style={{ textAlign: 'center', fontSize: 12 }}>
             You don't have any groups to manage
           </Text>
         ) : (
           <React.Fragment>
-            <Text style={[{marginVertical: 5}, styles.title]}>
-              Groups you manage
-            </Text>
+            <Text style={[{ marginVertical: 5 }, styles.title]}>Groups you manage</Text>
             <FlatList
-              data={groups}        
+              data={groups}
               keyExtractor={(item, i) => i.toString()}
-              renderItem={({item}) => <ManageGroupCard item={item} />}
+              renderItem={({ item }) => <ManageGroupCard item={item} />}
             />
           </React.Fragment>
         )}

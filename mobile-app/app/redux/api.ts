@@ -28,12 +28,10 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
     const loggedInUser = state.loggedInUser;
-    
+
     // Handle different token structures
-    const token = loggedInUser?.payload?.token || 
-                  loggedInUser?.token || 
-                  loggedInUser?.access_token;
-    
+    const token = loggedInUser?.payload?.token || loggedInUser?.token || loggedInUser?.access_token;
+
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
@@ -49,10 +47,7 @@ export const shareUpTimeApi = createApi({
   tagTypes: ['User', 'Post', 'Comment', 'Follow', 'Message', 'Conversation'],
   endpoints: (builder) => ({
     // Auth endpoints
-    login: builder.mutation<
-      { user: any; token: string },
-      { email: string; password: string }
-    >({
+    login: builder.mutation<{ user: any; token: string }, { email: string; password: string }>({
       query: (credentials) => ({
         url: '/auth/login',
         method: 'POST',
@@ -63,7 +58,7 @@ export const shareUpTimeApi = createApi({
 
     register: builder.mutation<
       { user: any; token: string },
-      { 
+      {
         username: string;
         email: string;
         password: string;
@@ -95,8 +90,7 @@ export const shareUpTimeApi = createApi({
 
     // Posts endpoints
     getFeedPosts: builder.query<any[], { page?: number; limit?: number }>({
-      query: ({ page = 1, limit = 10 }) => 
-        `/posts?page=${page}&limit=${limit}`,
+      query: ({ page = 1, limit = 10 }) => `/posts?page=${page}&limit=${limit}`,
       providesTags: ['Post'],
     }),
 
@@ -140,11 +134,14 @@ export const shareUpTimeApi = createApi({
       providesTags: ['Comment'],
     }),
 
-    createComment: builder.mutation<any, { 
-      postId: string; 
-      content: string;
-      parentId?: string;
-    }>({
+    createComment: builder.mutation<
+      any,
+      {
+        postId: string;
+        content: string;
+        parentId?: string;
+      }
+    >({
       query: ({ postId, content, parentId }) => ({
         url: `/posts/${postId}/comments`,
         method: 'POST',
@@ -160,16 +157,19 @@ export const shareUpTimeApi = createApi({
     }),
 
     getMessages: builder.query<any[], { conversationId: string; page?: number }>({
-      query: ({ conversationId, page = 1 }) => 
+      query: ({ conversationId, page = 1 }) =>
         `/messages/conversations/${conversationId}/messages?page=${page}`,
       providesTags: ['Message'],
     }),
 
-    sendMessage: builder.mutation<any, {
-      conversationId: string;
-      content: string;
-      type?: 'text' | 'media';
-    }>({
+    sendMessage: builder.mutation<
+      any,
+      {
+        conversationId: string;
+        content: string;
+        type?: 'text' | 'media';
+      }
+    >({
       query: ({ conversationId, ...messageData }) => ({
         url: `/messages/conversations/${conversationId}/messages`,
         method: 'POST',

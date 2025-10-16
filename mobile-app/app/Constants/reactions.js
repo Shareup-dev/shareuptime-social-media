@@ -41,7 +41,7 @@ export default [
   },
 ];
 
-export const findEmoji = name => {
+export const findEmoji = (name) => {
   switch (name) {
     case 'laugh':
       return '😂';

@@ -1,13 +1,13 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import colors from "../../config/colors";
-import Icon from "../Icon";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import colors from '../../config/colors';
+import Icon from '../Icon';
 ///assets/icons/circled-tag-icon.png
 export default function TagsEmpty({ navigation }) {
   return (
     <View style={styles.container}>
       <Icon
-        image={require("../../assets/icons/circled-tag-icon.png")}
+        image={require('../../assets/icons/circled-tag-icon.png')}
         size={90}
         backgroundSizeRatio={1}
       />
@@ -22,8 +22,8 @@ export default function TagsEmpty({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text1: {
     marginTop: 5,
@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
   },
   text2: {
     marginTop: 10,
-    width: "70%",
-    textAlign: "center",
+    width: '70%',
+    textAlign: 'center',
     fontSize: 12,
     color: colors.mediumGray,
   },

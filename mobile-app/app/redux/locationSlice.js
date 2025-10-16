@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = [];
 export const locationSlice = createSlice({
-  name: "location",
+  name: 'location',
   initialState,
   reducers: {
     setlocation: (state, newState) => {

@@ -1,7 +1,7 @@
-import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { useSelector } from "react-redux";
-import Icon from "../components/Icon";
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
+import Icon from '../components/Icon';
 
 export default function AddPostButton({ onPress }) {
   let isReelScreen = useSelector((state) => state.reelScreenDetector);
@@ -11,8 +11,8 @@ export default function AddPostButton({ onPress }) {
         <Icon
           image={
             isReelScreen
-              ? require("../assets/tab-navigation-icons/aperture-icon.png")
-              : require("../assets/tab-navigation-icons/add-icon.png")
+              ? require('../assets/tab-navigation-icons/aperture-icon.png')
+              : require('../assets/tab-navigation-icons/add-icon.png')
           }
           backgroundColor={null}
           backgroundSizeRatio={1}

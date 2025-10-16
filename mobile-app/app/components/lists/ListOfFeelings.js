@@ -1,9 +1,9 @@
-import React, { useContext, useMemo } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { useDispatch } from "react-redux";
-import { postFeelingsActions } from "../../redux/postFeelings";
-import { data as Feelings } from "../Data/activitiesAndFeelings";
+import React, { useContext, useMemo } from 'react';
+import { View, StyleSheet, Text, Image } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+import { postFeelingsActions } from '../../redux/postFeelings';
+import { data as Feelings } from '../Data/activitiesAndFeelings';
 
 export default function ListOfFeelings(props) {
   const dispatch = useDispatch();
@@ -30,9 +30,9 @@ export default function ListOfFeelings(props) {
       <ScrollView showsVerticalScrollIndicator={false}>
         {Feelings.map(
           (feeling, index) =>
-            feeling.type === "Feeling" && (
+            feeling.type === 'Feeling' && (
               <FeelingCard key={index} name={feeling.name} img={feeling.img} />
-            )
+            ),
         )}
       </ScrollView>
     </View>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   cardText: {
     marginLeft: 15,
   },
-  card: { flexDirection: "row", alignItems: "center" },
+  card: { flexDirection: 'row', alignItems: 'center' },
   img: {
     width: 50,
     height: 50,

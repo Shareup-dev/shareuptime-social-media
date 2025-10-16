@@ -1,28 +1,28 @@
-import React,{useContext} from "react";
-import { TouchableOpacity,View, Text, Image, StyleSheet,  } from "react-native";
-import Screen from "../components/Screen";
-import colors from "../config/colors";
-import routes from "../navigation/routes";
-import store from "../redux/store";
-import { swapedImagesAction } from "../redux/swapedImages";
-import constants from "../config/constants";
-import authContext from "../Contexts/authContext";
+import React, { useContext } from 'react';
+import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
+import Screen from '../components/Screen';
+import colors from '../config/colors';
+import routes from '../navigation/routes';
+import store from '../redux/store';
+import { swapedImagesAction } from '../redux/swapedImages';
+import constants from '../config/constants';
+import authContext from '../Contexts/authContext';
 
 const CheckoutComplete = ({ navigation, route }) => {
-  const  {postType,swapedPostId,item } = route.params;
-  const {postTypes} = constants
+  const { postType, swapedPostId, item } = route.params;
+  const { postTypes } = constants;
   const { userData: user } = useContext(authContext)?.userState;
 
-  const createPostFormData = content => {
+  const createPostFormData = (content) => {
     const formData = new FormData();
     formData.append('content', content.text);
     if (content.images.length !== 0) {
-      content.images.forEach(image => {
-       // const splitPathArr = image.split('/');
+      content.images.forEach((image) => {
+        // const splitPathArr = image.split('/');
         formData.append(`files`, {
-          name: "String(splitPathArr.slice(-1).pop())",
+          name: 'String(splitPathArr.slice(-1).pop())',
           type: 'image/jpg',
-          uri: image//Platform.OS === 'ios' ? image.replace('file://', '') : image,
+          uri: image, //Platform.OS === 'ios' ? image.replace('file://', '') : image,
         });
       });
     }
@@ -36,8 +36,7 @@ const CheckoutComplete = ({ navigation, route }) => {
     return formData;
   };
 
-  const createHang =() => {
-    
+  const createHang = () => {
     //   const swapContent = {
     //     text: item.title,
     //     category: "gifts",
@@ -53,33 +52,33 @@ const CheckoutComplete = ({ navigation, route }) => {
     //       .catch(e => {
     //         console.error(e);
     //       }).finally(_ => navigation.navigate(routes.FEED));;
-          navigation.navigate(routes.FEED);
-  }
+    navigation.navigate(routes.FEED);
+  };
   return (
     <Screen>
       <View style={styles.mainContainer}>
         <Image
-          style={{ marginTop: 100, height: "50%" }}
-          resizeMode={"center"}
-          width={"100%"}
-          source={require("../assets/icons/CheckoutComplete.png")}
+          style={{ marginTop: 100, height: '50%' }}
+          resizeMode={'center'}
+          width={'100%'}
+          source={require('../assets/icons/CheckoutComplete.png')}
         />
         <View style={styles.infoContainer}>
           <Text style={styles.congrats}>Congratulation !!!</Text>
           <Text style={styles.checkoutMessage}>
-            Thank you for choosing ShareUp to swap items, your item will be
-            shipped soon
+            Thank you for choosing ShareUp to swap items, your item will be shipped soon
           </Text>
           <TouchableOpacity
-            onPress={() => {postType == postTypes.HANG_SHARE 
-              ? createHang()
-              :store.dispatch(
-                swapedImagesAction.removeImages(swapedPostId)
-              );
+            onPress={() => {
+              postType == postTypes.HANG_SHARE
+                ? createHang()
+                : store.dispatch(swapedImagesAction.removeImages(swapedPostId));
             }}
           >
             <View style={styles.goBackButton}>
-              <Text style={styles.goBackLabel}>{postType == postTypes.HANG_SHARE ? "Hang In":"Track Order"}</Text>
+              <Text style={styles.goBackLabel}>
+                {postType == postTypes.HANG_SHARE ? 'Hang In' : 'Track Order'}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -91,29 +90,29 @@ const styles = StyleSheet.create({
   mainContainer: {
     padding: 10,
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   congrats: {
     fontSize: 26,
-    fontWeight: "600",
-    textAlign: "center",
+    fontWeight: '600',
+    textAlign: 'center',
   },
   infoContainer: {
-    width: "60%",
-    marginHorizontal: "20%",
+    width: '60%',
+    marginHorizontal: '20%',
   },
   checkoutMessage: {
     color: colors.LightGray,
     fontSize: 18,
     marginVertical: 10,
-    textAlign: "center",
+    textAlign: 'center',
   },
   goBackButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginVertical: 30,
-    backgroundColor: "rgba(4, 69, 102, .19)",
+    backgroundColor: 'rgba(4, 69, 102, .19)',
     borderRadius: 25,
     height: 50,
     paddingBottom: 5,

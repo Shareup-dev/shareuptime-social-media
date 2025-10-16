@@ -18,10 +18,10 @@ class AuthService {
         username,
         password,
       })
-      .then(async response => {
+      .then(async (response) => {
         return response;
       })
-      .catch(error => {
+      .catch((error) => {
         return error;
       });
   };
@@ -30,7 +30,6 @@ class AuthService {
     try {
       const user = await EncryptedStorage.getItem('auth_session');
       if (user !== null) {
-
         let token = await JSON.parse(user);
 
         return token;

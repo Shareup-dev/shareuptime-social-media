@@ -4,14 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { pgPool } from '../config/database';
 import { ImageProcessor, FileManager } from '../middleware/uploadMiddleware';
-import { CreateUserRequest, UpdateUserRequest, User } from '../types';
-import {
-  hashPassword,
-  createResponse,
-  isValidEmail,
-  isValidUsername,
-  sanitizeInput,
-} from '../utils';
+import { CreateUserRequest, UpdateUserRequest } from '../types';
+import { createResponse, isValidEmail, isValidUsername, sanitizeInput } from '../utils';
 
 // Kullanıcı kayıt
 export const registerUser = async (req: Request, res: Response): Promise<void> => {

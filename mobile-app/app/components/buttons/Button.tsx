@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-  DimensionValue,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, ViewStyle, DimensionValue } from 'react-native';
 import type { ReactNode } from 'react';
 
 import colors from '@/config/colors';

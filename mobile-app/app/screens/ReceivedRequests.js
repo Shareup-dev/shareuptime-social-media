@@ -1,14 +1,8 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
 import Screen from '../components/Screen';
-import {Header, HeaderTitle} from '../components/headers';
+import { Header, HeaderTitle } from '../components/headers';
 import Icon from '../components/Icon';
 import UserService from '../services/user.service';
 import routes from '../navigation/routes';
@@ -19,53 +13,45 @@ import ListHeader from '../components/lists/ListHeader';
 import ListItem from '../components/lists/ListItem';
 import colors from '../config/colors';
 
-export default function ReceivedRequests({navigation}) {
-  const {userData: user} = useContext(authContext).userState;
+export default function ReceivedRequests({ navigation }) {
+  const { userData: user } = useContext(authContext).userState;
   const [requests, setRequests] = useState([]);
   const [acceptedFrom, setAcceptedFrom] = useState([]);
   const [rejectedFrom, setRejectedFrom] = useState([]);
 
   useEffect(() => {
-    let mounted = true
-    if (mounted){
-    UserService.getFriendRequestRecieved(user.email).then(resp => {
-      setRequests(resp.data);
-      requests.forEach(request => {
-   
+    let mounted = true;
+    if (mounted) {
+      UserService.getFriendRequestRecieved(user.email).then((resp) => {
+        setRequests(resp.data);
+        requests.forEach((request) => {});
       });
-    });
-  } 
-  return () => mounted = false
+    }
+    return () => (mounted = false);
   }, []);
 
-  const acceptFriendRequest = friend => {
- 
-    UserService.acceptFriendRequest(user.id, friend.id).then(resp => {
-     
-    });
+  const acceptFriendRequest = (friend) => {
+    UserService.acceptFriendRequest(user.id, friend.id).then((resp) => {});
 
-    setAcceptedFrom(previousState => {
+    setAcceptedFrom((previousState) => {
       return [...previousState, friend];
     });
   };
 
-  const rejectFriendRequest = friend => {
+  const rejectFriendRequest = (friend) => {
+    UserService.declineFriendRequest(user.id, friend.id).then((resp) => {});
 
-    UserService.declineFriendRequest(user.id, friend.id).then(resp => {
-    
-    });
-
-    setRejectedFrom(previousState => {
+    setRejectedFrom((previousState) => {
       return [...previousState, friend];
     });
   };
 
-  const getTabTitle = friend => {
-    if (acceptedFrom.filter(user => friend.email === user.email)[0]) {
+  const getTabTitle = (friend) => {
+    if (acceptedFrom.filter((user) => friend.email === user.email)[0]) {
       return 'unfriend';
     }
 
-    if (rejectedFrom.filter(user => friend.email === user.email)[0]) {
+    if (rejectedFrom.filter((user) => friend.email === user.email)[0]) {
       return 'Rejected';
     }
     return 'Reject';
@@ -75,9 +61,7 @@ export default function ReceivedRequests({navigation}) {
     if (requests.length === 0) {
       return (
         <View style={styles.container}>
-          <Text style={styles.emptyText}>
-            You dont't have any received requests
-          </Text>
+          <Text style={styles.emptyText}>You dont't have any received requests</Text>
         </View>
       );
     } else {
@@ -89,36 +73,36 @@ export default function ReceivedRequests({navigation}) {
               <ListHeader subtitle="Add new friends to know more about them" />
             )}
             data={requests}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => (
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
               <ListItem
                 user={item}
                 image={item.profilePicturePath}
                 title={item.firstName}
                 secondBtnTitle={'Accept'}
                 secondBtn={
-                  acceptedFrom.filter(user => user.email === item.email)[0] ||
-                  rejectedFrom.filter(user => user.email === item.email)[0]
+                  acceptedFrom.filter((user) => user.email === item.email)[0] ||
+                  rejectedFrom.filter((user) => user.email === item.email)[0]
                     ? false
                     : true
                 }
                 secondBtnAction={acceptFriendRequest}
                 tabTitle={getTabTitle(item)}
                 color={
-                  acceptedFrom.filter(user => user.email === item.email)[0]
+                  acceptedFrom.filter((user) => user.email === item.email)[0]
                     ? colors.iondigoDye
                     : colors.lighterGray
                 }
                 fontColor={
-                  acceptedFrom.filter(user => user.email === item.email)[0]
+                  acceptedFrom.filter((user) => user.email === item.email)[0]
                     ? colors.white
                     : colors.dark
                 }
                 onPress={rejectFriendRequest}
                 style={[defaultStyles.listItemStyle, defaultStyles.lightShadow]}
                 fullWidth={
-                  acceptedFrom.filter(user => user.email === item.email)[0] ||
-                  rejectedFrom.filter(user => user.email === item.email)[0]
+                  acceptedFrom.filter((user) => user.email === item.email)[0] ||
+                  rejectedFrom.filter((user) => user.email === item.email)[0]
                     ? true
                     : false
                 }
@@ -138,12 +122,7 @@ export default function ReceivedRequests({navigation}) {
         backgroundColor={colors.white}
         left={
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-            <Icon
-              name="chevron-back"
-              type="Ionicons"
-              size={25}
-              backgroundSizeRatio={1}
-            />
+            <Icon name="chevron-back" type="Ionicons" size={25} backgroundSizeRatio={1} />
           </TouchableWithoutFeedback>
         }
         middle={<HeaderTitle>Pending Requests</HeaderTitle>}

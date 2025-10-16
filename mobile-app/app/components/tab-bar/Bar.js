@@ -1,6 +1,6 @@
-import React from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
-import Tab from "./Tab";
+import React from 'react';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import Tab from './Tab';
 
 export default function Bar({
   tabes,
@@ -31,6 +31,6 @@ export default function Bar({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 });

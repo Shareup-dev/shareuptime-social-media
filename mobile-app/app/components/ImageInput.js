@@ -1,24 +1,18 @@
-import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableWithoutFeedback,
-  Alert,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 
-import {MaterialCommunityIcons} from 'react-native-vector-icons';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
 
 import colors from '../config/colors';
 import Icon from './Icon';
 
-export default function ImageInput({imageUri, onChangeImage, isSwap}) {
+export default function ImageInput({ imageUri, onChangeImage, isSwap }) {
   useEffect(() => {
     requestPermission();
   }, []);
 
   const requestPermission = async () => {
-    const {granted} = await ImagePicker.requestCameraPermissionsAsync();
+    const { granted } = await ImagePicker.requestCameraPermissionsAsync();
     if (!granted) alert('You need to enable permission to access the library');
   };
 
@@ -26,8 +20,8 @@ export default function ImageInput({imageUri, onChangeImage, isSwap}) {
     if (!imageUri) selectImage();
     else
       Alert.alert('Delete', 'Are you sure you want to delete this image?', [
-        {text: 'Yes', onPress: () => onChangeImage(null)},
-        {text: 'No'},
+        { text: 'Yes', onPress: () => onChangeImage(null) },
+        { text: 'No' },
       ]);
   };
 
@@ -59,7 +53,7 @@ export default function ImageInput({imageUri, onChangeImage, isSwap}) {
             size={25}
             onPress={onPress}
           />
-          <Image source={{uri: imageUri}} style={styles.Image} />
+          <Image source={{ uri: imageUri }} style={styles.Image} />
         </>
       ) : (
         isSwap && (
@@ -70,7 +64,7 @@ export default function ImageInput({imageUri, onChangeImage, isSwap}) {
             />
           </TouchableWithoutFeedback>
         )
-      )} 
+      )}
     </View>
   );
 }

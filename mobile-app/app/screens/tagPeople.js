@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, Image } from 'react-native';
 
-import Screen from "../components/Screen";
-import TextField from "../components/TextField";
-import colors from "../config/colors";
-import { HeaderWithBackArrow } from "../components/headers";
-import { Checkbox } from "react-native-paper";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import Screen from '../components/Screen';
+import TextField from '../components/TextField';
+import colors from '../config/colors';
+import { HeaderWithBackArrow } from '../components/headers';
+import { Checkbox } from 'react-native-paper';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const usersData = [
-  { name: "john Mac", img: "../assets/images/reel2.png" },
-  { name: "Kaneshamoorthi Lokeesan", img: "../assets/images/reel2.png" },
+  { name: 'john Mac', img: '../assets/images/reel2.png' },
+  { name: 'Kaneshamoorthi Lokeesan', img: '../assets/images/reel2.png' },
 ];
 
 export default function TagPeople({ navigation }) {
@@ -34,13 +34,10 @@ export default function TagPeople({ navigation }) {
         }}
       >
         <View style={styles.usersInfo}>
-          <Image
-            style={styles.img}
-            source={require("../assets/images/reel2.png")}
-          />
+          <Image style={styles.img} source={require('../assets/images/reel2.png')} />
           <Text style={{ marginLeft: 15 }}>{name}</Text>
         </View>
-        <Checkbox status={CheckIfChecked(name) ? "checked" : "unchecked"} />
+        <Checkbox status={CheckIfChecked(name) ? 'checked' : 'unchecked'} />
       </TouchableOpacity>
     );
   };
@@ -74,13 +71,13 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: 10,
     marginVertical: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   usersInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   img: {
     height: 40,
@@ -88,20 +85,20 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   titleContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   title: {
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: 16,
   },
   searchbar: {
-    width: "90%",
+    width: '90%',
     marginLeft: 10,
   },
 
   separator: {
     backgroundColor: colors.LightGray,
-    width: "100%",
+    width: '100%',
     height: 10,
     marginTop: 15,
   },

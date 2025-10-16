@@ -1,9 +1,9 @@
-import React from "react";
-import { View, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
 
-import colors from "../../config/colors";
-import Icon from "../Icon";
-import defaultStyles from "../../config/styles";
+import colors from '../../config/colors';
+import Icon from '../Icon';
+import defaultStyles from '../../config/styles';
 
 export default function HangCard({ title, image, onPress }) {
   return (
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.lighterGray,
     margin: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

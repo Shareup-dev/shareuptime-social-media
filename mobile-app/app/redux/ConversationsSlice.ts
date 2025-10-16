@@ -64,23 +64,24 @@ const conversationsSlice = createSlice({
       state.error = null;
     },
     addConversation: (state, action: PayloadAction<Conversation>) => {
-      const existingIndex = state.conversations.findIndex(
-        conv => conv.id === action.payload.id
-      );
-      
+      const existingIndex = state.conversations.findIndex((conv) => conv.id === action.payload.id);
+
       if (existingIndex !== -1) {
         state.conversations[existingIndex] = action.payload;
       } else {
         state.conversations.unshift(action.payload);
       }
     },
-    updateConversation: (state, action: PayloadAction<{
-      id: string;
-      updates: Partial<Conversation>;
-    }>) => {
+    updateConversation: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        updates: Partial<Conversation>;
+      }>,
+    ) => {
       const { id, updates } = action.payload;
-      const conversationIndex = state.conversations.findIndex(conv => conv.id === id);
-      
+      const conversationIndex = state.conversations.findIndex((conv) => conv.id === id);
+
       if (conversationIndex !== -1) {
         state.conversations[conversationIndex] = {
           ...state.conversations[conversationIndex],
@@ -88,32 +89,35 @@ const conversationsSlice = createSlice({
         };
       }
     },
-    updateLastMessage: (state, action: PayloadAction<{
-      conversationId: string;
-      lastMessage: LastMessage;
-    }>) => {
+    updateLastMessage: (
+      state,
+      action: PayloadAction<{
+        conversationId: string;
+        lastMessage: LastMessage;
+      }>,
+    ) => {
       const { conversationId, lastMessage } = action.payload;
-      const conversation = state.conversations.find(conv => conv.id === conversationId);
-      
+      const conversation = state.conversations.find((conv) => conv.id === conversationId);
+
       if (conversation) {
         conversation.lastMessage = lastMessage;
         conversation.updatedAt = lastMessage.timestamp;
-        
+
         // Move to top of list
         state.conversations = [
           conversation,
-          ...state.conversations.filter(conv => conv.id !== conversationId),
+          ...state.conversations.filter((conv) => conv.id !== conversationId),
         ];
       }
     },
     incrementUnreadCount: (state, action: PayloadAction<string>) => {
-      const conversation = state.conversations.find(conv => conv.id === action.payload);
+      const conversation = state.conversations.find((conv) => conv.id === action.payload);
       if (conversation) {
         conversation.unreadCount += 1;
       }
     },
     markAsRead: (state, action: PayloadAction<string>) => {
-      const conversation = state.conversations.find(conv => conv.id === action.payload);
+      const conversation = state.conversations.find((conv) => conv.id === action.payload);
       if (conversation) {
         conversation.unreadCount = 0;
         if (conversation.lastMessage) {
@@ -121,34 +125,40 @@ const conversationsSlice = createSlice({
         }
       }
     },
-    setTypingStatus: (state, action: PayloadAction<{
-      conversationId: string;
-      userId: string;
-      isTyping: boolean;
-    }>) => {
+    setTypingStatus: (
+      state,
+      action: PayloadAction<{
+        conversationId: string;
+        userId: string;
+        isTyping: boolean;
+      }>,
+    ) => {
       const { conversationId, userId, isTyping } = action.payload;
-      const conversation = state.conversations.find(conv => conv.id === conversationId);
-      
+      const conversation = state.conversations.find((conv) => conv.id === conversationId);
+
       if (conversation) {
         if (isTyping) {
           if (!conversation.typingUsers.includes(userId)) {
             conversation.typingUsers.push(userId);
           }
         } else {
-          conversation.typingUsers = conversation.typingUsers.filter(id => id !== userId);
+          conversation.typingUsers = conversation.typingUsers.filter((id) => id !== userId);
         }
         conversation.isTyping = conversation.typingUsers.length > 0;
       }
     },
-    updateUserOnlineStatus: (state, action: PayloadAction<{
-      userId: string;
-      isOnline: boolean;
-      lastSeen?: string;
-    }>) => {
+    updateUserOnlineStatus: (
+      state,
+      action: PayloadAction<{
+        userId: string;
+        isOnline: boolean;
+        lastSeen?: string;
+      }>,
+    ) => {
       const { userId, isOnline, lastSeen } = action.payload;
-      
-      state.conversations.forEach(conversation => {
-        const participant = conversation.participants.find(p => p.id === userId);
+
+      state.conversations.forEach((conversation) => {
+        const participant = conversation.participants.find((p) => p.id === userId);
         if (participant) {
           participant.isOnline = isOnline;
           if (lastSeen) {
@@ -158,7 +168,7 @@ const conversationsSlice = createSlice({
       });
     },
     removeConversation: (state, action: PayloadAction<string>) => {
-      state.conversations = state.conversations.filter(conv => conv.id !== action.payload);
+      state.conversations = state.conversations.filter((conv) => conv.id !== action.payload);
     },
     setHasMore: (state, action: PayloadAction<boolean>) => {
       state.hasMore = action.payload;

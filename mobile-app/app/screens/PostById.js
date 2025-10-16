@@ -1,7 +1,7 @@
-import {useFocusEffect} from '@react-navigation/native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, Dimensions} from 'react-native';
-import {HeaderWithBackArrow} from '../components/headers';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { HeaderWithBackArrow } from '../components/headers';
 import Card from '../components/lists/Card';
 import SharedPostCard from '../components/lists/SharedPostCard';
 import SwapCard from '../components/lists/SwapCard';
@@ -12,8 +12,8 @@ import hangShareService from '../services/hangShare.service';
 import postService from '../services/post.service';
 import swapService from '../services/swap.service';
 
-export default function PostById({navigation, route}) {
-  const {params} = route;
+export default function PostById({ navigation, route }) {
+  const { params } = route;
   const [post, setPost] = useState({
     state: null,
     loading: false,
@@ -36,15 +36,15 @@ export default function PostById({navigation, route}) {
     useCallback(() => {
       const fetchPost = () => {
         if (params?.id) {
-          setPost(prev => ({...prev, loading: true}));
+          setPost((prev) => ({ ...prev, loading: true }));
 
           postTypeService()
-            .then(({data}) => setPost(prev => ({...prev, state: data})))
-            .catch(e => {
+            .then(({ data }) => setPost((prev) => ({ ...prev, state: data })))
+            .catch((e) => {
               console.error(e.message);
-              setPost(prev => ({...prev, state: null}));
+              setPost((prev) => ({ ...prev, state: null }));
             })
-            .finally(_ => setPost(prev => ({...prev, loading: false})));
+            .finally((_) => setPost((prev) => ({ ...prev, loading: false })));
         }
       };
 
@@ -52,26 +52,16 @@ export default function PostById({navigation, route}) {
     }, [params.id]),
   );
 
-  const RenderCard = ({item}) => {
+  const RenderCard = ({ item }) => {
     {
       switch (item?.allPostsType) {
         case constants.postTypes.SWAP:
           return (
-            <SwapCard
-              navigation={navigation}
-              route={route}
-              item={item}
-              userId={item.userdata.id}
-            />
+            <SwapCard navigation={navigation} route={route} item={item} userId={item.userdata.id} />
           );
         case constants.postTypes.SWAP:
           return (
-            <SwapCard
-              navigation={navigation}
-              route={route}
-              item={item}
-              userId={item.userdata.id}
-            />
+            <SwapCard navigation={navigation} route={route} item={item} userId={item.userdata.id} />
           );
         case 'share':
           return (
@@ -84,12 +74,7 @@ export default function PostById({navigation, route}) {
           );
         case constants.postTypes.HANG_SHARE:
           return (
-            <SwapCard
-              navigation={navigation}
-              route={route}
-              item={item}
-              userId={item.userdata.id}
-            />
+            <SwapCard navigation={navigation} route={route} item={item} userId={item.userdata.id} />
           );
         case 'post':
           return (
@@ -106,23 +91,24 @@ export default function PostById({navigation, route}) {
               style={{
                 alignItems: 'center',
                 marginVertical: 25,
-              }}>
+              }}
+            >
               <Text>Post not found</Text>
             </View>
           );
       }
     }
   };
-  const {width, height} = Dimensions.get('window');
+  const { width, height } = Dimensions.get('window');
 
   return (
     <View>
       <HeaderWithBackArrow
-        onBackButton={_ => navigation.navigate(routes.APP_NAVIGATOR)}
+        onBackButton={(_) => navigation.navigate(routes.APP_NAVIGATOR)}
         title="View Post"
       />
       <View style={styles.container}>
-        <View style={{height: height, width: width, backgroundColor: '#fff'}}>
+        <View style={{ height: height, width: width, backgroundColor: '#fff' }}>
           {post.loading ? (
             <Loading text="Fetching Post" />
           ) : (
@@ -135,7 +121,8 @@ export default function PostById({navigation, route}) {
                     flex: 1,
                     alignItems: 'center',
                     justifyContent: 'center',
-                  }}>
+                  }}
+                >
                   <Text>Post not found</Text>
                 </View>
               )}

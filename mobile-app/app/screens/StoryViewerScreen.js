@@ -1,12 +1,12 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React from 'react';
+import { View, Text } from 'react-native';
 
 const StoryViewerScreen = () => {
-    return (
-        <View>
-            <Text></Text>
-        </View>
-    )
-}
+  return (
+    <View>
+      <Text />
+    </View>
+  );
+};
 
-export default StoryViewerScreen
+export default StoryViewerScreen;

@@ -1,29 +1,18 @@
-import React from "react";
-import { View, StyleSheet, Image, Text, Dimensions } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 
-import colors from "../../config/colors";
-import defaultStyle from "../../config/styles";
-import Icon from "../Icon";
+import colors from '../../config/colors';
+import defaultStyle from '../../config/styles';
+import Icon from '../Icon';
 
-const width = Dimensions.get("window").width / 2 - 15;
-const height = Dimensions.get("window").height / 3;
+const width = Dimensions.get('window').width / 2 - 15;
+const height = Dimensions.get('window').height / 3;
 
-export default function LongCard({
-  style,
-  image,
-  title,
-  subTitle,
-  navigation,
-}) {
-
+export default function LongCard({ style, image, title, subTitle, navigation }) {
   return (
     <View style={[styles.container, style]}>
       <Image
-        source={
-          image
-            ? { uri: image }
-            : require("../../assets/images/group-texture.png")
-        }
+        source={image ? { uri: image } : require('../../assets/images/group-texture.png')}
         style={styles.image}
       />
       <View style={[styles.titlesContainer]}>
@@ -31,10 +20,10 @@ export default function LongCard({
         {subTitle && (
           <View style={styles.privacyBadge}>
             <Icon
-              backgroundColor={colors.lighterGray}           
+              backgroundColor={colors.lighterGray}
               size={30}
-              type={subTitle === "Public" ? "Entypo" : "Ionicons"}
-              name={subTitle === "Public" ? "globe" : "lock-closed"}
+              type={subTitle === 'Public' ? 'Entypo' : 'Ionicons'}
+              name={subTitle === 'Public' ? 'globe' : 'lock-closed'}
             />
             <Text style={[styles.subTitle]}>{subTitle}</Text>
           </View>
@@ -51,24 +40,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: colors.lighterGray,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   image: {
     width: width - 3,
     height: height - 50,
-    resizeMode: "cover",
+    resizeMode: 'cover',
   },
   titlesContainer: {
     zIndex: 1,
     bottom: 1,
     margin: 7,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: "auto",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: 'auto',
   },
   title: {
     color: colors.dark,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 18,
     marginTop: -3,
     width: 110,
@@ -78,10 +67,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   privacyBadge: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     right: 0,
     marginTop: 10,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 });

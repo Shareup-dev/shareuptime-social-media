@@ -18,13 +18,7 @@ const Header: React.FC<HeaderProps> = ({
   headerContainerStyle,
 }) => {
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor },
-        headerContainerStyle,
-      ]}
-    >
+    <View style={[styles.container, { backgroundColor }, headerContainerStyle]}>
       <View style={styles.section}>{left}</View>
       <View style={styles.section}>{middle}</View>
       <View style={styles.section}>{right}</View>

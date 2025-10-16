@@ -1,9 +1,9 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
-import colors from "../../config/colors";
-import routes from "../../navigation/routes";
-import Tab from "../buttons/Tab";
+import colors from '../../config/colors';
+import routes from '../../navigation/routes';
+import Tab from '../buttons/Tab';
 
 export default function EmptyNotice({ navigation }) {
   return (
@@ -32,25 +32,25 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontSize: 16,
-    fontWeight: "bold",
-    alignSelf: "center",
+    fontWeight: 'bold',
+    alignSelf: 'center',
   },
   smallGray: {
     marginTop: 10,
-    width: "60%",
+    width: '60%',
     fontSize: 12,
     color: colors.mediumGray,
-    alignSelf: "center",
-    textAlign: "center",
+    alignSelf: 'center',
+    textAlign: 'center',
   },
   addFriendsButton: {
     backgroundColor: colors.lighterGray,
     borderRadius: 10,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: 25,
   },
   buttonTitle: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });

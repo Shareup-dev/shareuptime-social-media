@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   ColorValue,
   Text,
@@ -8,7 +8,7 @@ import {
   NativeSyntheticEvent,
   TextLayoutEventData,
 } from 'react-native';
-import type {StyleProp, TextProps} from 'react-native';
+import type { StyleProp, TextProps } from 'react-native';
 
 type Props = TextProps & {
   children: React.ReactNode;
@@ -37,13 +37,13 @@ const Texts: React.FC<Props> = ({
   const [numberOfLines, setNumberOfLines] = useState<number | undefined>(lines);
 
   const checkNumOfLines = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-    const {lines: layoutLines} = event.nativeEvent;
+    const { lines: layoutLines } = event.nativeEvent;
     setIsTruncatedText((layoutLines?.length ?? 0) > (numberOfLines ?? 0));
   };
 
   const toggleBtnHandler = () => {
-    setTextCollapse(prev => !prev);
-    setNumberOfLines(prev => (prev ? undefined : lines));
+    setTextCollapse((prev) => !prev);
+    setNumberOfLines((prev) => (prev ? undefined : lines));
   };
 
   const styles = StyleSheet.create({
@@ -53,7 +53,7 @@ const Texts: React.FC<Props> = ({
       opacity: opacity,
     },
   });
-  
+
   if (truncate) {
     return (
       <>
@@ -63,17 +63,17 @@ const Texts: React.FC<Props> = ({
           onTextLayout={checkNumOfLines}
           numberOfLines={numberOfLines}
           {...rest}
-          style={[style, styles.text]}>
+          style={[style, styles.text]}
+        >
           {children}
         </Text>
         {isTruncatedText && children !== '' && (
-          <TouchableOpacity
-            style={{paddingVertical: 5}}
-            onPress={toggleBtnHandler}>
+          <TouchableOpacity style={{ paddingVertical: 5 }} onPress={toggleBtnHandler}>
             <Text
-              style={{fontSize: 12, color: color}}
+              style={{ fontSize: 12, color: color }}
               allowFontScaling={false}
-              numberOfLines={numberOfLines}>
+              numberOfLines={numberOfLines}
+            >
               {textCollapse ? `Show Less..` : `Show more..`}
             </Text>
           </TouchableOpacity>

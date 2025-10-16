@@ -1,12 +1,12 @@
-import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import UserProfilePicture from "../UserProfilePicture";
-import HeaderWithBackArrow from "./HeaderWithBackArrow";
+import UserProfilePicture from '../UserProfilePicture';
+import HeaderWithBackArrow from './HeaderWithBackArrow';
 
-import Icon from "../Icon";
-import defaultStyles from "../../config/styles";
-import colors from "../../config/colors";
+import Icon from '../Icon';
+import defaultStyles from '../../config/styles';
+import colors from '../../config/colors';
 
 export default function ChatRoomHeader({ profilePicture, title, navigation }) {
   return (
@@ -14,11 +14,7 @@ export default function ChatRoomHeader({ profilePicture, title, navigation }) {
       onBackButton={() => navigation.goBack()}
       leftComponent={
         <View style={styles.container}>
-          <UserProfilePicture
-            profilePicture={profilePicture}
-            size={50}
-            showActiveStatus={true}
-          />
+          <UserProfilePicture profilePicture={profilePicture} size={50} showActiveStatus={true} />
 
           <View style={styles.rightWrapper}>
             <Text style={defaultStyles.fontWeightMedium}>{title}</Text>
@@ -51,30 +47,30 @@ export default function ChatRoomHeader({ profilePicture, title, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    alignItems: 'flex-end',
     paddingLeft: 10,
   },
   rightWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: colors.lighterGray,
     height: 40,
-    width: "100%",
+    width: '100%',
     borderTopLeftRadius: 50,
     borderBottomLeftRadius: 50,
     marginLeft: 20,
-    alignItems: "center",
+    alignItems: 'center',
     paddingLeft: 30,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   userName: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   callButton: {
     marginRight: 10,
   },
   actions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     right: 180,
   },
 });

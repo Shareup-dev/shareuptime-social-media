@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import colors from '../config/colors';
 import JoinGroupList from './lists/JoinGroupList';
@@ -7,7 +7,7 @@ import WritePost from './WritePost';
 
 import StoriesList from './lists/StoriesList';
 
-export default function FeedTop({navigation}) {
+export default function FeedTop({ navigation }) {
   return (
     <View>
       <StoriesList navigation={navigation} style={styles.storiesList} />

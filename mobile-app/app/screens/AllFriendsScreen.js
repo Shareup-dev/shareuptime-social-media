@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import {Header, HeaderTitle} from '../components/headers';
+import { Header, HeaderTitle } from '../components/headers';
 import authContext from '../authContext';
 import UserService from '../services/user.service';
 import defaultStyles from '../config/styles';
@@ -20,44 +20,35 @@ import Screen from '../components/Screen';
 import colors from '../../app/config/colors';
 import routes from '../navigation/routes';
 
-export default function AllFriendsScreen({navigation}) {
+export default function AllFriendsScreen({ navigation }) {
   const [friends, setFriends] = useState([]);
   const [removed, setremoved] = useState([]);
-  const {userData: loggedInUser} = useContext(authContext).userState;
+  const { userData: loggedInUser } = useContext(authContext).userState;
 
   useEffect(() => {
-    UserService.getFriends(loggedInUser.email).then(resp => {
-      resp.data.forEach(dost => dost.email);
+    UserService.getFriends(loggedInUser.email).then((resp) => {
+      resp.data.forEach((dost) => dost.email);
       setFriends(resp.data);
     });
   }, []);
 
-  const UnfriendConfirmationDialog = friend => {
-    return Alert.alert(
-      'Confirm',
-      `Are you sure you want to Unfriend ${friend.firstName} ?`,
-      [
-        {
-          text: 'Yes',
-          onPress: () => {
-            // setremoved((previousState) => {
-            //   return [...previousState, friend];
-            // })
-            UserService.deleteFriend(loggedInUser.id, friend.id).then(
-              removeResp => {
-               
-                setFriends(previousFriends => {
-                  return previousFriends.filter(
-                    dost => dost.email !== friend.email,
-                  );
-                });
-              },
-            );
-          },
+  const UnfriendConfirmationDialog = (friend) => {
+    return Alert.alert('Confirm', `Are you sure you want to Unfriend ${friend.firstName} ?`, [
+      {
+        text: 'Yes',
+        onPress: () => {
+          // setremoved((previousState) => {
+          //   return [...previousState, friend];
+          // })
+          UserService.deleteFriend(loggedInUser.id, friend.id).then((removeResp) => {
+            setFriends((previousFriends) => {
+              return previousFriends.filter((dost) => dost.email !== friend.email);
+            });
+          });
         },
-        {text: 'No', onPress: () => {}},
-      ],
-    );
+      },
+      { text: 'No', onPress: () => {} },
+    ]);
   };
   const onClickAddFriends = () => {
     navigation.navigate(routes.Add_NEW_FRIEND);
@@ -73,7 +64,8 @@ export default function AllFriendsScreen({navigation}) {
             color={colors.LightGray}
             onPress={() => {
               navigation.navigate(routes.Add_NEW_FRIEND);
-            }}>
+            }}
+          >
             <Text>Add Friends</Text>
           </TouchableOpacity>
         </View>
@@ -84,8 +76,8 @@ export default function AllFriendsScreen({navigation}) {
         <FlatList
           data={friends}
           ListHeaderComponent={() => <></>}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
             <ListItem
               user={item}
               image={item.profilePicturePath}
@@ -112,12 +104,7 @@ export default function AllFriendsScreen({navigation}) {
         backgroundColor={colors.white}
         left={
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-            <Icon
-              name="chevron-back"
-              type="Ionicons"
-              size={25}
-              backgroundSizeRatio={1}
-            />
+            <Icon name="chevron-back" type="Ionicons" size={25} backgroundSizeRatio={1} />
           </TouchableWithoutFeedback>
         }
         middle={<HeaderTitle>All Friends</HeaderTitle>}

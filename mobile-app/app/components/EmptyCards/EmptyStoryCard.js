@@ -1,7 +1,7 @@
-import React, {useEffect, useRef} from 'react';
-import {Animated, View} from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, View } from 'react-native';
 
-export default React.memo(function EmptyStoryCard({count = 3}) {
+export default React.memo(function EmptyStoryCard({ count = 3 }) {
   const array = Array(count).fill(0, 0, count);
   const fadeAnim = useRef(new Animated.Value(0.4)).current;
 
@@ -10,7 +10,7 @@ export default React.memo(function EmptyStoryCard({count = 3}) {
       toValue: 0.6,
       duration: 600,
       useNativeDriver: true,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       if (finished) fadeOut();
     });
   };
@@ -20,7 +20,7 @@ export default React.memo(function EmptyStoryCard({count = 3}) {
       toValue: 0.4,
       useNativeDriver: true,
       duration: 600,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       if (finished) fadeIn();
     });
   };
@@ -30,7 +30,7 @@ export default React.memo(function EmptyStoryCard({count = 3}) {
   }, []);
 
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View style={{ flexDirection: 'row' }}>
       {array.map((ele, i) => (
         <Animated.View
           key={i}

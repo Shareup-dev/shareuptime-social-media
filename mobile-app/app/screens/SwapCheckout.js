@@ -1,13 +1,12 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, TextInput } from "react-native";
-import AppButton from "../components/buttons/Button";
-import { Header, HeaderCloseIcon, HeaderTitle } from "../components/headers";
-import Screen from "../components/Screen";
-import colors from "../config/colors";
-import routes from "../navigation/routes";
+import React from 'react';
+import { View, Text, Image, StyleSheet, TextInput } from 'react-native';
+import AppButton from '../components/buttons/Button';
+import { Header, HeaderCloseIcon, HeaderTitle } from '../components/headers';
+import Screen from '../components/Screen';
+import colors from '../config/colors';
+import routes from '../navigation/routes';
 
 const SwapCheckout = ({ navigation, route }) => {
-
   return (
     <Screen>
       <Header
@@ -31,28 +30,22 @@ const SwapCheckout = ({ navigation, route }) => {
         </View>
         <Text style={styles.paymentMethodLabel}>Payment Method</Text>
         <Text style={styles.inputLabel}>Name on card</Text>
-        <TextInput
-          placeholder={"Your name as on the card"}
-          style={styles.textInput}
-        />
+        <TextInput placeholder={'Your name as on the card'} style={styles.textInput} />
         <Text style={styles.inputLabel}>Card number</Text>
-        <TextInput placeholder={"Enter card number"} style={styles.textInput} />
+        <TextInput placeholder={'Enter card number'} style={styles.textInput} />
         <View>
           <Text style={styles.inputLabel}>Expiry Date</Text>
-          <TextInput placeholder={"MM/YY"} style={styles.textInput} />
+          <TextInput placeholder={'MM/YY'} style={styles.textInput} />
           <Text style={styles.inputLabel}>CVV</Text>
-          <TextInput placeholder={"***"} style={styles.textInput} />
+          <TextInput placeholder={'***'} style={styles.textInput} />
         </View>
         <View style={styles.actionButtons}>
           <AppButton
-            style={[
-              styles.actionButton,
-              { borderWidth: 1, borderColor: colors.iondigoDye },
-            ]}
-            width={"45%"}
+            style={[styles.actionButton, { borderWidth: 1, borderColor: colors.iondigoDye }]}
+            width={'45%'}
             fontColor={colors.iondigoDye}
             color={colors.white}
-            title={"Cancel"}
+            title={'Cancel'}
           />
           <AppButton
             onPress={() => {
@@ -60,17 +53,17 @@ const SwapCheckout = ({ navigation, route }) => {
                 swapedPostId: route.params.swapedPostId,
               });
             }}
-            width={"45%"}
+            width={'45%'}
             style={styles.actionButton}
-            title={"Pay"}
+            title={'Pay'}
           />
         </View>
         <View style={styles.logosContainer}>
           <Image
             style={styles.logoStyle}
-            resizeMode={"stretch"}
-            width={"100%"}
-            source={require("../assets/icons/paymentIcons.png")}
+            resizeMode={'stretch'}
+            width={'100%'}
+            source={require('../assets/icons/paymentIcons.png')}
           />
         </View>
       </View>
@@ -86,14 +79,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   totalContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginVertical: 15,
   },
   totalLabel: {
     fontSize: 32,
     color: colors.LightGray,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   pricingSeparator: {
     fontSize: 32,
@@ -104,7 +97,7 @@ const styles = StyleSheet.create({
   },
   paymentMethodLabel: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   inputLabel: {
     fontSize: 18,
@@ -120,8 +113,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   actionButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
   actionButton: {
@@ -129,13 +122,13 @@ const styles = StyleSheet.create({
     elevation: 0,
   },
   logosContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     // backgroundColor: "coral",
   },
   logoStyle: {
     height: 80,
-    width: "100%",
+    width: '100%',
     marginVertical: 10,
   },
 });

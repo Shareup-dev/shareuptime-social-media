@@ -1,5 +1,5 @@
-import React, {useContext, useState, useEffect} from 'react';
-import {View, StyleSheet, Text, FlatList} from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
 
 import HeaderWithBackArrow from '../components/headers/HeaderWithBackArrow';
 import Icon from '../components/Icon';
@@ -9,11 +9,7 @@ import authContext from '../authContext';
 import UserService from '../services/user.service';
 import Card from '../components/lists/Card';
 
-import {
-  ImagesAndVideosEmpty,
-  TagsEmpty,
-  ProfileTop,
-} from '../components/profile';
+import { ImagesAndVideosEmpty, TagsEmpty, ProfileTop } from '../components/profile';
 import SwapCard from '../components/lists/SwapCard';
 
 const POSTS = 'posts';
@@ -21,22 +17,22 @@ const IMAGE_VIDEOS = 'images&videos';
 const TAGS = 'tags';
 
 const tabs = [
-  {name: POSTS, icon: {name: 'rss', type: 'Feather'}},
-  {name: IMAGE_VIDEOS, icon: {name: 'grid', type: 'Feather'}},
-  {name: TAGS, icon: {image: require('../assets/icons/tag-icon.png')}},
+  { name: POSTS, icon: { name: 'rss', type: 'Feather' } },
+  { name: IMAGE_VIDEOS, icon: { name: 'grid', type: 'Feather' } },
+  { name: TAGS, icon: { image: require('../assets/icons/tag-icon.png') } },
 ];
 
-export default function UserProfileScreen({navigation, route}) {
+export default function UserProfileScreen({ navigation, route }) {
   const [currentTab, setCurrentTab] = useState(POSTS);
-  const {userState} = useContext(authContext);
+  const { userState } = useContext(authContext);
   const [posts, setPosts] = useState([]);
-  const [userData,setUserData] = useState([]);
+  const [userData, setUserData] = useState([]);
   const [imagesAndVideos, setImagesAndVideos] = useState([]);
   const [tags, setTags] = useState([]);
 
   const userEmail = route.params;
 
-  const handleTapped = name => {
+  const handleTapped = (name) => {
     setCurrentTab(name);
   };
 
@@ -44,19 +40,15 @@ export default function UserProfileScreen({navigation, route}) {
     // PostService.getPostsForUser(userEmail)
     //   .then(res => {
     //     setPosts(res.data);
-
     //   })
     //   .catch(err => console.error(err));
   };
   const getUserData = () => {
-
     UserService.getUserByEmail(userEmail)
-      .then(res => {
-    
+      .then((res) => {
         setUserData(res.data);
-      
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -74,7 +66,7 @@ export default function UserProfileScreen({navigation, route}) {
     />
   );
 
-  const PostsItem = ({item}) =>
+  const PostsItem = ({ item }) =>
     item.hasOwnProperty('swaped') ? (
       /**
        * The Swap Should from backend as instance of post
@@ -103,8 +95,8 @@ export default function UserProfileScreen({navigation, route}) {
       />
     );
 
-  const ImagesAndVideosItem = ({item}) => <View></View>;
-  const TagsItems = ({item}) => <View></View>;
+  const ImagesAndVideosItem = ({ item }) => <View />;
+  const TagsItems = ({ item }) => <View />;
 
   return (
     <Screen style={styles.container}>
@@ -126,12 +118,12 @@ export default function UserProfileScreen({navigation, route}) {
         <FlatList
           data={posts}
           renderItem={PostsItem}
-          keyExtractor={post => post.id.toString()}
+          keyExtractor={(post) => post.id.toString()}
           ListHeaderComponent={ListHeader}
           ListEmptyComponent={() => (
             <Text style={styles.listEmptyText}>Start adding your posts!</Text>
           )}
-          ListFooterComponent={() => <View style={styles.listFooter}></View>}
+          ListFooterComponent={() => <View style={styles.listFooter} />}
         />
       )}
 
@@ -139,10 +131,10 @@ export default function UserProfileScreen({navigation, route}) {
         <FlatList
           data={imagesAndVideos}
           renderItem={ImagesAndVideosItem}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           ListHeaderComponent={ListHeader}
           ListEmptyComponent={ImagesAndVideosEmpty}
-          ListFooterComponent={() => <View style={styles.listFooter}></View>}
+          ListFooterComponent={() => <View style={styles.listFooter} />}
         />
       )}
 
@@ -150,10 +142,10 @@ export default function UserProfileScreen({navigation, route}) {
         <FlatList
           data={tags}
           renderItem={TagsItems}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           ListHeaderComponent={ListHeader}
           ListEmptyComponent={TagsEmpty}
-          ListFooterComponent={() => <View style={styles.listFooter}></View>}
+          ListFooterComponent={() => <View style={styles.listFooter} />}
         />
       )}
     </Screen>

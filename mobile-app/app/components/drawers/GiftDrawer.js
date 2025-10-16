@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, FlatList, StatusBar} from 'react-native';
+import { View, StyleSheet, FlatList, StatusBar } from 'react-native';
 import Modal from 'react-native-modal';
 
 import colors from '../../config/colors';
 import DropDownListItem from '../lists/DropDownListItem';
 
-export default function GiftDrawer({isVisible, setIsVisible}) {
+export default function GiftDrawer({ isVisible, setIsVisible }) {
   const listItems = [
     {
       title: 'Best Buy',
@@ -71,12 +71,13 @@ export default function GiftDrawer({isVisible, setIsVisible}) {
       onSwipeComplete={() => setIsVisible(false)}
       onBackdropPress={() => setIsVisible(false)}
       animationIn="slideInRight"
-      animationOut="slideOutRight">
+      animationOut="slideOutRight"
+    >
       <View style={styles.container}>
         <FlatList
           data={listItems}
-          keyExtractor={item => item.title}
-          renderItem={({item}) => (
+          keyExtractor={(item) => item.title}
+          renderItem={({ item }) => (
             <View style={styles.DropDownListItems}>
               <DropDownListItem
                 title={item.title}

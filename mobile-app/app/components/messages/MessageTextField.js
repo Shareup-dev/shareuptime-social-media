@@ -1,26 +1,19 @@
-import React, {useState, useContext, useRef} from 'react';
-import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import React, { useState, useContext, useRef } from 'react';
+import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import authContext from '../../authContext';
 import colors from '../../config/colors';
 import Icon from '../Icon';
 
-export default function MessageTextField({
-  style,
-  forwardRef,
-  contactId,
-  onSend,
-  ...otherProps
-}) {
+export default function MessageTextField({ style, forwardRef, contactId, onSend, ...otherProps }) {
   const [message, setMessage] = useState('');
 
-  const {user} = useContext(authContext);
+  const { user } = useContext(authContext);
 
   const textInputRed = useRef();
 
-  const onChangeText = text => {
+  const onChangeText = (text) => {
     setMessage(text);
-
   };
 
   const handelSendMessage = async () => {

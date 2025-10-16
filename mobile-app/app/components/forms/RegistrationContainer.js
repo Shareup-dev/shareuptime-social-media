@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Animated} from 'react-native';
+import { StyleSheet, Animated } from 'react-native';
 
 import Text from '../Text';
 import Screen from '../Screen';
@@ -9,17 +9,14 @@ import useAnimatedKeyboardEvent from '../../hooks/useAnimatedKeyboardEvent';
 const LOGO_SIZE = 60;
 const LOGO_SIZE_SMALL = 30;
 
-export default function RegistrationContainer({children, title = 'Register'}) {
-  const {currentValue: currentLogoSize} = useAnimatedKeyboardEvent(
-    LOGO_SIZE,
-    LOGO_SIZE_SMALL,
-  );
+export default function RegistrationContainer({ children, title = 'Register' }) {
+  const { currentValue: currentLogoSize } = useAnimatedKeyboardEvent(LOGO_SIZE, LOGO_SIZE_SMALL);
 
   return (
     <Screen style={styles.container}>
       <Animated.Image
         source={require('../../assets/main-logo.png')}
-        style={[styles.logo, {height: currentLogoSize}]}
+        style={[styles.logo, { height: currentLogoSize }]}
       />
       <Text style={styles.title}>{title}</Text>
       {children}

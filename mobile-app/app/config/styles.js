@@ -1,4 +1,4 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import colors from './colors';
 
 export default {
@@ -80,7 +80,7 @@ export default {
     color: colors.dark,
     textTransform: 'capitalize',
   },
-  listItemSubTitle: {fontSize: 10, color: colors.dimGray},
+  listItemSubTitle: { fontSize: 10, color: colors.dimGray },
   listItemStyle: {
     marginBottom: 13,
     marginHorizontal: 28,

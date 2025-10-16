@@ -1,4 +1,10 @@
-import { launchImageLibrary, launchCamera, ImagePickerResponse, MediaType, PhotoQuality } from 'react-native-image-picker';
+import {
+  launchImageLibrary,
+  launchCamera,
+  ImagePickerResponse,
+  MediaType,
+  PhotoQuality,
+} from 'react-native-image-picker';
 import { Platform, PermissionsAndroid, Alert } from 'react-native';
 
 export interface MediaFile {
@@ -27,9 +33,12 @@ export class MediaPickerService {
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         ]);
 
-        const cameraGranted = grants['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED;
-        const storageGranted = grants['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED ||
-                               grants['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED;
+        const cameraGranted =
+          grants['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED;
+        const storageGranted =
+          grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED ||
+          grants['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED;
 
         return cameraGranted && storageGranted;
       } catch (err) {
@@ -40,7 +49,9 @@ export class MediaPickerService {
     return true;
   }
 
-  static async pickFromGallery(options: MediaPickerOptions = { mediaType: 'photo', quality: 0.8 }): Promise<MediaFile[]> {
+  static async pickFromGallery(
+    options: MediaPickerOptions = { mediaType: 'photo', quality: 0.8 },
+  ): Promise<MediaFile[]> {
     const hasPermission = await this.requestPermissions();
     if (!hasPermission) {
       throw new Error('Permissions not granted');
@@ -68,7 +79,7 @@ export class MediaPickerService {
         }
 
         if (response.assets) {
-          const mediaFiles: MediaFile[] = response.assets.map(asset => ({
+          const mediaFiles: MediaFile[] = response.assets.map((asset) => ({
             uri: asset.uri || '',
             type: asset.type || 'image/jpeg',
             name: asset.fileName || `media_${Date.now()}.jpg`,
@@ -82,7 +93,9 @@ export class MediaPickerService {
     });
   }
 
-  static async takePhoto(options: MediaPickerOptions = { mediaType: 'photo', quality: 0.8 }): Promise<MediaFile | null> {
+  static async takePhoto(
+    options: MediaPickerOptions = { mediaType: 'photo', quality: 0.8 },
+  ): Promise<MediaFile | null> {
     const hasPermission = await this.requestPermissions();
     if (!hasPermission) {
       throw new Error('Camera permissions not granted');
@@ -124,7 +137,9 @@ export class MediaPickerService {
     });
   }
 
-  static showMediaPicker(options: MediaPickerOptions = { mediaType: 'photo', quality: 0.8 }): Promise<MediaFile[]> {
+  static showMediaPicker(
+    options: MediaPickerOptions = { mediaType: 'photo', quality: 0.8 },
+  ): Promise<MediaFile[]> {
     return new Promise((resolve, reject) => {
       Alert.alert(
         'Select Media',
@@ -158,7 +173,7 @@ export class MediaPickerService {
             onPress: () => resolve([]),
           },
         ],
-        { cancelable: true }
+        { cancelable: true },
       );
     });
   }
@@ -193,10 +208,10 @@ export class MediaPickerService {
   static async uploadMedia(
     files: MediaFile[],
     uploadType: 'profile' | 'post' | 'story' | 'message',
-    onProgress?: (progress: number) => void
+    onProgress?: (progress: number) => void,
   ): Promise<string[]> {
     const formData = new FormData();
-    
+
     files.forEach((file, index) => {
       formData.append(uploadType === 'profile' ? 'profilePicture' : `${uploadType}Media`, {
         uri: file.uri,
@@ -227,11 +242,14 @@ export class MediaPickerService {
   }
 
   // Resize image for optimization
-  static async resizeImage(file: MediaFile, options: {
-    width?: number;
-    height?: number;
-    quality?: number;
-  }): Promise<MediaFile> {
+  static async resizeImage(
+    file: MediaFile,
+    options: {
+      width?: number;
+      height?: number;
+      quality?: number;
+    },
+  ): Promise<MediaFile> {
     // This would typically use a library like react-native-image-resizer
     // For now, return the original file
     return file;

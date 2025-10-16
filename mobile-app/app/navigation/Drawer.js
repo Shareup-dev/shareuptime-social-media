@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import {
   View,
   StyleSheet,
@@ -18,8 +18,8 @@ import DrawerButtons from './DrawerButtons';
 import LinkButton from '../components/buttons/LinkButton';
 
 import routes from './routes';
-import {useNavigation} from '@react-navigation/native';
-import {ScrollView} from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const listItems = [
   {
@@ -73,8 +73,8 @@ const listItems = [
   },
 ];
 
-export default function Drawer({isVisible, setIsVisible}) {
-  const {userState, authActions} = useContext(authContext);
+export default function Drawer({ isVisible, setIsVisible }) {
+  const { userState, authActions } = useContext(authContext);
 
   const navigation = useNavigation();
   return (
@@ -85,7 +85,8 @@ export default function Drawer({isVisible, setIsVisible}) {
       onSwipeComplete={() => setIsVisible(false)}
       onBackdropPress={() => setIsVisible(false)}
       animationIn="slideInRight"
-      animationOut="slideOutRight">
+      animationOut="slideOutRight"
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <Icon
@@ -101,11 +102,9 @@ export default function Drawer({isVisible, setIsVisible}) {
             <FlatList
               data={listItems}
               contentContainerStyle={styles.flatList}
-              keyExtractor={item => item.title}
+              keyExtractor={(item) => item.title}
               numColumns={2}
-              renderItem={({item}) => (
-                <DrawerButtons title={item.title} iconImage={item.icon} />
-              )}
+              renderItem={({ item }) => <DrawerButtons title={item.title} iconImage={item.icon} />}
             />
           </View>
 
@@ -120,10 +119,7 @@ export default function Drawer({isVisible, setIsVisible}) {
                 size={35}
               />
               <View style={styles.center}>
-                <LinkButton
-                  title={'Help & Support'}
-                  style={styles.linkButton}
-                />
+                <LinkButton title={'Help & Support'} style={styles.linkButton} />
               </View>
             </View>
 
@@ -160,7 +156,7 @@ export default function Drawer({isVisible, setIsVisible}) {
   );
 }
 
-function LogoutButton({onPress}) {
+function LogoutButton({ onPress }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.logoutButton}>

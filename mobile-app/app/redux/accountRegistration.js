@@ -1,14 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const registrationSlice = createSlice({
-    name: 'registrationSlice',
-    initialState: {
+  name: 'registrationSlice',
+  initialState: {},
+  reducers: {
+    appendFields: (previousFields, newFields) => {
+      return { ...previousFields, ...newFields.payload };
     },
-    reducers: {
-        appendFields: (previousFields, newFields) => {
-            return { ...previousFields, ...newFields.payload };
-        }
-
-    }
-})
+  },
+});
 export default registrationSlice;

@@ -1,11 +1,5 @@
-import React, {useContext, useState, useCallback, useEffect} from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  ActivityIndicator,
-  View,
-} from 'react-native';
+import React, { useContext, useState, useCallback, useEffect } from 'react';
+import { StyleSheet, FlatList, Dimensions, ActivityIndicator, View } from 'react-native';
 import authContext from '../authContext';
 import Screen from '../components/Screen';
 import Card from '../components/lists/Card';
@@ -17,42 +11,35 @@ import TrendingComponent from '../components/trending/TrendingComponent';
 import postService from '../services/post.service';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function NewsFeedScreen({navigation, route}) {
-  const {userState} = useContext(authContext);
+export default function NewsFeedScreen({ navigation, route }) {
+  const { userState } = useContext(authContext);
   const [posts, setPosts] = useState([]);
   const [activityIndicator, setActivityIndicator] = useState(true);
   useFocusEffect(
     useCallback(() => {
-    loadNews();
-    // loadStories();
-    // return setActivityIndicator(false);
-    return;
-  }, [])
-)
+      loadNews();
+      // loadStories();
+      // return setActivityIndicator(false);
+      return;
+    }, []),
+  );
   const loadNews = async () => {
-    postService.getNewsFeed(userState?.userData?.email)
-    .then(res =>{ 
-      const postArray = res.data.reverse();
-      setPosts(postArray)
-    })
-    .catch(e => console.error(e))
+    postService
+      .getNewsFeed(userState?.userData?.email)
+      .then((res) => {
+        const postArray = res.data.reverse();
+        setPosts(postArray);
+      })
+      .catch((e) => console.error(e));
   };
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return item.hasOwnProperty('swaped') ? (
       /**
        * The Swap Should from backend as instance of post
        */
       // ToDO: Refactor to use one component for posts and swap.
-      <SwapCard
-        navigation={navigation}
-        route={route}
-        item={item}
-
-        userId={item.userdata.id}
-
-
-      />
+      <SwapCard navigation={navigation} route={route} item={item} userId={item.userdata.id} />
     ) : (
       <Card
         user={item.userdata}
@@ -81,9 +68,7 @@ export default function NewsFeedScreen({navigation, route}) {
 
   const ActivityIndicatorComponent = () => (
     <View style={styles.listFooter}>
-      {activityIndicator && (
-        <ActivityIndicator size="large" color={colors.iondigoDye} />
-      )}
+      {activityIndicator && <ActivityIndicator size="large" color={colors.iondigoDye} />}
     </View>
   );
   const ListHeader = () => {
@@ -95,7 +80,7 @@ export default function NewsFeedScreen({navigation, route}) {
     );
   };
 
-return (
+  return (
     <Screen style={styles.container} statusPadding={false}>
       <FlatList
         initialNumToRender={10}
@@ -103,7 +88,7 @@ return (
         data={[]}
         ListHeaderComponent={ListHeader}
         ListFooterComponent={ActivityIndicatorComponent}
-        keyExtractor={post => post.id.toString()}
+        keyExtractor={(post) => post.id.toString()}
         showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         onEndReached={hideActivityIndicator}

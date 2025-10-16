@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const reelScreenDetector = createSlice({
-  name: "reelScreenDetector",
+  name: 'reelScreenDetector',
   initialState: false,
   reducers: {
     setReelScreen: (state) => {

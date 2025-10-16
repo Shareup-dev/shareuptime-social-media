@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import BetterImage from '../betterImage/BetterImage';
 import ImageView from 'react-native-image-viewing';
 import VideoPlayer from '../ShareupVideoPlayer/shareupVideoPlayer';
 
-let {width} = Dimensions.get('window');
+let { width } = Dimensions.get('window');
 
-const setWidth = postType => {
+const setWidth = (postType) => {
   switch (postType) {
     case 'share':
       return width - 64;
@@ -16,7 +16,7 @@ const setWidth = postType => {
   }
 };
 
-function CustomImageSlider({media = [], height, postType}) {
+function CustomImageSlider({ media = [], height, postType }) {
   const [imageSlider, setImageSlider] = useState({
     state: false,
     index: 0,
@@ -29,7 +29,7 @@ function CustomImageSlider({media = [], height, postType}) {
     },
   });
 
-  const imgGridViewer = index => {
+  const imgGridViewer = (index) => {
     switch (media.length) {
       case 4:
         return setWidth(postType) / 2;
@@ -48,17 +48,18 @@ function CustomImageSlider({media = [], height, postType}) {
       <View style={[styles.imgWrapper]}>
         <ImageView
           visible={imageSlider.state}
-          images={media.map(media => ({uri: media.mediaPath}))}
+          images={media.map((media) => ({ uri: media.mediaPath }))}
           keyExtractor={(item, index) => index.toString()}
           imageIndex={imageSlider.index}
           onRequestClose={() => {
-            setImageSlider(prev => ({...prev, state: false}));
+            setImageSlider((prev) => ({ ...prev, state: false }));
           }}
         />
         {media.map((image, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => setImageSlider({state: true, index: index})}>
+            onPress={() => setImageSlider({ state: true, index: index })}
+          >
             {/* {image.mediaPath ? (
               image.mediaPath.split('.').pop() === 'mp4' ||
               image.mediaPath.split('.').pop() === 'mov' ? (
@@ -91,7 +92,7 @@ function CustomImageSlider({media = [], height, postType}) {
             (image.mediaPath.split('.').pop() === 'mp4' ||
               image.mediaPath.split('.').pop() === 'mov') ? (
               <VideoPlayer
-                source={{uri: image.mediaPath}}
+                source={{ uri: image.mediaPath }}
                 navigator={navigator}
                 tapAnywhereToPause={false}
                 toggleResizeModeOnFullscreen={false}
@@ -102,16 +103,16 @@ function CustomImageSlider({media = [], height, postType}) {
                 controlTimeout={5000}
                 paused={true}
                 seekColor={'#576CEC'}
-                style={[{width: imgGridViewer(index) - 2, margin: 1, height}]}
-                videoStyle={{width: imgGridViewer(index) - 2, height: '100%'}}
+                style={[{ width: imgGridViewer(index) - 2, margin: 1, height }]}
+                videoStyle={{ width: imgGridViewer(index) - 2, height: '100%' }}
                 resizeMode={'cover'}
               />
             ) : (
               <BetterImage
                 key={index}
-                style={[{width: imgGridViewer(index) - 2, margin: 1, height}]}
+                style={[{ width: imgGridViewer(index) - 2, margin: 1, height }]}
                 resizeMode={'cover'}
-                source={{uri: image.mediaPath}}
+                source={{ uri: image.mediaPath }}
               />
             )}
           </TouchableOpacity>

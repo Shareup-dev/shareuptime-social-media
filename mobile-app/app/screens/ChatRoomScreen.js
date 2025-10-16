@@ -1,32 +1,25 @@
-import React, {useContext, useEffect, useRef} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Dimensions,
-  ActivityIndicator,
-} from 'react-native';
-import {useSelector} from 'react-redux';
+import React, { useContext, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { useSelector } from 'react-redux';
 
-import {useMessages} from '../backendless';
+import { useMessages } from '../backendless';
 import Screen from '../components/Screen';
-import {ChatRoomHeader} from '../components/headers';
+import { ChatRoomHeader } from '../components/headers';
 import MessageTextField from '../components/messages/MessageTextField';
 import Tab from '../components/buttons/Tab';
 import colors from '../config/colors';
 import defaultStyles from '../config/styles';
 import MessageItem from '../components/messages/MessageItem';
 import store from '../redux/store';
-import {messagesAction} from '../redux/messagesSlice';
+import { messagesAction } from '../redux/messagesSlice';
 import authContext from '../authContext';
 
-export default function ChatRoomScreen({navigation, route}) {
-  const {user} = useContext(authContext);
+export default function ChatRoomScreen({ navigation, route }) {
+  const { user } = useContext(authContext);
 
-  const {contact, conversationId} = route.params;
+  const { contact, conversationId } = route.params;
 
-  const messages = useSelector(state => state.messages);
+  const messages = useSelector((state) => state.messages);
 
   const messagesListRef = useRef();
 
@@ -82,13 +75,10 @@ export default function ChatRoomScreen({navigation, route}) {
 
       <FlatList
         data={messages}
-        renderItem={({item}) => (
-          <MessageItem
-            item={item}
-            profilePicture={contact.profilePicturePath}
-          />
+        renderItem={({ item }) => (
+          <MessageItem item={item} profilePicture={contact.profilePicturePath} />
         )}
-        keyExtractor={message => message.objectId}
+        keyExtractor={(message) => message.objectId}
         onEndReached={() => updateStoredMessages(conversationId)}
         onEndReachedThreshold={0.5}
         inverted={true}

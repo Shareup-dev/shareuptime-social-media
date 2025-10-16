@@ -1,17 +1,12 @@
-import React, { useState } from "react";
-import { FlatList } from "react-native";
-import routes from "../../navigation/routes";
+import React, { useState } from 'react';
+import { FlatList } from 'react-native';
+import routes from '../../navigation/routes';
 
-import ChatListItem from "./ChatListItem";
-import EmptyNotice from "./EmptyNotice";
-import ListWrapper from "./ListWrapper";
+import ChatListItem from './ChatListItem';
+import EmptyNotice from './EmptyNotice';
+import ListWrapper from './ListWrapper';
 
-export default function ChatsList({
-  navigation,
-  chats,
-  loading,
-  refreshChats,
-}) {
+export default function ChatsList({ navigation, chats, loading, refreshChats }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const handelRefresh = () => {

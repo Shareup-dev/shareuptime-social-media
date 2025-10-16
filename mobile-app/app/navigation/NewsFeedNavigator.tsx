@@ -40,7 +40,7 @@ const NewsFeedNavigator: React.FC = () => {
           header: ({ navigation }) => <CustomHeaderBar navigation={navigation} />,
         }}
       />
-      
+
       <Stack.Screen
         name="UserProfile"
         component={UserProfileScreen}
@@ -49,7 +49,7 @@ const NewsFeedNavigator: React.FC = () => {
           title: 'Profile',
         }}
       />
-      
+
       <Stack.Screen
         name="EditProfile"
         component={EditProfileScreen}
@@ -58,7 +58,7 @@ const NewsFeedNavigator: React.FC = () => {
           title: 'Edit Profile',
         }}
       />
-      
+
       <Stack.Screen
         name="PostDetails"
         component={NewsFeedScreen} // Temporary - need PostDetailsScreen
@@ -67,7 +67,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: true,
         }}
       />
-      
+
       <Stack.Screen
         name="Comments"
         component={AddCommentsOnReels}
@@ -78,7 +78,7 @@ const NewsFeedNavigator: React.FC = () => {
           animation: 'slide_from_bottom',
         }}
       />
-      
+
       <Stack.Screen
         name="Stories"
         component={MyReelsScreen}
@@ -88,7 +88,7 @@ const NewsFeedNavigator: React.FC = () => {
           gestureEnabled: false,
         }}
       />
-      
+
       <Stack.Screen
         name="Reels"
         component={MyReelsScreen}
@@ -97,7 +97,7 @@ const NewsFeedNavigator: React.FC = () => {
           presentation: 'fullScreenModal',
         }}
       />
-      
+
       <Stack.Screen
         name="AddNewReel"
         component={MyReelsScreen}
@@ -106,7 +106,7 @@ const NewsFeedNavigator: React.FC = () => {
           presentation: 'modal',
         }}
       />
-      
+
       <Stack.Screen
         name="Settings"
         component={SettingPrivacyScreen}
@@ -116,7 +116,7 @@ const NewsFeedNavigator: React.FC = () => {
           gestureEnabled: false,
         }}
       />
-      
+
       <Stack.Screen
         name="Followers"
         component={UserProfileScreen} // Temporary - need FollowersScreen
@@ -125,7 +125,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: true,
         }}
       />
-      
+
       <Stack.Screen
         name="Following"
         component={UserProfileScreen} // Temporary - need FollowingScreen
@@ -134,7 +134,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: true,
         }}
       />
-      
+
       <Stack.Screen
         name="Search"
         component={NewsFeedScreen} // Temporary - need SearchScreen
@@ -143,7 +143,7 @@ const NewsFeedNavigator: React.FC = () => {
           presentation: 'modal',
         }}
       />
-      
+
       <Stack.Screen
         name="HashtagPosts"
         component={NewsFeedScreen} // Temporary - need HashtagPostsScreen
@@ -152,7 +152,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: true,
         })}
       />
-      
+
       <Stack.Screen
         name="LocationPosts"
         component={NewsFeedScreen} // Temporary - need LocationPostsScreen
@@ -170,7 +170,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="Swap" // Legacy route
         component={SwapScreen}
@@ -178,7 +178,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="SwapDisplay" // Legacy route
         component={SwapDisplay}
@@ -186,7 +186,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="SwapShipping" // Legacy route
         component={ShippingAddress}
@@ -194,7 +194,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="SwapCheckout" // Legacy route
         component={SwapCheckout}
@@ -202,7 +202,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="SwapCheckoutComplete" // Legacy route
         component={SwapCheckoutComplete}
@@ -210,7 +210,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="GroupFeed" // Legacy route
         component={GroupFeedScreen}
@@ -218,7 +218,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="InviteGroupMembers" // Legacy route
         component={InviteGroupMembers}
@@ -226,7 +226,7 @@ const NewsFeedNavigator: React.FC = () => {
           headerShown: false,
         }}
       />
-      
+
       <Stack.Screen
         name="SetPostAudience" // Legacy route
         component={SetPostAudience}

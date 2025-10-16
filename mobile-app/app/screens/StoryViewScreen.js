@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useReducer, useRef, useState} from 'react';
+import React, { memo, useEffect, useReducer, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -18,13 +18,8 @@ import DownModal from '../components/drawers/DownModal';
 
 const windowWidth = Dimensions.get('screen').width;
 
-const StoryViewScreen = ({navigation, route}) => {
-  const {
-    stories_List: data,
-    firstName,
-    lastName,
-    profilePicture,
-  } = route.params;
+const StoryViewScreen = ({ navigation, route }) => {
+  const { stories_List: data, firstName, lastName, profilePicture } = route.params;
 
   // const [menuOpen, setMenuOpen] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -67,30 +62,30 @@ const StoryViewScreen = ({navigation, route}) => {
   const [timerState, dispatch] = useReducer(timerReducer, initState);
 
   const width = [];
-  data.map(_ => width.push(useRef(new Animated.Value(0)).current));
+  data.map((_) => width.push(useRef(new Animated.Value(0)).current));
 
   // Start progress animations
   const startProgress = () => {
     let startTime = new Date().valueOf();
-    dispatch({type: actions.START_TIMER, startTime});
+    dispatch({ type: actions.START_TIMER, startTime });
 
     Animated.timing(width[activeIndex], {
       toValue: windowWidth / data.length - 2,
       useNativeDriver: false,
       duration: timerState.duration,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       if (finished)
         if (activeIndex !== data.length - 1) {
-          dispatch({type: actions.RESET_TIMER});
+          dispatch({ type: actions.RESET_TIMER });
           setLoaded(false);
-          setActiveIndex(prev => prev + 1);
+          setActiveIndex((prev) => prev + 1);
         } else navigation.popToTop();
     });
   };
   // Pause progress animations
   const pauseProgress = () => {
     let pausedTime = new Date().valueOf();
-    const {duration, startedTime} = timerState;
+    const { duration, startedTime } = timerState;
     const currentDuration = duration - (pausedTime - startedTime);
 
     dispatch({
@@ -169,20 +164,22 @@ const StoryViewScreen = ({navigation, route}) => {
 
   const StorySlides = memo(() => {
     return (
-      <View style={{position: 'absolute', zIndex: 10}}>
-        <View style={{flexDirection: 'row'}}>
+      <View style={{ position: 'absolute', zIndex: 10 }}>
+        <View style={{ flexDirection: 'row' }}>
           {data.map((item, index) => (
             <View
               key={index}
               style={{
                 paddingHorizontal: 1,
                 width: windowWidth / data.length,
-              }}>
+              }}
+            >
               <View
                 style={{
                   borderRadius: 6,
                   backgroundColor: '#CACACA',
-                }}>
+                }}
+              >
                 <Animated.View
                   style={{
                     backgroundColor: '#00000099',
@@ -207,7 +204,7 @@ const StoryViewScreen = ({navigation, route}) => {
             </View>
             <Text style={styles.userName}>{`${firstName} ${lastName}`}</Text>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             {/* <TouchableOpacity
               style={styles.closeIcon}
               onPress={() => {
@@ -226,7 +223,8 @@ const StoryViewScreen = ({navigation, route}) => {
               style={[styles.closeIcon, styles.shadow]}
               onPress={() => {
                 navigation.popToTop();
-              }}>
+              }}
+            >
               <Icon
                 name={'close'}
                 type={'AntDesign'}
@@ -254,13 +252,14 @@ const StoryViewScreen = ({navigation, route}) => {
         onPressOut={() => {
           setPaused(false);
           startProgress();
-        }}>
+        }}
+      >
         <StorySlides />
         {data[activeIndex]?.video ? (
           <Video
-            ref={ref => (this.player = ref)}
+            ref={(ref) => (this.player = ref)}
             paused={paused}
-            onLoad={_ => setLoaded(true)}
+            onLoad={(_) => setLoaded(true)}
             resizeMode={'cover'}
             style={{
               width: '100%',
@@ -278,8 +277,8 @@ const StoryViewScreen = ({navigation, route}) => {
               height: '100%',
               backgroundColor: '#000',
             }}
-            onLoadEnd={_ => setLoaded(true)}
-            source={{uri: fileStorage.baseUrl + data[activeIndex].image}}
+            onLoadEnd={(_) => setLoaded(true)}
+            source={{ uri: fileStorage.baseUrl + data[activeIndex].image }}
           />
         )}
         <Text
@@ -291,8 +290,9 @@ const StoryViewScreen = ({navigation, route}) => {
             fontSize: 16,
             fontWeight: '600',
             color: '#fff',
-          }}>
-      { data[activeIndex].caption}
+          }}
+        >
+          {data[activeIndex].caption}
         </Text>
       </TouchableOpacity>
     </>
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     maxWidth: windowWidth / 2,
     color: '#fdfdfd',
     textShadowColor: 'black',
-    textShadowOffset: {width: 0, height: 0},
+    textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 8,
     fontWeight: '800',
     marginLeft: 20,
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: '#fff',
-    shadowOffset: {width: 0, height: 0},
+    shadowOffset: { width: 0, height: 0 },
     shadowRadius: 8,
   },
 

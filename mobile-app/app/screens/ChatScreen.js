@@ -1,4 +1,4 @@
-import React, {memo, useContext, useEffect, useRef, useState} from 'react';
+import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 
-import {HeaderWithBackArrow} from '../components/headers';
+import { HeaderWithBackArrow } from '../components/headers';
 import Icon from '../components/Icon';
 import colors from '../config/colors';
 
@@ -24,14 +24,14 @@ import Screen from '../components/Screen';
 
 // import  PushNotification from 'react-native-push-notification';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-function ChatScreen({navigation, route}) {
+function ChatScreen({ navigation, route }) {
   const sockJsRef = useRef();
 
-  const {user} = route.params;
+  const { user } = route.params;
   const {
-    userState: {username},
+    userState: { username },
   } = useContext(AuthContext);
 
   const [messages, setMessages] = useState({
@@ -44,21 +44,21 @@ function ChatScreen({navigation, route}) {
   const getConversations = () => {
     chatService
       .getConversation(username, user.email)
-      .then(({data}) => {
+      .then(({ data }) => {
         setConversationId(data.id);
-        setMessages(prev => ({
+        setMessages((prev) => ({
           ...prev,
           state: data.messages,
         }));
       })
-      .catch(e => console.error(e.message));
+      .catch((e) => console.error(e.message));
   };
 
   const archivedHandler = () => {
     chatService
       .archiveChat(username, conversationId)
-      .then(({status}) => status === 200 && navigation.goBack())
-      .catch(e => console.error(e.message));
+      .then(({ status }) => status === 200 && navigation.goBack())
+      .catch((e) => console.error(e.message));
   };
 
   const clearChatHandler = () => {
@@ -70,18 +70,18 @@ function ChatScreen({navigation, route}) {
   };
 
   const viewProfileHandler = () => {
-    navigation.navigate(routes.FRIEND_PROFILE, {user});
+    navigation.navigate(routes.FRIEND_PROFILE, { user });
   };
 
   useEffect(() => {
     getConversations();
   }, []);
 
-  const onMessageReceived = mess => {
-    setMessages(prev => ({...prev, state: [mess, ...prev.state]}));
+  const onMessageReceived = (mess) => {
+    setMessages((prev) => ({ ...prev, state: [mess, ...prev.state] }));
   };
 
-  const onSendMessage = async message => {
+  const onSendMessage = async (message) => {
     if (message) {
       await sockJsRef.current.sendMessage(
         `/app/chat`,
@@ -97,7 +97,7 @@ function ChatScreen({navigation, route}) {
     }
   };
 
-  const displayMessageTime = creationTime => {
+  const displayMessageTime = (creationTime) => {
     let time = new Date(creationTime);
     const today = new Date();
 
@@ -120,12 +120,13 @@ function ChatScreen({navigation, route}) {
     }
   };
 
-  const MessageCard = ({right, item}) => {
+  const MessageCard = ({ right, item }) => {
     return (
       <View
         style={{
           alignSelf: right ? 'flex-end' : 'flex-start',
-        }}>
+        }}
+      >
         <View
           style={{
             backgroundColor: right ? '#9FB7C4' : '#fff',
@@ -135,14 +136,16 @@ function ChatScreen({navigation, route}) {
             paddingVertical: 10,
             borderRadius: 10,
             maxWidth: '70%',
-          }}>
+          }}
+        >
           <Text
             style={{
               marginVertical: 3,
               fontSize: 14,
               fontWeight: '600',
               color: '#333',
-            }}>
+            }}
+          >
             {item.message}
           </Text>
         </View>
@@ -151,7 +154,8 @@ function ChatScreen({navigation, route}) {
             textAlign: right ? 'right' : 'left',
             marginHorizontal: 15,
             fontSize: 12,
-          }}>
+          }}
+        >
           {displayMessageTime(item.creationTime)}
         </Text>
       </View>
@@ -163,7 +167,7 @@ function ChatScreen({navigation, route}) {
       <SockJsClient
         url={settings.apiUrl + '/chat'}
         topics={[`/user/${username}/messages`]}
-        onMessage={msg => onMessageReceived(msg)}
+        onMessage={(msg) => onMessageReceived(msg)}
         ref={sockJsRef}
         debug={false}
       />
@@ -171,13 +175,13 @@ function ChatScreen({navigation, route}) {
       <View style={[styles.container]}>
         <HeaderWithBackArrow
           title={`${user.firstName} ${user.lastName}`}
-          titleStyle={{fontSize: 16}}
-          onBackButton={_ => navigation.goBack()}
+          titleStyle={{ fontSize: 16 }}
+          onBackButton={(_) => navigation.goBack()}
           rightComponent={
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <Icon name="md-videocam-outline" type="Ionicons" />
               <Icon name="phone-call" type="Feather" />
-              <TouchableOpacity onPress={_ => setOpenModal(prev => !prev)}>
+              <TouchableOpacity onPress={(_) => setOpenModal((prev) => !prev)}>
                 <Icon name="options" type="SimpleLineIcons" />
               </TouchableOpacity>
             </View>
@@ -192,13 +196,15 @@ function ChatScreen({navigation, route}) {
           animationOut={'slideOutRight'}
           onSwipeComplete={() => setOpenModal(false)}
           onBackdropPress={() => setOpenModal(false)}
-          backdropOpacity={0.1}>
+          backdropOpacity={0.1}
+        >
           <View
             style={{
               backgroundColor: '#fff',
               maxHeight: 200,
               paddingVertical: 10,
-            }}>
+            }}
+          >
             <TouchableOpacity style={styles.menu} onPress={viewProfileHandler}>
               <Text style={styles.menuText}>View Profile</Text>
             </TouchableOpacity>
@@ -223,29 +229,27 @@ function ChatScreen({navigation, route}) {
           data={messages.state}
           // onEndReached={getConversations}
           keyExtractor={(item, i) => i.toString()}
-          renderItem={({item}) => (
-            <MessageCard
-              right={item.fromWho === username ? true : false}
-              item={item}
-            />
+          renderItem={({ item }) => (
+            <MessageCard right={item.fromWho === username ? true : false} item={item} />
           )}
         />
 
         <View
           style={{
             position: 'absolute',
-            bottom:0,
+            bottom: 0,
             flexDirection: 'row',
             alignItems: 'center',
             paddingHorizontal: 10,
             paddingVertical: 10,
             justifyContent: 'space-between',
             width: width,
-          }}>
+          }}
+        >
           <TextInput
             style={styles.message}
             value={message}
-            onChangeText={val => setMessage(val)}
+            onChangeText={(val) => setMessage(val)}
             placeholder="message"
           />
           <TouchableOpacity
@@ -254,7 +258,8 @@ function ChatScreen({navigation, route}) {
               padding: 5,
               borderRadius: 25,
             }}
-            onPress={() => onSendMessage(message)}>
+            onPress={() => onSendMessage(message)}
+          >
             <Icon
               noBackground
               name={'send'}

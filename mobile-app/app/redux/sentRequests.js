@@ -1,18 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 let initialState = [];
 
 const sentRequestSlice = createSlice({
-  name: "sentRequestSlice",
+  name: 'sentRequestSlice',
   initialState,
   reducers: {
     setList: (state, newState) => {
-
       return (state = newState.payload);
     },
-    removeFriend: () => {
-
-    },
+    removeFriend: () => {},
     getList: (state) => {
       return state.payload;
     },

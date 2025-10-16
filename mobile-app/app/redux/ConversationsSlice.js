@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   list: [],
 };
 
 const conversationsSlice = createSlice({
-  name: "conversations",
+  name: 'conversations',
   initialState,
   reducers: {
     setConversations: (state, action) => {

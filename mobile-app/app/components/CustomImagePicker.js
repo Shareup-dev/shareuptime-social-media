@@ -1,20 +1,18 @@
 import React from 'react';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 
 import Modal from 'react-native-modal';
-import {Ionicons, Feather} from 'react-native-vector-icons';
+import { Ionicons, Feather } from 'react-native-vector-icons';
 
-import {Header, HeaderButton, HeaderTitle} from './headers';
+import { Header, HeaderButton, HeaderTitle } from './headers';
 import colors from '../config/colors';
 
-export default function CustomImagePicker({onCancel}) {
+export default function CustomImagePicker({ onCancel }) {
   return (
     <Modal isVisible={true} style={styles.modal}>
       <View style={styles.container}>
         <Header
-          left={
-            <HeaderButton title="Cancel" isActive={true} onPress={onCancel} />
-          }
+          left={<HeaderButton title="Cancel" isActive={true} onPress={onCancel} />}
           middle={<HeaderTitle>Photos</HeaderTitle>}
           right={<HeaderButton title="Done" isActive={true} />}
           headerContainerStyle={styles.header}

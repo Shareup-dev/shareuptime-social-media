@@ -1,5 +1,5 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
 // import Text from "../Text";
 
@@ -14,5 +14,5 @@ export default function ErrorMessage({ error, visible }) {
 }
 
 const styles = StyleSheet.create({
-  error: { color: "red", fontSize: 13 },
+  error: { color: 'red', fontSize: 13 },
 });

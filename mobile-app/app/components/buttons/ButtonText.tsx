@@ -11,12 +11,7 @@ interface ButtonTextProps {
   fontColor?: string;
 }
 
-const ButtonText: React.FC<ButtonTextProps> = ({
-  children,
-  style,
-  fontSize = 18,
-  fontColor,
-}) => {
+const ButtonText: React.FC<ButtonTextProps> = ({ children, style, fontSize = 18, fontColor }) => {
   return (
     <Text
       style={[

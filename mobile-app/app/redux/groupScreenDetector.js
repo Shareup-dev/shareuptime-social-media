@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const groupScreenDetector = createSlice({
-  name: "groupScreenDetector",
+  name: 'groupScreenDetector',
   initialState: false,
   reducers: {
     setGroupScreen: (state) => {

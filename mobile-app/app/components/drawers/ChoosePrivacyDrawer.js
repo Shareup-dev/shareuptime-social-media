@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {RadioButton, Text} from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { RadioButton, Text } from 'react-native-paper';
 
 import DownModal from './DownModal';
-import {Header, HeaderCloseIcon, HeaderButton, HeaderTitle} from '../headers';
+import { Header, HeaderCloseIcon, HeaderButton, HeaderTitle } from '../headers';
 import colors from '../../config/colors';
 import Icon from '../Icon';
 
@@ -27,33 +27,22 @@ export default function ChoosePrivacyDrawer({
   return (
     <DownModal isVisible={isVisible} setIsVisible={setIsVisible}>
       <Header
-        left={
-          <HeaderCloseIcon
-            onPress={handleCancel}
-            backgroundColor={colors.white}
-          />
-        }
+        left={<HeaderCloseIcon onPress={handleCancel} backgroundColor={colors.white} />}
         middle={<HeaderTitle>Group Privacy</HeaderTitle>}
         backgroundColor={colors.white}
-        right={
-          <HeaderButton onPress={handleAddGroup} title="Done" isActive={true} />
-        }
+        right={<HeaderButton onPress={handleAddGroup} title="Done" isActive={true} />}
       />
 
       <RadioButton.Group
-        onValueChange={newValue => {
+        onValueChange={(newValue) => {
           setValue(newValue);
           setPrivacy(newValue);
         }}
-        value={value}>
+        value={value}
+      >
         <View style={styles.radioGroupWrapper}>
           <View style={styles.radioButtonItemWrapper}>
-            <Icon
-              name="globe"
-              type="Entypo"
-              backgroundSizeRatio={1}
-              size={20}
-            />
+            <Icon name="globe" type="Entypo" backgroundSizeRatio={1} size={20} />
             <RadioButton.Item
               value={false}
               label="Public"
@@ -61,18 +50,11 @@ export default function ChoosePrivacyDrawer({
               style={styles.radioButtonItem}
               labelStyle={styles.RadioLabelStyle}
             />
-            <Text style={styles.radioButtonDescription}>
-              Anyone on or off Shareup
-            </Text>
+            <Text style={styles.radioButtonDescription}>Anyone on or off Shareup</Text>
           </View>
           <View style={styles.separator} />
           <View style={styles.radioButtonItemWrapper}>
-            <Icon
-              name="user-alt"
-              type="FontAwesome5"
-              backgroundSizeRatio={1}
-              size={20}
-            />
+            <Icon name="user-alt" type="FontAwesome5" backgroundSizeRatio={1} size={20} />
             <RadioButton.Item
               value={true}
               label="Private"

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -16,17 +16,17 @@ import useImagePicker from '../hooks/useImagePicker';
 import routes from '../navigation/routes';
 import defautlStyles from '../config/styles';
 import colors from '../config/colors';
-import {Header, HeaderTitle} from '../components/headers';
+import { Header, HeaderTitle } from '../components/headers';
 import Toast from 'react-native-toast-message';
 
 import groupService from '../services/group.service';
 
-const UpdateGroupPhoto = ({navigation, route}) => {
+const UpdateGroupPhoto = ({ navigation, route }) => {
   const groupData = route.params;
 
   const [loading, setLoading] = useState(false);
 
-  const {file = [], pickImage} = useImagePicker();
+  const { file = [], pickImage } = useImagePicker();
 
   const proceedHandler = () => {
     if (loading) {
@@ -45,7 +45,7 @@ const UpdateGroupPhoto = ({navigation, route}) => {
     groupService
       .addGroupImage(groupData.id, groupFormData)
       .then(
-        resp =>
+        (resp) =>
           resp.status === 200 &&
           navigation.navigate({
             name: routes.GROUP_FEED,
@@ -53,7 +53,7 @@ const UpdateGroupPhoto = ({navigation, route}) => {
             merge: true,
           }),
       )
-      .catch(e =>
+      .catch((e) =>
         Toast.show({
           position: 'bottom',
           visibilityTime: 5000,
@@ -62,7 +62,7 @@ const UpdateGroupPhoto = ({navigation, route}) => {
           text2: 'Error occurred while creating the group 😒',
         }),
       )
-      .finally(_ => setLoading(false));
+      .finally((_) => setLoading(false));
   };
 
   return (
@@ -71,18 +71,13 @@ const UpdateGroupPhoto = ({navigation, route}) => {
         backgroundColor={colors.white}
         left={
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-            <Icon
-              name="chevron-back"
-              type="Ionicons"
-              size={25}
-              backgroundSizeRatio={1}
-            />
+            <Icon name="chevron-back" type="Ionicons" size={25} backgroundSizeRatio={1} />
           </TouchableWithoutFeedback>
         }
         middle={<HeaderTitle>Change Group Photo</HeaderTitle>}
         right={
           <TouchableOpacity disabled={loading} onPress={proceedHandler}>
-            <Text>{loading?'Saving':'Save'}</Text>
+            <Text>{loading ? 'Saving' : 'Save'}</Text>
           </TouchableOpacity>
         }
       />
@@ -92,15 +87,8 @@ const UpdateGroupPhoto = ({navigation, route}) => {
       </Text>
       <View style={styles.photoContainer}>
         {!file[0]?.uri && (
-          <TouchableOpacity
-            style={[defautlStyles.row, styles.uploadButton]}
-            onPress={pickImage}>
-            <Icon
-              type={'FontAwesome'}
-              size={50}
-              name={'photo'}
-              style={{marginRight: 10}}
-            />
+          <TouchableOpacity style={[defautlStyles.row, styles.uploadButton]} onPress={pickImage}>
+            <Icon type={'FontAwesome'} size={50} name={'photo'} style={{ marginRight: 10 }} />
             <Text>Upload cover photo</Text>
           </TouchableOpacity>
         )}
@@ -111,9 +99,7 @@ const UpdateGroupPhoto = ({navigation, route}) => {
         )}
       </View>
       {file[0]?.uri && (
-        <Text style={[styles.subTitle]}>
-          Touch on the image to change if needed
-        </Text>
+        <Text style={[styles.subTitle]}>Touch on the image to change if needed</Text>
       )}
     </Screen>
   );

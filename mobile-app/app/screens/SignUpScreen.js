@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import * as Yup from 'yup';
 
-import {Form, FormField, SubmitButton} from '../components/forms';
+import { Form, FormField, SubmitButton } from '../components/forms';
 import Separator from '../components/Separator';
 import routes from '../navigation/routes';
 
@@ -19,25 +19,26 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
 });
 
-export default function SignUpScreen({navigation}) {
+export default function SignUpScreen({ navigation }) {
   const [error, setError] = useState('');
   const [Loading, setLoading] = useState(false);
 
   const handleSubmit = (values, props) => {
     setLoading(true);
-    const {setFieldError} = props;
+    const { setFieldError } = props;
 
     authService
       .verifyUser(values?.email)
-      .then(res =>
+      .then((res) =>
         res.status !== 200
           ? navigation.navigate(routes.SIGNUP_STEP2, {
               ...values,
             })
           : setFieldError('email', 'The Email you provide is already in used.'),
       )
-      .catch(e => {
-        if (e.message === 'Request failed with status code 404') { // if user not exist move to next step 
+      .catch((e) => {
+        if (e.message === 'Request failed with status code 404') {
+          // if user not exist move to next step
           {
             navigation.navigate(routes.SIGNUP_STEP2, {
               ...values,
@@ -57,7 +58,8 @@ export default function SignUpScreen({navigation}) {
           email: '',
         }}
         onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
+        validationSchema={validationSchema}
+      >
         <FormField
           autoCorrect={false}
           name="firstName"
@@ -81,23 +83,16 @@ export default function SignUpScreen({navigation}) {
           style={defaultStyles.formField}
         />
 
-        <Text style={{color: colors.red, fontWeight: '700'}}>
-          {error ? error : null}
-        </Text>
+        <Text style={{ color: colors.red, fontWeight: '700' }}>{error ? error : null}</Text>
 
-        <SubmitButton
-          disabled={Loading}
-          title="Next"
-          dis
-          style={styles.submitButton}
-        />
+        <SubmitButton disabled={Loading} title="Next" dis style={styles.submitButton} />
         <Separator text="or" />
-<AlternativeRegistrationContainer />
+        <AlternativeRegistrationContainer />
 
         <LinkButton
           title="Do you have an existing account?"
           onPress={() => navigation.navigate(routes.LOGIN)}
-          style={{marginTop: 10, fontSize: 18}}
+          style={{ marginTop: 10, fontSize: 18 }}
         />
       </Form>
     </RegistrationContainer>

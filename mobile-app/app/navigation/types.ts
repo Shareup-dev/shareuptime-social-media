@@ -1,5 +1,9 @@
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import type { CompositeNavigationProp, NavigatorScreenParams, RouteProp } from '@react-navigation/native';
+import type {
+  CompositeNavigationProp,
+  NavigatorScreenParams,
+  RouteProp,
+} from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 
 // Authentication Stack Types
@@ -10,7 +14,7 @@ export type AuthStackParamList = {
   ResetPassword: { token: string };
 };
 
-// Main Tab Navigator Types  
+// Main Tab Navigator Types
 export type MainTabParamList = {
   NewsFeedNavigator: NavigatorScreenParams<NewsFeedStackParamList>;
   GroupNavigator: NavigatorScreenParams<GroupStackParamList>;
@@ -35,7 +39,7 @@ export type NewsFeedStackParamList = {
   Search: undefined;
   HashtagPosts: { hashtag: string };
   LocationPosts: { locationId: string };
-  
+
   // Legacy routes for backward compatibility
   KeepHang: undefined;
   Swap: undefined;
@@ -48,7 +52,7 @@ export type NewsFeedStackParamList = {
   SetPostAudience: undefined;
 };
 
-// Group Stack Types  
+// Group Stack Types
 export type GroupStackParamList = {
   GroupsList: undefined;
   GroupDetails: { groupId: string };
@@ -98,18 +102,21 @@ export type CombinedNavigationProp = CompositeNavigationProp<
   MainTabNavigationProp,
   CompositeNavigationProp<
     NewsFeedNavigationProp,
-    CompositeNavigationProp<
-      GroupNavigationProp,
-      ActivityNavigationProp
-    >
+    CompositeNavigationProp<GroupNavigationProp, ActivityNavigationProp>
   >
 >;
 
 // Route Prop Types for Screens
 export type AuthRouteProp<T extends keyof AuthStackParamList> = RouteProp<AuthStackParamList, T>;
-export type NewsFeedRouteProp<T extends keyof NewsFeedStackParamList> = RouteProp<NewsFeedStackParamList, T>;
+export type NewsFeedRouteProp<T extends keyof NewsFeedStackParamList> = RouteProp<
+  NewsFeedStackParamList,
+  T
+>;
 export type GroupRouteProp<T extends keyof GroupStackParamList> = RouteProp<GroupStackParamList, T>;
-export type ActivityRouteProp<T extends keyof ActivityStackParamList> = RouteProp<ActivityStackParamList, T>;
+export type ActivityRouteProp<T extends keyof ActivityStackParamList> = RouteProp<
+  ActivityStackParamList,
+  T
+>;
 export type MainTabRouteProp<T extends keyof MainTabParamList> = RouteProp<MainTabParamList, T>;
 
 // Hook Types for useNavigation

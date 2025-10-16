@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,29 +9,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AuthContext from '../authContext';
-import {HeaderWithBackArrow} from '../components/headers';
+import { HeaderWithBackArrow } from '../components/headers';
 import fileStorage from '../config/fileStorage';
 import routes from '../navigation/routes';
 import groupService from '../services/group.service';
 
-export default function MyGroups({navigation}) {
-  const {userState} = useContext(AuthContext);
+export default function MyGroups({ navigation }) {
+  const { userState } = useContext(AuthContext);
   const [groups, setGroups] = useState([]);
 
-  const Item = ({item}) => {
+  const Item = ({ item }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.6}
-        onPress={() => navigation.navigate(routes.GROUP_FEED, item)}>
+        onPress={() => navigation.navigate(routes.GROUP_FEED, item)}
+      >
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <Image
             source={
               item.image
-                ? {uri: fileStorage.baseUrl + item.image}
+                ? { uri: fileStorage.baseUrl + item.image }
                 : require('../assets/images/group-texture.png')
             }
             style={styles.img}
@@ -51,14 +53,11 @@ export default function MyGroups({navigation}) {
         groupService.getGroupsOfOwner(userState?.userData?.id),
         groupService.getUserGroups(userState?.username),
       ])
-        .then(res => {
-          setGroups([{title: 'Groups you manage', data: res[0].data}]);
-          setGroups(prev => [
-            ...prev,
-            {title: 'Other groups', data: res[1].data},
-          ]);
+        .then((res) => {
+          setGroups([{ title: 'Groups you manage', data: res[0].data }]);
+          setGroups((prev) => [...prev, { title: 'Other groups', data: res[1].data }]);
         })
-        .catch(e => console.error(e.message));
+        .catch((e) => console.error(e.message));
     };
     fetchMyGroups();
   }, []);
@@ -78,10 +77,10 @@ export default function MyGroups({navigation}) {
           showsVerticalScrollIndicator={false}
           sections={groups}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => <Item item={item} />}
-          renderSectionHeader={props => {
+          renderItem={({ item }) => <Item item={item} />}
+          renderSectionHeader={(props) => {
             const {
-              section: {title, data},
+              section: { title, data },
             } = props;
 
             return (
@@ -93,9 +92,10 @@ export default function MyGroups({navigation}) {
                       fontSize: 13,
                       textAlign: 'center',
                       marginVertical: 15,
-                    }}>
+                    }}
+                  >
                     {`You don't have any ${
-                      title === 'Other groups'? 'Other groups': 'groups to manage'
+                      title === 'Other groups' ? 'Other groups' : 'groups to manage'
                     }`}
                   </Text>
                 )}

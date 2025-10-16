@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableWithoutFeedback, Text} from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Text } from 'react-native';
 import colors from '../../config/colors';
 
 import Icon from '../Icon';
@@ -15,19 +15,12 @@ export default function HeaderWithBackArrow({
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={onBackButton}>
-        <Icon
-          name="chevron-back"
-          type="Ionicons"
-          size={35}
-          backgroundSizeRatio={0.8}
-        />
+        <Icon name="chevron-back" type="Ionicons" size={35} backgroundSizeRatio={0.8} />
       </TouchableWithoutFeedback>
       {leftComponent}
       {title && <Text style={[styles.title, titleStyle]}>{title}</Text>}
       {component}
-      {rightComponent && (
-        <View style={styles.rightComponent}>{rightComponent}</View>
-      )}
+      {rightComponent && <View style={styles.rightComponent}>{rightComponent}</View>}
     </View>
   );
 }

@@ -31,12 +31,12 @@ export class ShareUpTimeWebSocketClient {
 
   connect(token: string): void {
     this.token = token;
-    
+
     if (this.socket) {
       this.disconnect();
     }
 
-  this.socket = io(WS_BASE_URL, {
+    this.socket = io(WS_BASE_URL, {
       auth: {
         token: this.token,
       },
@@ -128,7 +128,7 @@ export class ShareUpTimeWebSocketClient {
       this.listeners.delete(event);
       return;
     }
-    
+
     const listeners = this.listeners.get(event);
     if (listeners) {
       const index = listeners.indexOf(callback);
@@ -141,7 +141,7 @@ export class ShareUpTimeWebSocketClient {
   private emit(event: string, data: any): void {
     const listeners = this.listeners.get(event);
     if (listeners) {
-      listeners.forEach(callback => callback(data));
+      listeners.forEach((callback) => callback(data));
     }
   }
 
@@ -159,7 +159,11 @@ export class ShareUpTimeWebSocketClient {
     this.socket?.emit('leave_conversation', conversationId);
   }
 
-  sendMessage(conversationId: string, message: string, messageType: 'text' | 'image' | 'file' = 'text'): void {
+  sendMessage(
+    conversationId: string,
+    message: string,
+    messageType: 'text' | 'image' | 'file' = 'text',
+  ): void {
     this.socket?.emit('send_message', {
       conversationId,
       message,

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { pgPool } from '../config/database';
 import { ImageProcessor, FileManager } from '../middleware/uploadMiddleware';
-import { CreatePostRequest, PaginatedResponse } from '../types';
+import { CreatePostRequest } from '../types';
 import { createResponse, createPaginatedResponse, sanitizeInput } from '../utils';
 
 // Gönderi oluştur
@@ -81,7 +81,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
         RETURNING *
       `;
 
-      const newPostResult = await client.query(insertPostQuery, [
+      const _newPostResult = await client.query(insertPostQuery, [
         postId,
         authorId,
         content ? sanitizeInput(content) : '',
@@ -122,7 +122,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
 export const getPosts = async (req: Request, res: Response): Promise<void> => {
   try {
     const { page = 1, limit = 20 } = req.query;
-    const userId = (req as any).userId; // Opsiyonel, giriş yapmış kullanıcı
+    const _userId = (req as any).userId; // Opsiyonel, giriş yapmış kullanıcı
 
     const pageNumber = parseInt(page as string) || 1;
     const limitNumber = Math.min(parseInt(limit as string) || 20, 50); // Maksimum 50
@@ -380,7 +380,7 @@ export const updatePost = async (req: Request, res: Response): Promise<void> => 
         RETURNING *
       `;
 
-      const updatedPostResult = await client.query(updateQuery, updateValues);
+      const _updatedPostResult = await client.query(updateQuery, updateValues);
 
       // Güncellenen gönderiyi yazar bilgileriyle birlikte getir
       const postWithAuthorQuery = `

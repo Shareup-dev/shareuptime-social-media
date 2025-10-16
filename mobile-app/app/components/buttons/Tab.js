@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 import Icon from '../Icon';
 import colors from '../../config/colors';
@@ -62,7 +62,7 @@ export default function AppButton({
           paddingHorizontal: 10,
         },
         style,
-        {opacity: disabled ? 0.6 : 1},
+        { opacity: disabled ? 0.6 : 1 },
       ]} //wrap the button inside a container to modify the width: ;
       onPress={user ? () => onPress(user) : onPress}
       disabled={disabled}
@@ -86,7 +86,8 @@ export default function AppButton({
               fontWeight: fontWeight,
             },
             titleStyle,
-          ]}>
+          ]}
+        >
           {title}
         </Text>
       )}

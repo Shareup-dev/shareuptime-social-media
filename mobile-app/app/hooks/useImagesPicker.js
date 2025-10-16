@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import ImagePicker from 'react-native-image-picker';
 
 export default function useImagePicker() {
@@ -23,5 +23,5 @@ export default function useImagePicker() {
     setFiles([]);
   };
 
-  return {files, pickImage, clearFiles};
+  return { files, pickImage, clearFiles };
 }

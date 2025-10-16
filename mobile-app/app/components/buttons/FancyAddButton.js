@@ -1,8 +1,8 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 
-import Icon from "../Icon";
-import colors from "../../config/colors";
+import Icon from '../Icon';
+import colors from '../../config/colors';
 
 export default function FancyAddButton({ style, sizeRatio = 1 }) {
   return (
@@ -24,7 +24,7 @@ export default function FancyAddButton({ style, sizeRatio = 1 }) {
             borderRadius: 15 * sizeRatio,
           },
         ]}
-      ></View>
+      />
       <View
         style={[
           styles.backShade,
@@ -53,17 +53,17 @@ export default function FancyAddButton({ style, sizeRatio = 1 }) {
 const styles = StyleSheet.create({
   backShade: {
     backgroundColor: colors.lighterGray,
-    position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   frontShade: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.LightGray,
-    position: "absolute",
+    position: 'absolute',
   },
   addIcon: {
-    position: "absolute",
+    position: 'absolute',
   },
 });

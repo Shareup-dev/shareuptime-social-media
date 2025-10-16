@@ -16,7 +16,7 @@ export class CacheService {
         this.isRedisAvailable = false;
         console.log('⚠️  Redis unavailable, using in-memory cache');
       }
-    } catch (error) {
+    } catch (_error) {
       this.isRedisAvailable = false;
       console.log('⚠️  Redis unavailable, using in-memory cache');
     }
@@ -38,8 +38,8 @@ export class CacheService {
         this.inMemoryCache.delete(key);
       }
       return null;
-    } catch (error) {
-      console.warn('Cache get error:', error);
+    } catch (_error) {
+      console.warn('Cache get error:', _error);
       return null;
     }
   }
@@ -55,8 +55,8 @@ export class CacheService {
       const expiry = Date.now() + ttlSeconds * 1000;
       this.inMemoryCache.set(key, { value, expiry });
       return true;
-    } catch (error) {
-      console.warn('Cache set error:', error);
+    } catch (_error) {
+      console.warn('Cache set error:', _error);
       return false;
     }
   }
@@ -73,8 +73,8 @@ export class CacheService {
       // Delete from in-memory cache
       const memDeleted = this.inMemoryCache.delete(key);
       return success && memDeleted;
-    } catch (error) {
-      console.warn('Cache delete error:', error);
+    } catch (_error) {
+      console.warn('Cache delete error:', _error);
       return false;
     }
   }
@@ -95,8 +95,8 @@ export class CacheService {
         this.inMemoryCache.delete(key);
       }
       return false;
-    } catch (error) {
-      console.warn('Cache exists error:', error);
+    } catch (_error) {
+      console.warn('Cache exists error:', _error);
       return false;
     }
   }
@@ -111,8 +111,8 @@ export class CacheService {
         }
       }
       return 0;
-    } catch (error) {
-      console.warn('Cache pattern delete error:', error);
+    } catch (_error) {
+      console.warn('Cache pattern delete error:', _error);
       return 0;
     }
   }
@@ -207,8 +207,8 @@ export class CacheService {
       });
 
       return newCount;
-    } catch (error) {
-      console.warn('Counter increment error:', error);
+    } catch (_error) {
+      console.warn('Counter increment error:', _error);
       return 1;
     }
   }

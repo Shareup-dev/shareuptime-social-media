@@ -1,10 +1,6 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
-const usePagination = (
-  pageSize: number,
-  initPageNumber: number,
-  paginationService: Function,
-) => {
+const usePagination = (pageSize: number, initPageNumber: number, paginationService: Function) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [pageNo, setPageNo] = useState<number>(initPageNumber);
   const [endReached, setEndReached] = useState<boolean>(false);
@@ -14,7 +10,7 @@ const usePagination = (
     const fetchData = async () => {
       setLoading(true);
       try {
-        const {data} = await paginationService(pageNo, pageSize);
+        const { data } = await paginationService(pageNo, pageSize);
         setData(data);
         if (data.length < pageSize) setEndReached(true);
         else if (endReached) setEndReached(false);
@@ -31,7 +27,7 @@ const usePagination = (
   const onBeforeReachEnd = () => {
     if (endReached) return;
     else {
-      setPageNo(prev => prev + 1);
+      setPageNo((prev) => prev + 1);
     }
   };
 

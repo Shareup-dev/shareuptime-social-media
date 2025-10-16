@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
 
 import colors from '../../config/colors';
 import Tab from '../buttons/Tab';
@@ -37,7 +31,8 @@ export default function FriendCard({
     <View style={[styles.listItem]}>
       <TouchableOpacity
         onPress={onPressProfile}
-        style={{ flexDirection: 'row', alignItems: 'center', minWidth: width / 3 }}>
+        style={{ flexDirection: 'row', alignItems: 'center', minWidth: width / 3 }}
+      >
         <>
           {image && <BetterImage style={styles.image} source={{ uri: image }} />}
           <View style={styles.detailsContainer}>
@@ -68,12 +63,7 @@ export default function FriendCard({
                     />
                   )}
                   {!secondBtn && showCloseButton && (
-                    <Icon
-                      name="close"
-                      type="AntDesign"
-                      backgroundSizeRatio={0.5}
-                      size={30}
-                    />
+                    <Icon name="close" type="AntDesign" backgroundSizeRatio={0.5} size={30} />
                   )}
                 </View>
               )}
@@ -83,24 +73,23 @@ export default function FriendCard({
               style={[
                 styles.title,
                 defaultStyles.fontWeightMedium,
-                titleStyle,{marginLeft:10,marginVertical:10}
-              ]}>
+                titleStyle,
+                { marginLeft: 10, marginVertical: 10 },
+              ]}
+            >
               {title}
             </Text>
             {subTitle && (
               <Text
                 numberOfLines={2}
-                style={[
-                  defaultStyles.listItemSubTitle,
-                  defaultStyles.fontWeightMedium,
-                ]}>
+                style={[defaultStyles.listItemSubTitle, defaultStyles.fontWeightMedium]}
+              >
                 {subTitle}
               </Text>
             )}
           </View>
         </>
       </TouchableOpacity>
-
     </View>
   );
 }

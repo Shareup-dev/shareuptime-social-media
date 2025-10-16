@@ -3,7 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import JwtDecode from 'jwt-decode';
 
 const key = 'authToken';
-const storeToken = async authToken => {
+const storeToken = async (authToken) => {
   try {
     await EncryptedStorage.setItem(key, authToken);
   } catch (error) {

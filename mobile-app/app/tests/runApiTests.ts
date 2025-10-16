@@ -2,8 +2,8 @@ import ApiIntegrationTester from '../services/ApiIntegrationTester';
 
 /**
  * ShareUpTime Mobile App - API Integration Test Runner
- * 
- * Bu script mobil uygulamanın ShareUptime backend API'si ile 
+ *
+ * Bu script mobil uygulamanın ShareUptime backend API'si ile
  * entegrasyonunu test eder.
  */
 
@@ -38,7 +38,7 @@ export class ApiIntegrationTest {
       const response = await fetch('http://localhost:4000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: 'test@test.com', password: 'test' })
+        body: JSON.stringify({ email: 'test@test.com', password: 'test' }),
       });
       results.auth = response.status !== 404;
     } catch {
@@ -73,7 +73,7 @@ export class ApiIntegrationTest {
 
     const backendConnected = await this.testBackendConnection();
     const endpoints = await this.testApiEndpoints();
-    
+
     const workingEndpoints = Object.values(endpoints).filter(Boolean).length;
     const totalEndpoints = Object.keys(endpoints).length;
     const integrationReady = backendConnected && workingEndpoints >= 2;
@@ -86,7 +86,7 @@ export class ApiIntegrationTest {
     return {
       backendConnected,
       endpoints,
-      integrationReady
+      integrationReady,
     };
   }
 }

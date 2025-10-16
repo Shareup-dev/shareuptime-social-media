@@ -1,13 +1,6 @@
-import React, {useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Modal,
-  Button,
-  FlatList,
-} from 'react-native';
-import {MaterialCommunityIcons} from 'react-native-vector-icons';
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableWithoutFeedback, Modal, Button, FlatList } from 'react-native';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
 
 import defaultStyles from '../config/styles';
 import Text from './Text';
@@ -30,7 +23,7 @@ export default function AppPicker({
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModelVisible(true)}>
-        <View style={[defaultStyles.inputContainer, {width}]}>
+        <View style={[defaultStyles.inputContainer, { width }]}>
           {icon && (
             <MaterialCommunityIcons
               name={icon}
@@ -56,16 +49,12 @@ export default function AppPicker({
 
       <Modal visible={modelVisible} animationType="slide">
         <Screen>
-          <Button
-            title="Close"
-            onPress={() => setModelVisible(false)}
-            color={colors.primary}
-          />
+          <Button title="Close" onPress={() => setModelVisible(false)} color={colors.primary} />
           <FlatList
             data={items}
-            keyExtractor={item => item.value.toString()}
+            keyExtractor={(item) => item.value.toString()}
             numColumns={numberOfColumns}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <PickerItemComponent
                 item={item}
                 label={item.label}

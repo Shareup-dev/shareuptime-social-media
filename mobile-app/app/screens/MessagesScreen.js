@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import Screen from '../components/Screen';
-import {HeaderWithBackArrow} from '../components/headers';
+import { HeaderWithBackArrow } from '../components/headers';
 import UserProfilePicture from '../components/UserProfilePicture';
 import authContext from '../authContext';
 import TextField from '../components/TextField';
@@ -21,25 +21,19 @@ const FRIENDS = 'Friends';
 const GROUPS = 'Groups';
 const FAVORITES = 'Favorites';
 
-const tabes = [
-  {name: CHATS},
-  {name: FRIENDS},
-  {name: GROUPS},
-  {name: FAVORITES},
-];
+const tabes = [{ name: CHATS }, { name: FRIENDS }, { name: GROUPS }, { name: FAVORITES }];
 
-export default function MessagesScreen({navigation}) {
-  const {userData: user} = useContext(authContext).userState;
+export default function MessagesScreen({ navigation }) {
+  const { userData: user } = useContext(authContext).userState;
 
-  const {addConversationListener, removeConversationListener} =
-    useConversationListener();
+  const { addConversationListener, removeConversationListener } = useConversationListener();
 
   const [friends, setFriends] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [currentTab, setCurrentTab] = useState(CHATS);
 
-  const chats = useSelector(state => state.conversations.list);
+  const chats = useSelector((state) => state.conversations.list);
 
   useEffect(() => {
     loadData();
@@ -58,7 +52,7 @@ export default function MessagesScreen({navigation}) {
   };
 
   const getFriends = async () => {
-    await UserService.getFriends(user.email).then(res => {
+    await UserService.getFriends(user.email).then((res) => {
       setFriends(res.data);
     });
   };
@@ -67,7 +61,7 @@ export default function MessagesScreen({navigation}) {
     const result = await conversation.getConversations(user.id);
   };
 
-  const handleTabbed = name => {
+  const handleTabbed = (name) => {
     setCurrentTab(name);
   };
 
@@ -75,9 +69,7 @@ export default function MessagesScreen({navigation}) {
     <Screen>
       <HeaderWithBackArrow
         title={user.firstName}
-        leftComponent={
-          <UserProfilePicture size={45} style={styles.userProfilePicture} />
-        }
+        leftComponent={<UserProfilePicture size={45} style={styles.userProfilePicture} />}
         onBackButton={() => navigation.goBack()}
       />
       <View style={styles.containerTop}>
@@ -136,7 +128,7 @@ const styles = StyleSheet.create({
   searchbar: {
     marginTop: 10,
   },
-  bar: {marginTop: 5},
+  bar: { marginTop: 5 },
   addGroupsContainer: {
     alignItems: 'center',
     flexDirection: 'row',

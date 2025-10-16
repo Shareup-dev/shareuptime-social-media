@@ -1,22 +1,13 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-export default function TabNavigation({
-  tabMenus,
-  initTab = tabMenus[0].name,
-}) {
+export default function TabNavigation({ tabMenus, initTab = tabMenus[0].name }) {
   const [activeTab, setActiveTab] = useState(initTab);
 
   const TabButton = ({ name }) => {
     return (
-      <TouchableOpacity
-        onPress={() => setActiveTab(name)}
-        activeOpacity={0.6}
-        style={styles.btn}
-      >
-        <Text style={name === activeTab ? { fontWeight: "700" } : null}>
-          {name}
-        </Text>
+      <TouchableOpacity onPress={() => setActiveTab(name)} activeOpacity={0.6} style={styles.btn}>
+        <Text style={name === activeTab ? { fontWeight: '700' } : null}>{name}</Text>
       </TouchableOpacity>
     );
   };
@@ -50,16 +41,16 @@ const styles = StyleSheet.create({
   },
   navigation: {
     // backgroundColor: "#cacaca",
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   btn: {
     paddingHorizontal: 5,
     paddingVertical: 10,
     height: 40,
-    alignItems: "center",
-    width: "50%",
-    borderBottomColor: "#cacaca",
+    alignItems: 'center',
+    width: '50%',
+    borderBottomColor: '#cacaca',
     borderBottomWidth: 1,
   },
 });

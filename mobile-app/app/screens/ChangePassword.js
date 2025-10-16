@@ -1,15 +1,15 @@
 import React from 'react';
-import {Form, FormField, SubmitButton} from '../components/forms';
-import {StyleSheet, View, Text} from 'react-native';
+import { Form, FormField, SubmitButton } from '../components/forms';
+import { StyleSheet, View, Text } from 'react-native';
 import Screen from '../components/Screen';
 import defaultStyles from '../config/styles';
-import {Header, HeaderTitle, HeaderCloseIcon} from '../components/headers';
+import { Header, HeaderTitle, HeaderCloseIcon } from '../components/headers';
 import * as Yup from 'yup';
 import colors from '../config/colors';
 import routes from '../navigation/routes';
 import ForgotPasswordHeader from '../components/ForgotPassword/Header';
 
-export default function ChangePassword({navigation}) {
+export default function ChangePassword({ navigation }) {
   // determine all the rules for validating our form
   const validationSchema = Yup.object().shape({
     password1: Yup.string().required().label('Password').min(8),
@@ -20,7 +20,7 @@ export default function ChangePassword({navigation}) {
       .min(8),
   });
 
-  const handleSubmit = async userInfo => userInfo;
+  const handleSubmit = async (userInfo) => userInfo;
 
   return (
     <Screen style={styles.container}>
@@ -34,8 +34,9 @@ export default function ChangePassword({navigation}) {
           password2: '',
         }}
         onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
-        <View style={{marginTop: 10}}>
+        validationSchema={validationSchema}
+      >
+        <View style={{ marginTop: 10 }}>
           <FormField
             autoCorrect={false}
             name="password1"
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   userProfilePicture: {
     alignSelf: 'center',
   },
-  groupsList: {paddingTop: 20},
+  groupsList: { paddingTop: 20 },
   listItem: {
     marginBottom: 13,
     marginHorizontal: 28,

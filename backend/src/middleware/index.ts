@@ -22,8 +22,8 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     // Request objesine userId ekle
     (req as any).userId = decoded.userId;
     next();
-  } catch (error) {
-    console.error('Token doğrulama middleware hatası:', error);
+  } catch (_error) {
+    console.error('Token doğrulama middleware hatası:', _error);
     res.status(401).json(createResponse(false, 'Geçersiz token'));
   }
 };
@@ -43,7 +43,7 @@ export const optionalAuthentication = (req: Request, res: Response, next: NextFu
 
     // Token olmasa da veya geçersiz olsa da devam et
     next();
-  } catch (error) {
+  } catch (_error) {
     // Opsiyonel kimlik doğrulama, hata olsa bile devam eder
     next();
   }

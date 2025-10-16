@@ -1,7 +1,7 @@
-import React from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import colors from "../../config/colors";
+import React from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import colors from '../../config/colors';
 
 export default function EmojiTab({ emoji }) {
   return (
@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     width: 65,
     height: 30,
     backgroundColor: colors.mediumGray,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 50,
     marginHorizontal: 5,
   },

@@ -1,15 +1,14 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, StatusBar } from 'react-native';
 
-import {useNetInfo} from '@react-native-community/netinfo';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import colors from '../config/colors';
 import Text from './Text';
 
 export default function OfflineNotice() {
-  const {type, isInternetReachable} = useNetInfo();
+  const { type, isInternetReachable } = useNetInfo();
 
- 
   if (type !== 'unknown' && isInternetReachable === false)
     return (
       <View style={styles.container}>

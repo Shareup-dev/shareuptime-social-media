@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useCallback,useContext} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback, Alert,Text} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
-import {SliderBox} from 'react-native-image-slider-box';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { StyleSheet, View, TouchableWithoutFeedback, Alert, Text } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { SliderBox } from 'react-native-image-slider-box';
 
 import colors from '../../config/colors';
 import defaultStyles from '../../config/styles';
@@ -35,8 +35,7 @@ export default function Card({
   navigation,
   postType,
 }) {
-
-  const {userState} = useContext(authContext);
+  const { userState } = useContext(authContext);
   const options = [
     {
       title: 'Save post',
@@ -58,7 +57,7 @@ export default function Card({
     },
     {
       title: 'Swap',
-      icon: {image: require('../../assets/post-options-icons/swap-icon.png')},
+      icon: { image: require('../../assets/post-options-icons/swap-icon.png') },
       onPress: () => {
         alert('Swap');
       },
@@ -82,12 +81,20 @@ export default function Card({
       },
     },
     {
-      title: userState?.userData?.id !== user?.id ? <Text style={{color:colors.dark}}>Report</Text> : <Text style={{color:colors.red}}>Delete</Text>,
+      title:
+        userState?.userData?.id !== user?.id ? (
+          <Text style={{ color: colors.dark }}>Report</Text>
+        ) : (
+          <Text style={{ color: colors.red }}>Delete</Text>
+        ),
       icon: {
-        image:  userState?.userData?.id !== user?.id ? require('../../assets/post-options-icons/report-icon.png'): require('../../assets/post-options-icons/delete-red-icon.png'),
+        image:
+          userState?.userData?.id !== user?.id
+            ? require('../../assets/post-options-icons/report-icon.png')
+            : require('../../assets/post-options-icons/delete-red-icon.png'),
       },
       onPress: () => {
-        userState?.userData?.id !== user?.id ? alert('Report'): showDeleteAlert();
+        userState?.userData?.id !== user?.id ? alert('Report') : showDeleteAlert();
       },
     },
   ];
@@ -111,7 +118,7 @@ export default function Card({
       time: arrDate[3],
     });
   };
-  const formateNumber = number => {
+  const formateNumber = (number) => {
     if (number > 1000) {
       number = Math.floor(number / 1000);
       return number + 'k ';
@@ -130,11 +137,10 @@ export default function Card({
     }, [postData.id]),
   );
 
-
   const [numberOfReactions, setNumberOfReactions] = useState(postData.numberOfReaction);
   const [numberOfComments, setNumberOfComments] = useState(postData.numberOfComments);
 
-  const [comment,setComments] =useState(postData.comments)
+  const [comment, setComments] = useState(postData.comments);
   const [isUserLiked, setIsUserLiked] = useState(false);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const [images, setImages] = useState([]);
@@ -143,36 +149,35 @@ export default function Card({
   const [sliderWidth, setSliderWidth] = useState();
 
   const loadImages = () => {
-
     if (postData.media?.length !== 0) {
-      setImages(postData.media?.map(image => fileStorage.baseUrl + image.media + 'g'));
+      setImages(postData.media?.map((image) => fileStorage.baseUrl + image.media + 'g'));
     }
   };
 
   const checkIfLiked = () => {
-    const result = postData.liked
-      return setIsUserLiked(result);
+    const result = postData.liked;
+    return setIsUserLiked(result);
   };
 
   const handleReactions = async () => {
     PostService.likePost(user.id, postData.id)
-    .then (res => {
-      console.log("likeUnliked",res.data)
-      setIsUserLiked(!isUserLiked)
-      })//need to get likePostIds 
-    .catch(e => console.error(e))
+      .then((res) => {
+        console.log('likeUnliked', res.data);
+        setIsUserLiked(!isUserLiked);
+      }) //need to get likePostIds
+      .catch((e) => console.error(e));
     reloadPost();
   };
 
   // rerenders the post when interaction
   const reloadPost = async () => {
     PostService.getPostByPostId(postData.id)
-    .then(res => {
-      //setComments(res.data.comments)
-      setNumberOfComments(res.data.numberOfComments);
-      setNumberOfReactions(res.data.numberOfReaction);})
-    .catch(e => console.error(e))
-    
+      .then((res) => {
+        //setComments(res.data.comments)
+        setNumberOfComments(res.data.numberOfComments);
+        setNumberOfReactions(res.data.numberOfReaction);
+      })
+      .catch((e) => console.error(e));
   };
 
   const showDeleteAlert = () =>
@@ -195,19 +200,17 @@ export default function Card({
 
   const actionsTabSizeRatio = 0.5;
 
-  const onLayout = e => {
+  const onLayout = (e) => {
     setSliderWidth(e.nativeEvent.layout.width);
   };
 
-return (
+  return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View
-        style={[styles.card, defaultStyles.cardBorder, style]}
-        onLayout={onLayout}>
+      <View style={[styles.card, defaultStyles.cardBorder, style]} onLayout={onLayout}>
         {currentImage && (
           <ImageView
             visible={imageViewerVisible}
-            images={[{uri: currentImage}]}
+            images={[{ uri: currentImage }]}
             imageIndex={0}
             onRequestClose={() => {
               setImageViewerVisible(false);
@@ -223,7 +226,7 @@ return (
             ImageComponentStyle={styles.image}
             imageLoadingColor={colors.iondigoDye}
             // parentWidth={sliderWidth / 1.04}
-            onCurrentImagePressed={index => {
+            onCurrentImagePressed={(index) => {
               setCurrentImage(images[index]);
               setImageViewerVisible(true);
             }}
@@ -250,7 +253,7 @@ return (
           setIsVisible={setIsOptionsVisible}
           setIsOptionsVisible={setIsOptionsVisible}
           onInteraction={handleReactions}
-          postType = {postType}
+          postType={postType}
         />
 
         <PostOptionDrawer

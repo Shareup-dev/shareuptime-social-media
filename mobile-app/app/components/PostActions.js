@@ -1,18 +1,12 @@
-import React,{useState} from "react";
-import {
-  View,
-  TouchableWithoutFeedback,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import moment from "moment";
-import colors from "../config/colors";
-import Text from "../components/Text";
-import Tab from "../components/buttons/Tab";
-import Icon from "../components/Icon";
-import routes from "../navigation/routes";
-import fileStorage from "../config/fileStorage";
+import React, { useState } from 'react';
+import { View, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import moment from 'moment';
+import colors from '../config/colors';
+import Text from '../components/Text';
+import Tab from '../components/buttons/Tab';
+import Icon from '../components/Icon';
+import routes from '../navigation/routes';
+import fileStorage from '../config/fileStorage';
 
 const PostActions = ({
   postId,
@@ -32,14 +26,13 @@ const PostActions = ({
   swapId,
   onInteraction,
 }) => {
-  const fromReply = false
+  const fromReply = false;
   const actionsTabSizeRatio = 0.5;
   const [date, setDate] = useState(
     // moment(postData.published, "DD MMMM YYYY hh:mm:ss").fromNow()
-    null
+    null,
   );
 
-  
   return (
     <View style={styles.content}>
       <View style={styles.userInfo}>
@@ -50,15 +43,9 @@ const PostActions = ({
 
         <View style={styles.userNameContainer}>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate(routes.USER_PROFILE, postData.userdata.email )
-            }
+            onPress={() => navigation.navigate(routes.USER_PROFILE, postData.userdata.email)}
           >
-
             <Text style={styles.userName}>{postData.userdata.firstName}</Text>
-
-          
-
           </TouchableOpacity>
 
           <Text style={styles.postDate}>{date}</Text>
@@ -86,8 +73,8 @@ const PostActions = ({
           />
 
           <Tab
-            title={"0"}
-            iconImage={require("../assets/icons/share-icon.png")}
+            title={'0'}
+            iconImage={require('../assets/icons/share-icon.png')}
             sizeRatio={actionsTabSizeRatio}
             style={styles.actionTab}
             color={colors.mediumGray}
@@ -139,9 +126,7 @@ const PostActions = ({
               })
             }
           >
-            <Text style={[styles.actionsText, styles.comments]}>
-              {numberOfComments} Comments
-            </Text>
+            <Text style={[styles.actionsText, styles.comments]}>{numberOfComments} Comments</Text>
           </TouchableWithoutFeedback>
 
           <Text style={styles.actionsText}>0 Shares</Text>
@@ -177,11 +162,11 @@ const styles = StyleSheet.create({
     height: 50,
   },
   userInfo: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
   },
   content: {
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 10,
   },
   postDate: {
@@ -196,35 +181,35 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   userName: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   userNameContainer: {
-    width: "40%",
+    width: '40%',
   },
   actionsContainer: {
-    flexDirection: "row",
-    width: "42%",
-    justifyContent: "flex-end",
+    flexDirection: 'row',
+    width: '42%',
+    justifyContent: 'flex-end',
   },
   actionTab: {
     paddingHorizontal: 5,
     marginHorizontal: 5,
   },
   actionsBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 4,
   },
   commentsShares: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   likes: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   actionsText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   star: {
     marginRight: 5,
@@ -233,12 +218,12 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   optionsIcon: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     top: 8,
   },
   menuButton: {
     padding: 3,
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     width: 60,
     marginTop: -5,
   },

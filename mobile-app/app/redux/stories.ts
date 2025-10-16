@@ -79,9 +79,9 @@ const storiesSlice = createSlice({
     addUserStories: (state, action: PayloadAction<UserStories>) => {
       const newUserStories = action.payload;
       const existingIndex = state.userStories.findIndex(
-        us => us.user.id === newUserStories.user.id
+        (us) => us.user.id === newUserStories.user.id,
       );
-      
+
       if (existingIndex !== -1) {
         state.userStories[existingIndex] = newUserStories;
       } else {
@@ -90,10 +90,8 @@ const storiesSlice = createSlice({
     },
     addStory: (state, action: PayloadAction<Story>) => {
       const newStory = action.payload;
-      const userStoriesIndex = state.userStories.findIndex(
-        us => us.user.id === newStory.user.id
-      );
-      
+      const userStoriesIndex = state.userStories.findIndex((us) => us.user.id === newStory.user.id);
+
       if (userStoriesIndex !== -1) {
         state.userStories[userStoriesIndex].stories.unshift(newStory);
         state.userStories[userStoriesIndex].hasUnviewed = true;
@@ -108,19 +106,19 @@ const storiesSlice = createSlice({
     },
     markStoryAsViewed: (state, action: PayloadAction<{ userId: string; storyId: string }>) => {
       const { userId, storyId } = action.payload;
-      const userStoriesIndex = state.userStories.findIndex(us => us.user.id === userId);
-      
+      const userStoriesIndex = state.userStories.findIndex((us) => us.user.id === userId);
+
       if (userStoriesIndex !== -1) {
         const storyIndex = state.userStories[userStoriesIndex].stories.findIndex(
-          s => s.id === storyId
+          (s) => s.id === storyId,
         );
-        
+
         if (storyIndex !== -1) {
           state.userStories[userStoriesIndex].stories[storyIndex].isViewed = true;
           state.userStories[userStoriesIndex].stories[storyIndex].viewCount += 1;
-          
+
           // Check if all stories are viewed
-          const hasUnviewed = state.userStories[userStoriesIndex].stories.some(s => !s.isViewed);
+          const hasUnviewed = state.userStories[userStoriesIndex].stories.some((s) => !s.isViewed);
           state.userStories[userStoriesIndex].hasUnviewed = hasUnviewed;
         }
       }
@@ -153,12 +151,12 @@ const storiesSlice = createSlice({
     removeExpiredStories: (state) => {
       const now = new Date().toISOString();
       state.userStories = state.userStories
-        .map(userStories => ({
+        .map((userStories) => ({
           ...userStories,
-          stories: userStories.stories.filter(story => story.expiresAt > now),
+          stories: userStories.stories.filter((story) => story.expiresAt > now),
         }))
-        .filter(userStories => userStories.stories.length > 0);
-      
+        .filter((userStories) => userStories.stories.length > 0);
+
       // Reset indices if needed
       if (state.currentUserIndex >= state.userStories.length) {
         state.currentUserIndex = 0;

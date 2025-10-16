@@ -1,15 +1,9 @@
 import * as Yup from 'yup';
-import React, {useContext, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  PixelRatio,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, View, PixelRatio, TouchableOpacity, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
 
-import {ErrorMessage, Form, FormField, SubmitButton} from '../components/forms';
+import { ErrorMessage, Form, FormField, SubmitButton } from '../components/forms';
 import AlternativeRegistrationContainer from '../components/AlternativeRegistrationContainer';
 import AuthService from '../services/auth.service';
 import LinkButton from '../components/buttons/LinkButton';
@@ -31,15 +25,15 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(3).label('Password'),
 });
 
-export default function LoginScreen({navigation}) {
-  const {authActions} = useContext(authContext);
-  const {isReachable, checkIfReachable} = useIsReachable();
+export default function LoginScreen({ navigation }) {
+  const { authActions } = useContext(authContext);
+  const { isReachable, checkIfReachable } = useIsReachable();
 
   const [loading, setLoading] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async ({email, password}) => {
+  const handleSubmit = async ({ email, password }) => {
     setLoading(true);
 
     // checking if the server is reachable
@@ -53,7 +47,7 @@ export default function LoginScreen({navigation}) {
 
     // --------- login ----------
     AuthService.login(email, password)
-      .then(async result => {
+      .then(async (result) => {
         await authActions.login(result.data.username, result.data.jwt);
         Toast.show({
           position: 'bottom',
@@ -63,14 +57,14 @@ export default function LoginScreen({navigation}) {
           text2: 'Logged in Successfully 👋',
         });
       })
-      .catch(async e => {
+      .catch(async (e) => {
         let message;
-  
+
         if (e.message === 'Request failed with status code 401') {
           // if the user not verified
           await authService
             .verifyEmailOTP(email)
-            .then(res => {
+            .then((res) => {
               if (res.status === 200)
                 navigation.navigate(routes.SIGNUP_VERIFICATION, {
                   username: email,
@@ -79,7 +73,7 @@ export default function LoginScreen({navigation}) {
                   fromLogin: true,
                 });
             })
-            .catch(e => (message = 'Unexpected Error!'));
+            .catch((e) => (message = 'Unexpected Error!'));
         } else {
           if (e.message === 'Request failed with status code 500')
             // if invalid password or username
@@ -95,7 +89,7 @@ export default function LoginScreen({navigation}) {
           });
         }
       })
-      .finally(_ => {
+      .finally((_) => {
         setLoading(false);
         setLoginFailed(false);
       });
@@ -109,59 +103,59 @@ export default function LoginScreen({navigation}) {
       {loading ? (
         <Loading text="Logging in..." />
       ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
-        <LoginContainer>
-
-          <Form
-            initialValues={{email: '', password: ''}}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}>
-            <ErrorMessage error={error} visible={loginFailed} />
-            <FormField
-              autoCapitalize="none"
-              autoCorrect={false}
-              icon="email"
-              keyboardType="email-address"
-              name="email"
-              placeholder="Email Address"
-              textContentType="emailAddress" // Only for ios
-              style={defaultStyles.formField}
-            />
-
-            <FormField
-              autoCapitalize="none"
-              autoCorrect={false}
-              icon="lock"
-              name="password"
-              placeholder="Password"
-              secureTextEntry
-              textContentType="password" // Only for ios
-              style={defaultStyles.formField}
-            />
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={() => navigation.navigate(routes.FORGOT_PASSWORD)}>
-              <Text style={styles.forgotPassword}>Forgot Password</Text>
-            </TouchableOpacity>
-
-            <SubmitButton title="Share in" style={styles.submitButton} />
-            <AlternativeRegistrationContainer />
-
-            <Separator text="or" style={styles.separator} />
-            {/* added a comment here */}
-            <View style={styles.thirdContainer}>
-              <LinkButton
-                title="Create new account?"
-                style={styles.linkedButton}
-                onPress={() => {
-                  navigation.navigate(routes.SIGNUP);
-                }}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <LoginContainer>
+            <Form
+              initialValues={{ email: '', password: '' }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <ErrorMessage error={error} visible={loginFailed} />
+              <FormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                icon="email"
+                keyboardType="email-address"
+                name="email"
+                placeholder="Email Address"
+                textContentType="emailAddress" // Only for ios
+                style={defaultStyles.formField}
               />
-            </View>
-          </Form>
 
-        </LoginContainer>
-          </ScrollView>
+              <FormField
+                autoCapitalize="none"
+                autoCorrect={false}
+                icon="lock"
+                name="password"
+                placeholder="Password"
+                secureTextEntry
+                textContentType="password" // Only for ios
+                style={defaultStyles.formField}
+              />
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => navigation.navigate(routes.FORGOT_PASSWORD)}
+              >
+                <Text style={styles.forgotPassword}>Forgot Password</Text>
+              </TouchableOpacity>
+
+              <SubmitButton title="Share in" style={styles.submitButton} />
+              <AlternativeRegistrationContainer />
+
+              <Separator text="or" style={styles.separator} />
+              {/* added a comment here */}
+              <View style={styles.thirdContainer}>
+                <LinkButton
+                  title="Create new account?"
+                  style={styles.linkedButton}
+                  onPress={() => {
+                    navigation.navigate(routes.SIGNUP);
+                  }}
+                />
+              </View>
+            </Form>
+          </LoginContainer>
+        </ScrollView>
       )}
     </>
   );

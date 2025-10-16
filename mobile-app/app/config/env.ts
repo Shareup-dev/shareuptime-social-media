@@ -3,7 +3,7 @@
 
 export type EnvConfig = {
   API_URL: string; // e.g., http://localhost:4000/api
-  WS_URL: string;  // e.g., http://localhost:4000
+  WS_URL: string; // e.g., http://localhost:4000
   TIMEOUT: number; // ms
 };
 
@@ -15,7 +15,7 @@ const DEFAULTS: EnvConfig = {
 
 // Allow overriding via global for debugging or E2E without rebuilding
 const g: any = globalThis as any;
-const overrides: Partial<EnvConfig> = (g && g.__SHAREUP_ENV__) ? g.__SHAREUP_ENV__ : {};
+const overrides: Partial<EnvConfig> = g && g.__SHAREUP_ENV__ ? g.__SHAREUP_ENV__ : {};
 
 const ENV: EnvConfig = {
   ...DEFAULTS,

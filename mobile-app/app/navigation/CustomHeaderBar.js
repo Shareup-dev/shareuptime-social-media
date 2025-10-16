@@ -1,5 +1,5 @@
-import React, {useContext} from 'react';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import IconButton from '../components/buttons/IconButton';
 import Icon from '../components/Icon';
 import colors from '../config/colors';
@@ -7,18 +7,14 @@ import colors from '../config/colors';
 import routes from './routes';
 import authContext from '../authContext';
 
-
-export default function CustomHeaderBar({navigation}) {
-  const {userData} = useContext(authContext).userState;
+export default function CustomHeaderBar({ navigation }) {
+  const { userData } = useContext(authContext).userState;
 
   const size = 30;
   return (
     <View style={styles.container}>
       <View style={styles.headerLeft}>
-        <Icon
-          image={require('../assets/main-logo.png')}
-          backgroundSizeRatio={1}
-        />
+        <Icon image={require('../assets/main-logo.png')} backgroundSizeRatio={1} />
       </View>
       <View style={styles.headerRight}>
         <IconButton
@@ -71,6 +67,5 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     marginLeft: 10,
-    
   },
 });

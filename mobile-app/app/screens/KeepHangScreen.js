@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,40 +6,40 @@ import {
   FlatList,
   ScrollView,
   TouchableWithoutFeedback,
-} from "react-native";
-import Button from "../components/buttons/Button";
-import GiftDrawer from "../components/drawers/GiftDrawer";
-import Icon from "../components/Icon";
-import HangCard from "../components/lists/HangCard";
-import Screen from "../components/Screen";
-import Separator from "../components/Separator";
-import colors from "../config/colors";
+} from 'react-native';
+import Button from '../components/buttons/Button';
+import GiftDrawer from '../components/drawers/GiftDrawer';
+import Icon from '../components/Icon';
+import HangCard from '../components/lists/HangCard';
+import Screen from '../components/Screen';
+import Separator from '../components/Separator';
+import colors from '../config/colors';
 
 export default function KeepHangScreen({ navigation }) {
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const hangList = [
     {
       id: 1,
-      title: "Hang Flow",
-      image: "",
+      title: 'Hang Flow',
+      image: '',
     },
     {
       id: 2,
-      title: "Hang Gifts",
-      image: require("../assets/icons/gray-gift-icon.png"),
+      title: 'Hang Gifts',
+      image: require('../assets/icons/gray-gift-icon.png'),
       onPress: () => setIsDrawerVisible(!isDrawerVisible),
     },
     {
       id: 3,
-      title: "Hang Meals",
-      image: require("../assets/icons/gray-food-icon.png"),
+      title: 'Hang Meals',
+      image: require('../assets/icons/gray-food-icon.png'),
     },
     {
       id: 4,
-      title: "",
-      image: "",
+      title: '',
+      image: '',
     },
-    { id: 5, title: "", image: "" },
+    { id: 5, title: '', image: '' },
   ];
   return (
     <Screen statusPadding={true}>
@@ -57,23 +57,14 @@ export default function KeepHangScreen({ navigation }) {
           horizontal
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <HangCard
-              title={item.title}
-              image={item.image}
-              onPress={item.onPress}
-            />
+            <HangCard title={item.title} image={item.image} onPress={item.onPress} />
           )}
         />
       </View>
       <View style={styles.line} />
 
       <View style={styles.cameraIcon}>
-        <Icon
-          name="camera"
-          type="Feather"
-          color={colors.mediumGray}
-          backgroundSizeRatio={0.7}
-        />
+        <Icon name="camera" type="Feather" color={colors.mediumGray} backgroundSizeRatio={0.7} />
       </View>
       <ScrollView>
         <View style={styles.content}>
@@ -91,9 +82,7 @@ export default function KeepHangScreen({ navigation }) {
             />
             <View style={styles.textWrapper}>
               <Text style={styles.subTitle}>Allow access to all photo</Text>
-              <Text style={styles.text}>
-                Find Photos and videos faster by viewing
-              </Text>
+              <Text style={styles.text}>Find Photos and videos faster by viewing</Text>
               <Text style={styles.text}>your entire camera roll</Text>
             </View>
           </View>
@@ -110,16 +99,12 @@ export default function KeepHangScreen({ navigation }) {
             />
             <View style={styles.textWrapper}>
               <Text style={styles.subTitle}>Select photos to limit access</Text>
-              <Text style={styles.text}>
-                You'll need to manually select new photos
-              </Text>
+              <Text style={styles.text}>You'll need to manually select new photos</Text>
               <Text style={styles.text}>every time you want to share</Text>
             </View>
           </View>
           <View style={styles.endWrapper}>
-            <Text style={styles.text}>
-              Select allow access to all Photos to make
-            </Text>
+            <Text style={styles.text}>Select allow access to all Photos to make</Text>
             <Text style={styles.text}>Sharing easier</Text>
           </View>
           <View style={styles.button}>
@@ -128,10 +113,7 @@ export default function KeepHangScreen({ navigation }) {
         </View>
       </ScrollView>
 
-      <GiftDrawer
-        isVisible={isDrawerVisible}
-        setIsVisible={setIsDrawerVisible}
-      />
+      <GiftDrawer isVisible={isDrawerVisible} setIsVisible={setIsDrawerVisible} />
     </Screen>
   );
 }
@@ -139,35 +121,35 @@ export default function KeepHangScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {},
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
   },
   line: {
     height: 1.5,
-    width: "100%",
+    width: '100%',
     backgroundColor: colors.lighterGray,
   },
   listContainer: {
     padding: 10,
   },
   cameraIcon: {
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
     marginTop: 20,
     marginRight: 20,
   },
   content: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 17,
   },
   subTitle: {
     fontSize: 16,
-    fontWeight: "normal",
+    fontWeight: 'normal',
   },
   text: {
     color: colors.mediumGray,
@@ -175,19 +157,19 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   sectionWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   separator: {
     marginVertical: 20,
   },
   endWrapper: {
-    marginTop: "15%",
-    alignItems: "center",
+    marginTop: '15%',
+    alignItems: 'center',
     // backgroundColor: "red",
   },
   button: {
-    width: "70%",
+    width: '70%',
     marginVertical: 10,
   },
   extraSpace: {

@@ -1,9 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from '@reduxjs/toolkit';
-import type { 
-  Action, 
-  ThunkAction
-} from '@reduxjs/toolkit';
+import type { Action, ThunkAction } from '@reduxjs/toolkit';
 
 // Import RTK Query API
 import { shareUpTimeApi } from './api';
@@ -33,7 +30,7 @@ import postFeelingsReducer from './postFeelings';
 const rootReducer = combineReducers({
   // RTK Query API
   [shareUpTimeApi.reducerPath]: shareUpTimeApi.reducer,
-  
+
   // Modern TypeScript slices
   loggedInUser: loggedInUserSlice.reducer,
   feedPosts: feedPostsReducer,
@@ -41,7 +38,7 @@ const rootReducer = combineReducers({
   like: likeReducer,
   comments: commentsReducer,
   stories: storiesReducer,
-  
+
   // Legacy slices (to be migrated)
   sentRequests: sentRequestsReducer,
   registration: registrationSlice.reducer,
@@ -63,7 +60,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) => {
         serializableCheck: {
           ignoredActions: [
             'persist/FLUSH',
-            'persist/REHYDRATE', 
+            'persist/REHYDRATE',
             'persist/PAUSE',
             'persist/PERSIST',
             'persist/PURGE',

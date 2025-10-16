@@ -1,21 +1,21 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
-import UserProfilePicture from "../UserProfilePicture";
-import defaultStyles from "../../config/styles";
-import { TouchableHighlight } from "react-native-gesture-handler";
-import colors from "../../config/colors";
-import Icon from "../Icon";
-import routes from "../../navigation/routes";
+import UserProfilePicture from '../UserProfilePicture';
+import defaultStyles from '../../config/styles';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import colors from '../../config/colors';
+import Icon from '../Icon';
+import routes from '../../navigation/routes';
 
 export default function ChatListItem({
-  title = "",
-  profilePicture = "",
-  lastMessage = "",
-  lastMessageTime = "",
-  numberOfUnreadMessages = "",
-  lastMessageStatus = "",
-  isActive = "",
+  title = '',
+  profilePicture = '',
+  lastMessage = '',
+  lastMessageTime = '',
+  numberOfUnreadMessages = '',
+  lastMessageStatus = '',
+  isActive = '',
   onPress,
 }) {
   return (
@@ -35,20 +35,14 @@ export default function ChatListItem({
         <View style={styles.middle}>
           <Text
             numberOfLines={1}
-            style={[
-              defaultStyles.listItemTitle,
-              defaultStyles.fontWeightMedium,
-            ]}
+            style={[defaultStyles.listItemTitle, defaultStyles.fontWeightMedium]}
           >
             {title}
           </Text>
 
           <Text
             numberOfLines={2}
-            style={[
-              defaultStyles.listItemSubTitle,
-              defaultStyles.fontWeightMedium,
-            ]}
+            style={[defaultStyles.listItemSubTitle, defaultStyles.fontWeightMedium]}
           >
             {lastMessage}
           </Text>
@@ -65,20 +59,20 @@ export default function ChatListItem({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginHorizontal: 20,
     marginVertical: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
   middle: {
-    flexDirection: "column",
-    width: "70%",
+    flexDirection: 'column',
+    width: '70%',
   },
   right: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginTop: 10,
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   profilePicture: {
     marginRight: 10,
@@ -92,7 +86,7 @@ const styles = StyleSheet.create({
     height: 5,
     backgroundColor: colors.LightGray,
     borderRadius: 100,
-    justifyContent: "center",
+    justifyContent: 'center',
     marginHorizontal: 5,
   },
 });

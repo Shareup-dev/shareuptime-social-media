@@ -1,17 +1,12 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
-import colors from "../../config/colors";
-import DownModal from "./DownModal";
-import DrawerList from "./DrawerList";
-import defaultStyle from "../../config/styles";
+import colors from '../../config/colors';
+import DownModal from './DownModal';
+import DrawerList from './DrawerList';
+import defaultStyle from '../../config/styles';
 
-export default function OptionsDrawer({
-  options,
-  isVisible,
-  setIsVisible,
-  title,
-}) {
+export default function OptionsDrawer({ options, isVisible, setIsVisible, title }) {
   return (
     <DownModal isVisible={isVisible} setIsVisible={setIsVisible}>
       <View style={defaultStyle.tip} />

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,13 +9,13 @@ import {
   Text,
 } from 'react-native';
 import Video from 'react-native-video';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import Icon from '../Icon';
 import Loading from '../Loading';
 import BottomCard from '../Reels/ReelPlayerBottomCard';
 
-const {width, height} = Dimensions.get('window');
-const RenderReels = ({item, index, navigation}) => {
+const { width, height } = Dimensions.get('window');
+const RenderReels = ({ item, index, navigation }) => {
   const {
     id,
     reactions,
@@ -27,7 +27,7 @@ const RenderReels = ({item, index, navigation}) => {
     reelLiked,
   } = item;
 
-  const reelState = useSelector(state => state.reelActiveIndex);
+  const reelState = useSelector((state) => state.reelActiveIndex);
   const [paused, setPaused] = useState(false);
 
   const [mute, setMute] = useState(false);
@@ -47,14 +47,16 @@ const RenderReels = ({item, index, navigation}) => {
           backgroundColor: '#000',
         }}
         activeOpacity={1}
-        onPress={_ => setMute(prev => !prev)}
-        onLongPress={_ => loaded && setPaused(prev => !prev)}>
+        onPress={(_) => setMute((prev) => !prev)}
+        onLongPress={(_) => loaded && setPaused((prev) => !prev)}
+      >
         <View style={styles.Header}>
           <Text style={styles.HeaderText}>Share Reels</Text>
           <View style={styles.iconContainer}>
             <TouchableOpacity
-              style={{marginHorizontal: 10}}
-              onPress={_ => setMute(prev => !prev)}>
+              style={{ marginHorizontal: 10 }}
+              onPress={(_) => setMute((prev) => !prev)}
+            >
               <Icon
                 noBackground
                 type="MaterialCommunityIcons"
@@ -64,7 +66,7 @@ const RenderReels = ({item, index, navigation}) => {
                 name={mute ? 'volume-off' : 'volume-high'}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={_ => navigation.goBack()}>
+            <TouchableOpacity onPress={(_) => navigation.goBack()}>
               <Icon
                 noBackground
                 type="MaterialCommunityIcons"
@@ -81,14 +83,16 @@ const RenderReels = ({item, index, navigation}) => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+        >
           {paused && loaded ? (
             <View
               style={{
                 backgroundColor: '#33333320',
                 padding: 15,
                 borderRadius: 40,
-              }}>
+              }}
+            >
               <Icon
                 name={'pause'}
                 noBackground
@@ -96,7 +100,7 @@ const RenderReels = ({item, index, navigation}) => {
                 size={35}
                 backgroundSizeRatio={0.6}
                 color="#fff"
-                style={{opacity: 0.4}}
+                style={{ opacity: 0.4 }}
               />
             </View>
           ) : (
@@ -106,7 +110,8 @@ const RenderReels = ({item, index, navigation}) => {
                   backgroundColor: '#33333320',
                   padding: 15,
                   borderRadius: 40,
-                }}>
+                }}
+              >
                 <Icon
                   name={'volume-off'}
                   noBackground
@@ -114,7 +119,7 @@ const RenderReels = ({item, index, navigation}) => {
                   size={35}
                   backgroundSizeRatio={0.6}
                   color="#fff"
-                  style={{opacity: 0.4}}
+                  style={{ opacity: 0.4 }}
                 />
               </View>
             )
@@ -129,7 +134,8 @@ const RenderReels = ({item, index, navigation}) => {
                 height: height,
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}>
+              }}
+            >
               <Loading noBackground />
             </View>
           ) : null}
@@ -141,10 +147,10 @@ const RenderReels = ({item, index, navigation}) => {
               zIndex: -10,
             }}
             maxBitRate={2000000} // 2 megabits
-            onLoadStart={_ => setLoaded(false)}
-            source={{uri: item?.video_url}}
+            onLoadStart={(_) => setLoaded(false)}
+            source={{ uri: item?.video_url }}
             repeat
-            onLoad={_ => setLoaded(true)}
+            onLoad={(_) => setLoaded(true)}
             muted={mute}
             paused={paused}
             resizeMode="cover"

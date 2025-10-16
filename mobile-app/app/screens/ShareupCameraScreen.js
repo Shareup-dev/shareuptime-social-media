@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -15,27 +15,27 @@ import {
 } from 'react-native';
 
 import colors from '../config/colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {RNCamera} from 'react-native-camera';
+import { useDispatch, useSelector } from 'react-redux';
+import { RNCamera } from 'react-native-camera';
 import CameraBottomActions from '../components/CameraBottomActions';
 import CameraHeader from '../components/headers/CameraHeader';
 import Icon from '../components/Icon';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import AuthContext from '../Contexts/authContext';
 import Video from 'react-native-video';
 import storyService from '../services/story.service';
-import {ProgressBar} from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 import routes from '../navigation/routes';
-import {postDataSliceAction} from '../redux/postDataSlice';
+import { postDataSliceAction } from '../redux/postDataSlice';
 import constants from '../config/constants';
 
-export default function ShareupCameraScreen({navigation, route}) {
+export default function ShareupCameraScreen({ navigation, route }) {
   let cameraRef;
   let playerRef = useRef();
   const postType = route.params;
   const windowWidth = Dimensions.get('screen').width;
 
-  const {userData} = useContext(AuthContext)?.userState;
+  const { userData } = useContext(AuthContext)?.userState;
   const dispatch = useDispatch();
   const [isUploading, setIsUploading] = useState(false);
   const [screen, setScreen] = useState('capture');
@@ -89,20 +89,18 @@ export default function ShareupCameraScreen({navigation, route}) {
           skipProcessing: true,
           quality: 0.5,
         })
-        .then(res => {
-          const uris = [res].map(item => {
+        .then((res) => {
+          const uris = [res].map((item) => {
             return item.uri;
           });
 
-          
-            dispatch(postDataSliceAction.setImages(uris));
-          
+          dispatch(postDataSliceAction.setImages(uris));
 
           navigation.navigate(routes.ADD_POST, {
             postType: postType,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     }
@@ -140,20 +138,19 @@ export default function ShareupCameraScreen({navigation, route}) {
       videoQuality: 'medium',
       selectionLimit: 5,
     })
-      .then(res => {
+      .then((res) => {
         if (res.didCancel) return;
         else if (res.assets[0].duration > 3000) {
           Alert.alert('Ops..', "Sorry you can't upload this video", [null], {
             cancelable: true,
           });
         } else {
-          const uris = res.assets.map(item => {
+          const uris = res.assets.map((item) => {
             return item.uri;
           });
-          
-           
-            dispatch(postDataSliceAction.setImages(uris));
-          
+
+          dispatch(postDataSliceAction.setImages(uris));
+
           navigation.navigate(routes.ADD_POST, {
             postType: postType,
           });
@@ -161,7 +158,7 @@ export default function ShareupCameraScreen({navigation, route}) {
           //   setScreen('view');
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error('Error reading an image', error.message);
       });
 
@@ -171,7 +168,7 @@ export default function ShareupCameraScreen({navigation, route}) {
   };
 
   const handelRevertCamera = () => {
-    setCameraType(prev => (prev === 'back' ? 'front' : 'back'));
+    setCameraType((prev) => (prev === 'back' ? 'front' : 'back'));
   };
 
   const addStoryHandler = async () => {
@@ -182,19 +179,16 @@ export default function ShareupCameraScreen({navigation, route}) {
     const uniId = new Date().valueOf();
     storyData.append('caption', caption);
     storyData.append('stryfiles', {
-      name:
-        mode === 'photo'
-          ? `story-image-${uniId}.jpg`
-          : `story-video-${uniId}.mp4`,
+      name: mode === 'photo' ? `story-image-${uniId}.jpg` : `story-video-${uniId}.mp4`,
       type: mode === 'photo' ? 'image/jpg' : 'video/mp4',
       uri: story.uri,
     });
 
     storyService
       .addStory(userData.id, storyData)
-      .then(res => res)
-      .catch(e => console.error(e.message))
-      .finally(_ => {
+      .then((res) => res)
+      .catch((e) => console.error(e.message))
+      .finally((_) => {
         setIsUploading(false);
         navigation.goBack();
       });
@@ -207,10 +201,11 @@ export default function ShareupCameraScreen({navigation, route}) {
         style={[styles.camera]}
         ratio={'16:9'}
         captureAudio={true}
-        ref={ref => {
+        ref={(ref) => {
           cameraRef = ref;
         }}
-        type={cameraType}>
+        type={cameraType}
+      >
         <CameraBottomActions
           title={'Post'}
           onPickFile={imagePickHandler}

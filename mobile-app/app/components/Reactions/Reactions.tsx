@@ -1,16 +1,24 @@
-import {StyleSheet, View, Animated, Dimensions, ViewStyle, GestureResponderEvent, ImageSourcePropType} from 'react-native';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  Animated,
+  Dimensions,
+  ViewStyle,
+  GestureResponderEvent,
+  ImageSourcePropType,
+} from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import {Texts} from '../../Materials/Text';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-import reactions, {findEmoji} from '../../Constants/reactions';
+import { Texts } from '../../Materials/Text';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import reactions, { findEmoji } from '../../Constants/reactions';
 import postService from '../../services/post.service';
 import AuthContext from '../../Contexts/authContext';
 import Icon from '../Icon';
 
 const ICON_SIZE = 50;
 const TOUCH_DURATION = 500; //0.5 sec
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 enum contentTypeEnum {
   post = 'post',
@@ -27,22 +35,15 @@ interface Props {
   style?: ViewStyle;
 }
 
-const Reactions: React.FC<Props> = props => {
-  const {
-    emojiSize = 12,
-    isLiked,
-    contentId,
-    contentType,
-    setListOfReaction,
-    style,
-  } = props;
+const Reactions: React.FC<Props> = (props) => {
+  const { emojiSize = 12, isLiked, contentId, contentType, setListOfReaction, style } = props;
 
   const {
-    userState: {userData},
+    userState: { userData },
   } = useContext(AuthContext); //getting login user data
 
   // adding animated object into reaction array  - for scale animation while hover
-  const filterdReactions = reactions.slice(0, 5).map(item => ({
+  const filterdReactions = reactions.slice(0, 5).map((item) => ({
     ...item,
     scale: useRef(new Animated.Value(1)).current,
   }));
@@ -56,15 +57,14 @@ const Reactions: React.FC<Props> = props => {
   const displayReactions = useRef(new Animated.Value(0)).current;
 
   interface SelectedReactionType {
-    isReacted: Boolean;
-    selectReaction: String;
+    isReacted: boolean;
+    selectReaction: string;
   }
 
-  const [selectedReaction, setSelectedReaction] =
-    useState<SelectedReactionType>({
-      isReacted: isLiked === 'false' ? false : true,
-      selectReaction: isLiked === 'false' ? 'star' : isLiked,
-    });
+  const [selectedReaction, setSelectedReaction] = useState<SelectedReactionType>({
+    isReacted: isLiked === 'false' ? false : true,
+    selectReaction: isLiked === 'false' ? 'star' : isLiked,
+  });
 
   const scaleHandler = (index: number, state: number = 1.7) => {
     Animated.spring(filterdReactions[index].scale, {
@@ -127,7 +127,7 @@ const Reactions: React.FC<Props> = props => {
   };
 
   const gesture = Gesture.Pan()
-  .onBegin(e => {
+    .onBegin((e) => {
       xOffset = e.absoluteX;
       Animated.spring(translationX, {
         toValue: e.absoluteX,
@@ -136,7 +136,7 @@ const Reactions: React.FC<Props> = props => {
     })
     .onTouchesMove(onTouchesMoveHandler)
     .onTouchesUp(onTouchDropHandler)
-  .onFinalize(e => {
+    .onFinalize((e) => {
       openReactionPopUp(0);
     });
 
@@ -161,10 +161,10 @@ const Reactions: React.FC<Props> = props => {
   const mapReactionsIcons = () => {
     return (
       <>
-        {filterdReactions.map(item => (
+        {filterdReactions.map((item) => (
           <Animated.Image
             source={item.img}
-            style={[styles.img, {transform: [{scale: item.scale}]}]}
+            style={[styles.img, { transform: [{ scale: item.scale }] }]}
           />
         ))}
       </>
@@ -173,38 +173,38 @@ const Reactions: React.FC<Props> = props => {
 
   const reactionHandler = (emoji: string) => {
     let err = false;
-    setSelectedReaction(prev => ({
+    setSelectedReaction((prev) => ({
       isReacted: !prev.isReacted,
       selectReaction: emoji,
     }));
 
     switch (contentType) {
-      case contentTypeEnum['post']:
+      case contentTypeEnum.post:
         return postService
           .likePost(userData.id, contentId, emoji)
-          .then(({data}) => setListOfReaction(data.countOfEachReaction))
-          .catch(e => {
+          .then(({ data }) => setListOfReaction(data.countOfEachReaction))
+          .catch((e) => {
             err = true;
           });
 
-      case contentTypeEnum['comment']:
+      case contentTypeEnum.comment:
         return postService
           .likeUnlikeComment(userData.id, contentId, emoji)
-          .then(({data}) => setListOfReaction(data.countOfEachReaction))
-          .catch(e => (err = true));
+          .then(({ data }) => setListOfReaction(data.countOfEachReaction))
+          .catch((e) => (err = true));
 
-      case contentTypeEnum['reply']:
+      case contentTypeEnum.reply:
         return postService
           .likeUnlikeReply(userData.id, contentId, emoji)
-          .then(({data}) => setListOfReaction(data.countOfEachReaction))
-          .catch(e => (err = true));
+          .then(({ data }) => setListOfReaction(data.countOfEachReaction))
+          .catch((e) => (err = true));
 
       default:
         break;
     }
 
     if (err) {
-      setSelectedReaction(prev => ({
+      setSelectedReaction((prev) => ({
         isReacted: !prev.isReacted,
         selectReaction: isLiked === 'false' ? 'star' : isLiked,
       }));
@@ -224,7 +224,8 @@ const Reactions: React.FC<Props> = props => {
                   },
                 ],
               },
-            ]}>
+            ]}
+          >
             <Animated.View
               style={[
                 styles.reactions,
@@ -235,19 +236,19 @@ const Reactions: React.FC<Props> = props => {
                     },
                   ],
                 },
-              ]}>
+              ]}
+            >
               {mapReactionsIcons()}
             </Animated.View>
           </Animated.View>
           <View
             style={styles.row}
             onTouchStart={onTouchStartHandler}
-            onTouchEnd={onTouchEndHandler}>
+            onTouchEnd={onTouchEndHandler}
+          >
             {selectedReaction.isReacted ? (
               <Texts size={emojiSize} style={[styles.reactionBtn]}>
-                {`${findEmoji(selectedReaction.selectReaction)} ${
-                  selectedReaction.selectReaction
-                }`}
+                {`${findEmoji(selectedReaction.selectReaction)} ${selectedReaction.selectReaction}`}
               </Texts>
             ) : (
               <View style={styles.row}>
@@ -256,7 +257,7 @@ const Reactions: React.FC<Props> = props => {
                   name={`star-o`}
                   type="FontAwesome"
                   size={emojiSize * 2}
-                  style={{marginRight: -7}}
+                  style={{ marginRight: -7 }}
                 />
                 <Texts style={[styles.reactionBtn]} size={emojiSize}>
                   Star
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     elevation: 20,
     shadowColor: 'black',
-    shadowOffset: {width: 1, height: 10},
+    shadowOffset: { width: 1, height: 10 },
     shadowOpacity: 0.5,
   },
 });

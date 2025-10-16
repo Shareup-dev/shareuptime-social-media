@@ -1,14 +1,11 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
-import IconButton from "../buttons/IconButton";
-import Icon from "../Icon";
-import colors from "../../config/colors";
+import IconButton from '../buttons/IconButton';
+import Icon from '../Icon';
+import colors from '../../config/colors';
 
-export default function HeaderCloseIcon({
-  onPress,
-  backgroundColor = colors.lighterGray,
-}) {
+export default function HeaderCloseIcon({ onPress, backgroundColor = colors.lighterGray }) {
   return (
     <IconButton
       style={styles.iconButton}

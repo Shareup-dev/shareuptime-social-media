@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const groupPostsSlice = createSlice({
   name: 'groupPostsSlice',
@@ -8,7 +8,7 @@ const groupPostsSlice = createSlice({
       return (oldPosts = newPost.payload);
     },
     removePost: () => {},
-    getPosts: state => {
+    getPosts: (state) => {
       return state;
     },
   },

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,18 +10,18 @@ import {
   Animated,
   Alert,
   FlatList,
-} from "react-native";
-import moment from "moment";
-import colors from "../../config/colors";
-import Separator from "../Separator";
-import UserProfilePicture from "../UserProfilePicture";
-import Icon from "../Icon";
-import LinkButton from "../buttons/LinkButton";
-import CommentText from "./CommentText";
-import authContext from "../../authContext";
-import { Button } from "react-native-paper";
-import CommentsScreen from "../../screens/CommentsScreen";
-import PostOptionDrawer from "../drawers/PostOptionsDrawer";
+} from 'react-native';
+import moment from 'moment';
+import colors from '../../config/colors';
+import Separator from '../Separator';
+import UserProfilePicture from '../UserProfilePicture';
+import Icon from '../Icon';
+import LinkButton from '../buttons/LinkButton';
+import CommentText from './CommentText';
+import authContext from '../../authContext';
+import { Button } from 'react-native-paper';
+import CommentsScreen from '../../screens/CommentsScreen';
+import PostOptionDrawer from '../drawers/PostOptionsDrawer';
 export default function CommentItem({
   fromReply,
   comment,
@@ -37,17 +37,15 @@ export default function CommentItem({
   swapId,
   setIsOptionsVisible,
   isOptionsVisible,
-  setNumberOfComments
+  setNumberOfComments,
 }) {
   //const isReply = false
   const { userState } = useContext(authContext);
-  const [time, setTime] = useState(
-    moment(comment.published, "DD MMMM YYYY hh:mm:ss").fromNow()
-  );
+  const [time, setTime] = useState(moment(comment.published, 'DD MMMM YYYY hh:mm:ss').fromNow());
   return (
     <>
-     <TouchableWithoutFeedback onLongPress={setIsOptionsVisible(true)}>
-        <View style={!fromReply?styles.container:styles.replyContainer}>
+      <TouchableWithoutFeedback onLongPress={setIsOptionsVisible(true)}>
+        <View style={!fromReply ? styles.container : styles.replyContainer}>
           {/** Left */}
           <View>
             <UserProfilePicture size={40} />
@@ -69,7 +67,7 @@ export default function CommentItem({
             <View style={styles.commentDetailsContainer}>
               <Text style={styles.time}>{time}</Text>
               <Text style={styles.stars}>
-                {reactionsLength} {reactionsLength < 2 ? "Star" : "Stars"}
+                {reactionsLength} {reactionsLength < 2 ? 'Star' : 'Stars'}
               </Text>
               <LinkButton title="Reply" style={styles.reply} onPress={() => onReply(comment.id)} />
             </View>
@@ -91,7 +89,7 @@ export default function CommentItem({
                 <Icon
                   name="star"
                   type="AntDesign"
-                  size={isReply?20:15}
+                  size={isReply ? 20 : 15}
                   color={colors.iondigoDye}
                   backgroundSizeRatio={1}
                 />
@@ -101,7 +99,7 @@ export default function CommentItem({
                 <Icon
                   name="staro"
                   type="AntDesign"
-                  size={isReply?20:15}
+                  size={isReply ? 20 : 15}
                   color={colors.iondigoDye}
                   backgroundSizeRatio={1}
                 />
@@ -111,50 +109,62 @@ export default function CommentItem({
         </View>
         <Separator style={styles.separator} />
         {isReply ? (
-          <CommentsScreen route={{params: { comments: reply, userId: comment.user.id, commendId: comment.id, postType: postType, swapId: swapId, fromReply:true }}}/>
-        ) : (<Text />)}
+          <CommentsScreen
+            route={{
+              params: {
+                comments: reply,
+                userId: comment.user.id,
+                commendId: comment.id,
+                postType: postType,
+                swapId: swapId,
+                fromReply: true,
+              },
+            }}
+          />
+        ) : (
+          <Text />
+        )}
         {/* <Separator style={styles.separator} /> */}
-        </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    width: "100%",
-    paddingHorizontal: "10%",
+    flexDirection: 'row',
+    width: '100%',
+    paddingHorizontal: '10%',
     paddingTop: 25,
     paddingBottom: 6,
-    justifyContent: "center",
-    alignSelf:"center",
-    
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   replyContainer: {
-    flexDirection: "row",
-    width: "90%",
+    flexDirection: 'row',
+    width: '90%',
     paddingTop: 20,
     paddingBottom: 6,
     //justifyContent: "flex-start",
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
 
   medialContainer: {
     marginLeft: 10,
     paddingTop: 5,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   userName: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   commentDetailsContainer: {
-    width: "65%",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    width: '65%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   comment: {
     color: colors.mediumGray,
-    width: Dimensions.get("window").width / 1.7,
+    width: Dimensions.get('window').width / 1.7,
     fontSize: 13,
   },
   commentBody: {
@@ -170,21 +180,21 @@ const styles = StyleSheet.create({
   reply: {
     fontSize: 10,
     color: colors.iondigoDye,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   reactionContainer: {
     paddingTop: 5,
   },
   separator: {
     marginHorizontal: 15,
-    width:"90%"
+    width: '90%',
   },
   commentTextContainer: {
     marginVertical: 5,
   },
   readMore: {
     fontSize: 10,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: colors.iondigoDye,
   },
   deleteBox: {

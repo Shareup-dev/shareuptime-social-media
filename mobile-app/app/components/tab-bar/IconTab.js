@@ -1,8 +1,8 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import colors from "../../config/colors";
-import TabButton from "../buttons/Tab";
+import colors from '../../config/colors';
+import TabButton from '../buttons/Tab';
 
 export default function IconTab({ icon, onPress, tabbed, showSeparator }) {
   return (
@@ -30,14 +30,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.LightGray,
   },
   inactive: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
 
   underLine: {
     width: 35,
     height: 4,
-    backgroundColor: "#4485F2",
-    alignSelf: "center",
+    backgroundColor: '#4485F2',
+    alignSelf: 'center',
     borderRadius: 15,
     marginTop: 3,
   },
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     height: 25,
     width: 70,
     borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   separator: {
-    height: "90%",
+    height: '90%',
     width: 2,
     backgroundColor: colors.dark,
   },

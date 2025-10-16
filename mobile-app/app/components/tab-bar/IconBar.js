@@ -1,7 +1,7 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import colors from "../../config/colors";
-import IconTab from "./IconTab";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import colors from '../../config/colors';
+import IconTab from './IconTab';
 
 /**
  *
@@ -33,9 +33,9 @@ export default function IconBar({ tabs, onTab, currentTab }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: colors.lighterGray,
     paddingHorizontal: 20,
     paddingVertical: 5,

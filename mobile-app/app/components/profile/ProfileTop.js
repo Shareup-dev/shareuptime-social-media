@@ -1,5 +1,5 @@
-import React, {useContext} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, { useContext } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
 import colors from '../../config/colors';
 import Icon from '../Icon';
@@ -13,14 +13,8 @@ import StoriesList from '../lists/StoriesList';
 
 const profilePictureSize = 80;
 
-export default function ProfileTop({
-  navigation,
-  currentTab,
-  onIconBarTab,
-  tabs,
-  numberOfPosts,
-}) {
-  const {userData} = useContext(authContext)?.userState;
+export default function ProfileTop({ navigation, currentTab, onIconBarTab, tabs, numberOfPosts }) {
+  const { userData } = useContext(authContext)?.userState;
 
   return (
     <View style={styles.container}>
@@ -55,8 +49,8 @@ export default function ProfileTop({
         <View style={styles.row2}>
           <Text style={styles.username}>{userData.firstName}</Text>
           <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius
-            tellus placerat leo mi quis.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius tellus placerat leo mi
+            quis.
           </Text>
           <Tab
             title="Edit Profile"

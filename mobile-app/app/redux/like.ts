@@ -46,24 +46,32 @@ const likeSlice = createSlice({
       const postId = action.payload;
       const isCurrentlyLiked = state.likedPosts[postId] || false;
       const currentCount = state.likeCount[postId] || 0;
-      
+
       state.likedPosts[postId] = !isCurrentlyLiked;
       state.likeCount[postId] = isCurrentlyLiked ? currentCount - 1 : currentCount + 1;
     },
-    setPostLikeStatus: (state, action: PayloadAction<{
-      postId: string;
-      isLiked: boolean;
-      likeCount: number;
-    }>) => {
+    setPostLikeStatus: (
+      state,
+      action: PayloadAction<{
+        postId: string;
+        isLiked: boolean;
+        likeCount: number;
+      }>,
+    ) => {
       const { postId, isLiked, likeCount } = action.payload;
       state.likedPosts[postId] = isLiked;
       state.likeCount[postId] = likeCount;
     },
-    bulkSetLikeStatus: (state, action: PayloadAction<Array<{
-      postId: string;
-      isLiked: boolean;
-      likeCount: number;
-    }>>) => {
+    bulkSetLikeStatus: (
+      state,
+      action: PayloadAction<
+        Array<{
+          postId: string;
+          isLiked: boolean;
+          likeCount: number;
+        }>
+      >,
+    ) => {
       action.payload.forEach(({ postId, isLiked, likeCount }) => {
         state.likedPosts[postId] = isLiked;
         state.likeCount[postId] = likeCount;

@@ -37,7 +37,7 @@ export class ShareUpTimeWebSocket {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'shareuptime-secret') as any;
         (socket as AuthenticatedSocket).userId = decoded.userId;
         next();
-      } catch (err) {
+      } catch (_err) {
         next(new Error('Authentication error'));
       }
     });

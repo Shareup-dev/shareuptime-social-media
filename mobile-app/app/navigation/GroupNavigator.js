@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { View, StyleSheet } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import GroupsScreen from '../screens/GroupsScreen';
 import CreateNewGroup from '../screens/CreateNewGroup';

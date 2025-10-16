@@ -1,17 +1,11 @@
-import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableWithoutFeedback,
-  Alert,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 
-import {MaterialCommunityIcons} from 'react-native-vector-icons';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
 
 import colors from '../config/colors';
 
-export default function ImageInput({imageUri, onChangeImage}) {
+export default function ImageInput({ imageUri, onChangeImage }) {
   // useEffect(() => {
   //   requestPermission();
   // }, []);
@@ -48,7 +42,7 @@ export default function ImageInput({imageUri, onChangeImage}) {
     >
       <View style={styles.container}>
         {imageUri ? (
-          <Image source={{uri: imageUri}} style={styles.Image} />
+          <Image source={{ uri: imageUri }} style={styles.Image} />
         ) : (
           <MaterialCommunityIcons name="camera" style={styles.CameraIcon} />
         )}

@@ -1,33 +1,26 @@
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
-import {Dimensions} from 'react-native';
-import {Texts} from '../../Materials/Text';
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions } from 'react-native';
+import { Texts } from '../../Materials/Text';
 import colors from '../../config/colors';
 import BetterImage from '../betterImage/BetterImage';
-import {findEmoji} from '../../Constants/reactions';
+import { findEmoji } from '../../Constants/reactions';
 
 type TabTuple = [string, any[]];
 interface Props {
   tabs: TabTuple[];
 }
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-const TabView: React.FC<Props> = props => {
-  const {tabs} = props;
+const TabView: React.FC<Props> = (props) => {
+  const { tabs } = props;
   const [activeIndex, setactiveIndex] = useState<number>(0);
 
-  const renderReactions = ({item}: {item: any}) => {
+  const renderReactions = ({ item }: { item: any }) => {
     return (
       <View style={styles.card}>
-        <BetterImage style={styles.img} source={{uri: item.profilePicture}} />
+        <BetterImage style={styles.img} source={{ uri: item.profilePicture }} />
         <Texts size={15} style={styles.name}>
           {`${item.firstName} ${item.lastName}`}
         </Texts>
@@ -43,20 +36,17 @@ const TabView: React.FC<Props> = props => {
             <TouchableOpacity
               onPress={() => setactiveIndex(index)}
               key={index}
-              style={[
-                styles.tab,
-                index === activeIndex ? styles.active : null,
-              ]}>
+              style={[styles.tab, index === activeIndex ? styles.active : null]}
+            >
               <Texts
                 size={15}
                 style={[
-                  index === activeIndex && {fontWeight: '700'},
-                  {textTransform: 'capitalize'},
+                  index === activeIndex && { fontWeight: '700' },
+                  { textTransform: 'capitalize' },
                 ]}
-                color={index === activeIndex ? colors.iondigoDye : '#333'}>
-                {tabName !== 'all'
-                  ? `${findEmoji(tabName)} ${tabName}`
-                  : tabName}
+                color={index === activeIndex ? colors.iondigoDye : '#333'}
+              >
+                {tabName !== 'all' ? `${findEmoji(tabName)} ${tabName}` : tabName}
               </Texts>
             </TouchableOpacity>
           ))}

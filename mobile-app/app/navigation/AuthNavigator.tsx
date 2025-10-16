@@ -23,33 +23,33 @@ const AuthNavigator: React.FC = () => {
         animation: 'slide_from_right',
       }}
     >
-      <Stack.Screen 
-        name="Login" 
+      <Stack.Screen
+        name="Login"
         component={LoginScreen}
         options={{
           title: 'Sign In',
         }}
       />
-      
-      <Stack.Screen 
-        name="Register" 
+
+      <Stack.Screen
+        name="Register"
         component={SignUpScreen}
         options={{
           title: 'Create Account',
         }}
       />
-      
-      <Stack.Screen 
-        name="ForgotPassword" 
+
+      <Stack.Screen
+        name="ForgotPassword"
         component={ForgotPassword}
         options={{
           title: 'Reset Password',
           gestureDirection: 'vertical',
         }}
       />
-      
-      <Stack.Screen 
-        name="ResetPassword" 
+
+      <Stack.Screen
+        name="ResetPassword"
         component={ResetPassword}
         options={{
           title: 'New Password',

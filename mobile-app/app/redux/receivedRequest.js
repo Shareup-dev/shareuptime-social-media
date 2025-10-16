@@ -1,18 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 let initialState = [];
 
 const receivedRequestSlice = createSlice({
-  name: "receivedRequestSlice",
+  name: 'receivedRequestSlice',
   initialState,
   reducers: {
     setList: (state, newState) => {
-
       return (state = newState.payload);
     },
-    cancelRequest: () => {
-
-    },
+    cancelRequest: () => {},
     getList: (state) => {
       return state.payload;
     },

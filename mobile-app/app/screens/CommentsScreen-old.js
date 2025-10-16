@@ -1,33 +1,20 @@
-import React, {
-  useState,
-  useRef,
-  useContext,
-  useCallback,
-  useEffect,
-} from 'react';
-import {View, StyleSheet, FlatList, Keyboard} from 'react-native';
+import React, { useState, useRef, useContext, useCallback, useEffect } from 'react';
+import { View, StyleSheet, FlatList, Keyboard } from 'react-native';
 
-import {Header, HeaderCloseIcon, HeaderTitle} from '../components/headers';
+import { Header, HeaderCloseIcon, HeaderTitle } from '../components/headers';
 import Screen from '../components/Screen';
 import CommentItem from '../components/comments/CommentItem';
 import CommentTextField from '../components/comments/CommentTextField';
 import constants from '../config/constants';
 import AuthContext from '../Contexts/authContext';
 
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import postService from '../services/post.service';
 import SwapService from '../services/swap.service';
 
-export default function CommentsScreen({navigation, route}) {
-  const {
-    userId,
-    postId,
-    setNumberOfComments,
-    postType,
-    swapId,
-    fromDetailScreen,
-    writeComment,
-  } = route.params;
+export default function CommentsScreen({ navigation, route }) {
+  const { userId, postId, setNumberOfComments, postType, swapId, fromDetailScreen, writeComment } =
+    route.params;
   const commentsListRef = useRef();
   const commentTextFieldRef = useRef();
   //const [isUserLiked, setIsUserLiked] = useState(false);
@@ -39,8 +26,8 @@ export default function CommentsScreen({navigation, route}) {
   const [isReply, setIsReply] = useState(false);
   // needed to setup list refreshing
   const [refreshing, setRefreshing] = useState(false);
-  const {userState} = useContext(AuthContext);
-  const {postTypes} = constants;
+  const { userState } = useContext(AuthContext);
+  const { postTypes } = constants;
 
   //const [frmReply,setFrmReply] = useState(fromReply)
 
@@ -61,20 +48,20 @@ export default function CommentsScreen({navigation, route}) {
   const loadComments = async () => {
     if (postType === postTypes.SWAP) {
       SwapService.getSwapComment(swapId)
-        .then(res => {
+        .then((res) => {
           const commentArray = res.data; //.reverse();
           setCommentsList(commentArray);
         })
-        .catch(e => console.error(e.message));
+        .catch((e) => console.error(e.message));
       setCommentsList(response.data.comments);
     } else {
       postService
         .getAllComments(userState?.userData?.id, postId)
-        .then(res => {
+        .then((res) => {
           const commentArray = res.data; //.reverse();
           setCommentsList(commentArray);
         })
-        .catch(e => console.error(e.message));
+        .catch((e) => console.error(e.message));
     }
   };
 
@@ -88,10 +75,10 @@ export default function CommentsScreen({navigation, route}) {
   const handleAddComment = async () => {
     if (isReply) {
       if (postType === postTypes.SWAP) {
-        const comment = {content: commentContent};
+        const comment = { content: commentContent };
         postService
           .addSwapComment(userState?.userData?.id, swapId, comment.content)
-          .then(resp => {
+          .then((resp) => {
             refreshComments();
             setCommentContent('');
             commentTextFieldRef.current.clear();
@@ -100,30 +87,26 @@ export default function CommentsScreen({navigation, route}) {
           });
       } else {
         //const reply = {reply: commentContent};
-        const comment = {content: commentContent};
+        const comment = { content: commentContent };
         if (commentContent !== '') {
           postService
             .replay(userState?.userData?.id, commentId, comment)
-            .then(res => {
+            .then((res) => {
               refreshComments();
               setCommentContent('');
               commentTextFieldRef.current.clear();
               Keyboard.dismiss();
             })
-            .catch(e => console.error('1', e));
+            .catch((e) => console.error('1', e));
 
           // scrollToListBottom();
         }
       }
     } else {
       if (postType === 'swap') {
-        const comment = {content: commentContent};
-        SwapService.createSwapcomment(
-          userState?.userData?.id,
-          swapId,
-          comment.content,
-        )
-          .then(resp => {
+        const comment = { content: commentContent };
+        SwapService.createSwapcomment(userState?.userData?.id, swapId, comment.content)
+          .then((resp) => {
             refreshComments();
             setCommentContent('');
             commentTextFieldRef.current.clear();
@@ -132,24 +115,24 @@ export default function CommentsScreen({navigation, route}) {
           })
           .catch(console.error(e));
       } else {
-        const comment = {content: commentContent};
+        const comment = { content: commentContent };
         if (commentContent !== '') {
           postService
             .addComment(userState?.userData?.id, postId, comment)
-            .then(res => {
+            .then((res) => {
               refreshComments();
               setCommentContent('');
               commentTextFieldRef.current.clear();
               Keyboard.dismiss();
             })
-            .catch(e => console.error(e));
+            .catch((e) => console.error(e));
 
           // scrollToListBottom();
         }
       }
     }
   };
-  const handleEditComment = status => {
+  const handleEditComment = (status) => {
     setIsEdit(status);
   };
   const handleReplyComment = (commentId, showReply) => {
@@ -174,23 +157,23 @@ export default function CommentsScreen({navigation, route}) {
     setRefreshing(false);
   };
 
-  const handleOnChangeText = text => {
+  const handleOnChangeText = (text) => {
     setCommentContent(text);
   };
 
   const scrollToListBottom = () => {
-    commentsListRef.current.scrollToEnd({animated: true});
+    commentsListRef.current.scrollToEnd({ animated: true });
   };
 
-  const handleReactions = async cid => {
-    const params = {reaction: 'null'};
+  const handleReactions = async (cid) => {
+    const params = { reaction: 'null' };
     postService
       .likeUnlikeComment(userState?.userData?.id, cid, params)
-      .then(res => {
+      .then((res) => {
         refreshComments();
         //setIsUserLiked(!isUserLiked)
       }) //need to get likePostIds
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
 
     //refreshComments();
   };
@@ -206,17 +189,15 @@ export default function CommentsScreen({navigation, route}) {
 
       <FlatList
         data={commentsList}
-        keyExtractor={comment => comment.id.toString()}
+        keyExtractor={(comment) => comment.id.toString()}
         ref={commentsListRef}
         onContentSizeChange={scrollToListBottom}
         refreshing={refreshing}
         onRefresh={refreshComments}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <CommentItem
             comment={item}
-            reactionsLength={
-              item?.reactions?.length ? item?.reactions?.length : 0
-            }
+            reactionsLength={item?.reactions?.length ? item?.reactions?.length : 0}
             isUserLiked={item.commentLiked}
             onInteraction={handleReactions}
             //handleDelete={handleDeleteComment}

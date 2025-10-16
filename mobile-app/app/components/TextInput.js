@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput, Text} from 'react-native';
+import { View, TextInput, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import defaultStyles from '../config/styles.js';
 import colors from '../config/colors.js';
@@ -17,8 +17,9 @@ export default function AppTextInput({
       <View
         style={[
           defaultStyles.inputContainer,
-          {width, backgroundColor, borderColor: error ? 'crimson' : '#cacaca'},
-        ]}>
+          { width, backgroundColor, borderColor: error ? 'crimson' : '#cacaca' },
+        ]}
+      >
         {icon && (
           <MaterialCommunityIcons
             name={icon}
@@ -41,10 +42,7 @@ export default function AppTextInput({
           {...otherProps}
         />
       </View>
-      <Text
-        style={{color: 'crimson', paddingHorizontal: 30, textAlign: 'right'}}>
-        {error}
-      </Text>
+      <Text style={{ color: 'crimson', paddingHorizontal: 30, textAlign: 'right' }}>{error}</Text>
     </>
   );
 }

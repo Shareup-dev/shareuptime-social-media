@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import React, { useState } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 
 import AddPostButton from './AddPostButton';
 import AddPostScreen from '../screens/AddPostScreen';
@@ -15,10 +15,10 @@ import colors from '../config/colors';
 import ActivityNavigator from './ActivityNavigator';
 import NewsFeedNavigator from './NewsFeedNavigator';
 import GroupNavigator from './GroupNavigator';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import CustomHeaderBar from './CustomHeaderBar';
 
-const {postTypes} = constants;
+const { postTypes } = constants;
 
 const config = {
   animation: 'spring',
@@ -36,7 +36,7 @@ const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {
   // useNotifications();
-  let isReelScreen = useSelector(state => state.reelScreenDetector);
+  let isReelScreen = useSelector((state) => state.reelScreenDetector);
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -49,14 +49,15 @@ export default function AppNavigator() {
         screenOptions={{
           tabBarShowLabel: false,
           tabBarHideOnKeyboard: true,
-        }}>
+        }}
+      >
         <Tab.Screen
           name="NewsFeedNavigator"
           component={NewsFeedNavigator}
           options={{
             headerShown: false,
             // header: () => <CustomHeaderBar />,
-            tabBarIcon: ({size, color}) => (
+            tabBarIcon: ({ size, color }) => (
               <Icon
                 image={require('../assets/tab-navigation-icons/home-icon.png')}
                 backgroundSizeRatio={1}
@@ -71,7 +72,7 @@ export default function AppNavigator() {
           component={GroupNavigator}
           options={{
             headerShown: false,
-            tabBarIcon: ({size, color}) => (
+            tabBarIcon: ({ size, color }) => (
               <Icon
                 image={require('../assets/tab-navigation-icons/groups-icon.png')}
                 backgroundSizeRatio={1}
@@ -84,7 +85,7 @@ export default function AppNavigator() {
         <Tab.Screen
           name={routes.ADD_POST}
           component={AddPostScreen}
-          options={({navigation}) => ({
+          options={({ navigation }) => ({
             transitionSpec: {
               open: config,
               close: config,
@@ -103,21 +104,15 @@ export default function AppNavigator() {
                 }}
               />
             ),
-            headerLeft: ({navigation}) => (
+            headerLeft: ({ navigation }) => (
               <IconButton
                 style={styles.button}
                 onPress={() => navigation.navigate(routes.FEED)}
-                IconComponent={
-                  <Icon name="close" color={colors.dimGray} type="AntDesign" />
-                }
+                IconComponent={<Icon name="close" color={colors.dimGray} type="AntDesign" />}
               />
             ),
             headerRight: () => (
-              <Button
-                onPress={handleAddPost}
-                title="Post"
-                style={styles.button}
-              />
+              <Button onPress={handleAddPost} title="Post" style={styles.button} />
             ),
           })}
         />
@@ -127,7 +122,7 @@ export default function AppNavigator() {
           component={ActivityNavigator}
           options={{
             headerShown: false,
-            tabBarIcon: ({size, color}) => (
+            tabBarIcon: ({ size, color }) => (
               <Icon
                 image={require('../assets/tab-navigation-icons/bell-icon.png')}
                 backgroundSizeRatio={1}
@@ -144,7 +139,7 @@ export default function AppNavigator() {
           name="Account"
           component={AccountScreen}
           options={{
-            tabBarIcon: ({size, color}) => (
+            tabBarIcon: ({ size, color }) => (
               <TouchableWithoutFeedback onPress={() => setIsVisible(true)}>
                 <View style={styles.menu}>
                   <Icon

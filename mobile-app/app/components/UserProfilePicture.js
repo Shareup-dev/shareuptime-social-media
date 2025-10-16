@@ -1,5 +1,5 @@
-import React, {useContext, useState} from 'react';
-import {Image, View, StyleSheet} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Image, View, StyleSheet } from 'react-native';
 
 import AuthContext from '../authContext';
 import fileStorage from '../config/fileStorage';
@@ -14,7 +14,7 @@ export default function UserProfilePicture({
   bottomOffsite = 3,
   rightOffsite = -5,
 }) {
-  const {userState} = useContext(AuthContext);
+  const { userState } = useContext(AuthContext);
   const [picture, setPicture] = useState(
     profilePicture ? profilePicture : userState?.userData?.profilePicturePath,
   );
@@ -24,7 +24,7 @@ export default function UserProfilePicture({
         source={{
           uri: fileStorage.baseUrl + picture,
         }}
-        style={[{width: size, height: size, borderRadius: size / 2}, style]}
+        style={[{ width: size, height: size, borderRadius: size / 2 }, style]}
       />
 
       {showActiveStatus && (
@@ -32,10 +32,7 @@ export default function UserProfilePicture({
           name="circle"
           type="FontAwesome"
           color={colors.activeGreen}
-          style={[
-            styles.activeIcon,
-            {bottom: bottomOffsite, right: rightOffsite},
-          ]}
+          style={[styles.activeIcon, { bottom: bottomOffsite, right: rightOffsite }]}
           size={15}
           backgroundSizeRatio={0.9}
         />

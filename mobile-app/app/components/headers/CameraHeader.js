@@ -1,28 +1,15 @@
 import React from 'react';
-import {
-  StatusBar,
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { StatusBar, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import colors from '../../config/colors';
 import Icon from '../Icon';
 
-export default function CameraHeader({title, style, onClosePress}) {
+export default function CameraHeader({ title, style, onClosePress }) {
   return (
-    <View
-      style={[styles.container, {paddingTop: StatusBar.currentHeight}, style]}>
+    <View style={[styles.container, { paddingTop: StatusBar.currentHeight }, style]}>
       <Text style={styles.title}>{title}</Text>
       <TouchableOpacity onPress={onClosePress}>
-        <Icon
-          name="close"
-          type="AntDesign"
-          size={25}
-          color={colors.dark}
-          style={styles.icon}
-        />
+        <Icon name="close" type="AntDesign" size={25} color={colors.dark} style={styles.icon} />
       </TouchableOpacity>
     </View>
   );

@@ -1,23 +1,23 @@
 import React from 'react';
-import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 
 import colors from '../../config/colors';
 import routes from '../../navigation/routes';
 
 import fileStorage from '../../config/fileStorage';
 
-export default function StoryCard({style, navigation, data}) {
+export default function StoryCard({ style, navigation, data }) {
   const addStoryHandler = () => {
     navigation.navigate(routes.STORY_VIEW_SCREEN, data);
   };
-  const {stories_List, firstName} = data;
+  const { stories_List, firstName } = data;
 
   return (
     <TouchableOpacity onPress={addStoryHandler} activeOpacity={0.8}>
       <View style={[styles.container, style]}>
         <Image
-          source={{uri: fileStorage.baseUrl + stories_List[0]?.image}}
-          style={{height: '100%', width: '100%',backgroundColor:'#34343460'}}
+          source={{ uri: fileStorage.baseUrl + stories_List[0]?.image }}
+          style={{ height: '100%', width: '100%', backgroundColor: '#34343460' }}
         />
         <Text style={styles.userName}>{firstName}</Text>
       </View>

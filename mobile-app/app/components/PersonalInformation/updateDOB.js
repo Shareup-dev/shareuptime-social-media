@@ -1,5 +1,5 @@
-import {Formik} from 'formik';
-import React, {useContext, useState} from 'react';
+import { Formik } from 'formik';
+import React, { useContext, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,15 +11,15 @@ import {
   Keyboard,
 } from 'react-native';
 import AuthContext from '../../Contexts/authContext';
-import {HeaderWithBackArrow} from '../../components/headers';
+import { HeaderWithBackArrow } from '../../components/headers';
 import colors from '../../config/colors';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Loading from '../../components/Loading';
 import userService from '../../services/user.service';
 
-export default function UpdateDOB({navigation}) {
+export default function UpdateDOB({ navigation }) {
   const {
-    userState: {userData, username},
+    userState: { userData, username },
     authActions,
   } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -27,19 +27,19 @@ export default function UpdateDOB({navigation}) {
     userData.birthday_date ? new Date(userData.birthday_date) : new Date(),
   );
 
-  const handleSubmit = _ => {
+  const handleSubmit = (_) => {
     setLoading(true);
     Keyboard.dismiss();
     userService
-      .editProfile(username, {...userData, birthday_date: dob.toDateString()})
-      .then(({status, data}) => {
+      .editProfile(username, { ...userData, birthday_date: dob.toDateString() })
+      .then(({ status, data }) => {
         if (status === 200) {
           authActions.updateUserInfo(data);
           setLoading(false);
           navigation.goBack();
         }
       })
-      .catch(e => console.error(e.message));
+      .catch((e) => console.error(e.message));
   };
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -52,22 +52,16 @@ export default function UpdateDOB({navigation}) {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = date => {
+  const handleConfirm = (date) => {
     setDOB(date);
     hideDatePicker();
   };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <HeaderWithBackArrow
-        onBackButton={_ => navigation.goBack()}
-        title="Date of Birth"
-      />
+      <HeaderWithBackArrow onBackButton={(_) => navigation.goBack()} title="Date of Birth" />
       {loading && <Loading text="Saving.." modal />}
-      <TouchableOpacity
-        activeOpacity={1}
-        style={{flex: 1}}
-        onPress={_ => Keyboard.dismiss()}>
+      <TouchableOpacity activeOpacity={1} style={{ flex: 1 }} onPress={(_) => Keyboard.dismiss()}>
         <View style={styles.card}>
           <Text style={styles.label}>Date of birth</Text>
 
@@ -84,14 +78,16 @@ export default function UpdateDOB({navigation}) {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-            }}>
+            }}
+          >
             <TouchableOpacity onPress={showDatePicker}>
               <Text
                 style={{
                   margin: 5,
                   fontSize: 18,
                   fontWeight: '700',
-                }}>
+                }}
+              >
                 {dob.toDateString()}
               </Text>
             </TouchableOpacity>
@@ -106,7 +102,7 @@ export default function UpdateDOB({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: { flex: 1 },
   btnText: {
     color: '#fff',
     fontSize: 14,

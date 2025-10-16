@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  StatusBar,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, StatusBar } from 'react-native';
 
 import Icon from './Icon';
 import colors from '../config/colors';
@@ -67,7 +61,7 @@ export default function CameraBottomActions({
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems:'baseline',
+      alignItems: 'baseline',
       position: 'absolute',
       bottom: 0,
       zIndex: 1,
@@ -125,9 +119,7 @@ export default function CameraBottomActions({
           <Icon type={'FontAwesome'} name={'file-photo-o'} size={64} />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.captureButtonContainer}
-          onPress={onCapture}>
+        <TouchableOpacity style={styles.captureButtonContainer} onPress={onCapture}>
           <View style={styles.captureButton} />
         </TouchableOpacity>
 
@@ -138,8 +130,7 @@ export default function CameraBottomActions({
       <View style={styles.Header}>
         <Text style={styles.HeaderText}>{title}</Text>
         <View style={styles.iconContainer}>
-         
-          <TouchableOpacity onPress={_ => navigation.goBack()}>
+          <TouchableOpacity onPress={(_) => navigation.goBack()}>
             <Icon
               noBackground
               type="MaterialCommunityIcons"
@@ -156,47 +147,36 @@ export default function CameraBottomActions({
           {/* <View style={styles.recordingIcon} /> */}
           {/* <Text style={styles.recordingText}>{` Recording..`}</Text> */}
         </View>
-      ) : !onlyVideo && (
-
-        <View style={styles.modeContainer}>
-          <TouchableOpacity
-            style={styles.bottomBtn}
-            onPress={() => setMode('photo')}>
-            <Icon
-              style={styles.icon}
-              name={'camera'}
-              noBackground
-              color={mode === 'photo' ? 'crimson' : '#fff'}
-              type="Entypo"></Icon>
-            <Text
-              style={[
-                styles.modeText,
-                {color: mode === 'photo' ? 'crimson' : '#fff'},
-              ]}>
-              Photo
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setMode('video')}
-            style={styles.bottomBtn}>
-            <Icon
-              style={styles.icon}
-              name={'video-camera'}
-              noBackground
-              color={mode === 'video' ? 'crimson' : '#fff'}
-              type="Entypo"
-            />
-            <Text
-              style={[
-                styles.modeText,
-                {color: mode === 'video' ? 'crimson' : '#fff'},
-              ]}>
-              Video
-            </Text>
-          </TouchableOpacity>
-        </View>
+      ) : (
+        !onlyVideo && (
+          <View style={styles.modeContainer}>
+            <TouchableOpacity style={styles.bottomBtn} onPress={() => setMode('photo')}>
+              <Icon
+                style={styles.icon}
+                name={'camera'}
+                noBackground
+                color={mode === 'photo' ? 'crimson' : '#fff'}
+                type="Entypo"
+              />
+              <Text style={[styles.modeText, { color: mode === 'photo' ? 'crimson' : '#fff' }]}>
+                Photo
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setMode('video')} style={styles.bottomBtn}>
+              <Icon
+                style={styles.icon}
+                name={'video-camera'}
+                noBackground
+                color={mode === 'video' ? 'crimson' : '#fff'}
+                type="Entypo"
+              />
+              <Text style={[styles.modeText, { color: mode === 'video' ? 'crimson' : '#fff' }]}>
+                Video
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )
       )}
-
     </>
   );
 }

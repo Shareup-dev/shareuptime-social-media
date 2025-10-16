@@ -25,7 +25,7 @@ export const verifyToken = (token: string): { userId: string } | null => {
   try {
     const secret = process.env.JWT_SECRET || 'fallback-secret-key';
     return jwt.verify(token, secret) as { userId: string };
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 };

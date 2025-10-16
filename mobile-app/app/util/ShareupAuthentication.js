@@ -1,12 +1,12 @@
-import React, {useEffect, useReducer, useMemo} from 'react';
-import {View, StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
+import React, { useEffect, useReducer, useMemo } from 'react';
+import { View, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import colors from '../config/colors';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {removeAxiosToken, setTokenForAxios} from '../services/authHeader';
+import { removeAxiosToken, setTokenForAxios } from '../services/authHeader';
 import store from '../redux/store';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import AuthContext from '../authContext';
-import {AuthNavigator} from '../navigation';
+import { AuthNavigator } from '../navigation';
 import userService from '../services/user.service';
 import HomeNavigator from '../navigation/HomeNavigator';
 
@@ -53,7 +53,7 @@ export default function ShareupAuthentication() {
     // getting user information
     userService
       .getUserByEmail(username)
-      .then(res =>
+      .then((res) =>
         dispatch({
           type: actions.SET_STATE,
           username,
@@ -61,8 +61,7 @@ export default function ShareupAuthentication() {
           userData: res.data,
         }),
       )
-      .catch(e => {
-
+      .catch((e) => {
         dispatch({
           type: actions.CLEAR_STATE,
         });
@@ -76,11 +75,11 @@ export default function ShareupAuthentication() {
       retrieveToken: async () => {
         const session = await EncryptedStorage.getItem('auth_session');
         if (session) {
-          const {username, userToken} = JSON.parse(session);
+          const { username, userToken } = JSON.parse(session);
           setTokenForAxios(userToken);
           await gettingUserInfo(username, userToken);
         } else {
-          dispatch({type: actions.CLEAR_STATE});
+          dispatch({ type: actions.CLEAR_STATE });
         }
       },
       // Login
@@ -100,7 +99,7 @@ export default function ShareupAuthentication() {
       logout: async () => {
         await EncryptedStorage.removeItem('auth_session');
         removeAxiosToken();
-        dispatch({type: actions.CLEAR_STATE});
+        dispatch({ type: actions.CLEAR_STATE });
       },
       // signup
       signup: async (username, userToken) => {
@@ -127,16 +126,12 @@ export default function ShareupAuthentication() {
   if (userState.isLoading) {
     return (
       <View style={styles.loadingOverlay}>
-        <ActivityIndicator
-          style={styles.gobalLoadingIndicator}
-          size="large"
-          color="#044566"
-        />
+        <ActivityIndicator style={styles.gobalLoadingIndicator} size="large" color="#044566" />
       </View>
     );
   } else {
     return (
-      <AuthContext.Provider value={{authActions, userState}}>
+      <AuthContext.Provider value={{ authActions, userState }}>
         <Provider store={store}>
           {userState.userToken ? <HomeNavigator /> : <AuthNavigator />}
         </Provider>

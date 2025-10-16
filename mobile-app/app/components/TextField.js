@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 
 import Icon from '../components/Icon';
 import colors from '../config/colors.js';
@@ -23,7 +23,7 @@ export default function AppTextField({
   ...otherProps
 }) {
   return (
-    <View style={[styles.container, {width, height, backgroundColor}, style]}>
+    <View style={[styles.container, { width, height, backgroundColor }, style]}>
       {(iconName || iconImage) && (
         <Icon
           name={iconName}
@@ -36,10 +36,7 @@ export default function AppTextField({
       )}
       <TextInput
         placeholderTextColor={colors.dimGray}
-        style={[
-          styles.text,
-          {textAlign: isCenterTextAlign ? 'center' : 'auto'},
-        ]}
+        style={[styles.text, { textAlign: isCenterTextAlign ? 'center' : 'auto' }]}
         {...otherProps}
       />
       {endComponent}

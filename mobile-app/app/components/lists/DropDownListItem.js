@@ -1,18 +1,12 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableWithoutFeedback,
-  FlatList,
-} from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, View, Image, TouchableWithoutFeedback, FlatList } from 'react-native';
 
-import colors from "../../config/colors";
-import AppText from "../Text";
-import Icon from "../Icon";
-import defaultStyle from "../../config/styles";
-import IconButton from "../buttons/IconButton";
-import ListItemEnhanced from "./ListItemEnhanced";
+import colors from '../../config/colors';
+import AppText from '../Text';
+import Icon from '../Icon';
+import defaultStyle from '../../config/styles';
+import IconButton from '../buttons/IconButton';
+import ListItemEnhanced from './ListItemEnhanced';
 
 export default function DropDownListItem({
   title,
@@ -52,23 +46,13 @@ export default function DropDownListItem({
             {isDropDown ? (
               <IconButton
                 onPress={() => setIsDropDown(!isDropDown)}
-                IconComponent={
-                  <Icon
-                    name="caretdown"
-                    type="AntDesign"
-                    backgroundSizeRatio={0.3}
-                  />
-                }
+                IconComponent={<Icon name="caretdown" type="AntDesign" backgroundSizeRatio={0.3} />}
               />
             ) : (
               <IconButton
                 onPress={() => setIsDropDown(!isDropDown)}
                 IconComponent={
-                  <Icon
-                    name="caretright"
-                    type="AntDesign"
-                    backgroundSizeRatio={0.3}
-                  />
+                  <Icon name="caretright" type="AntDesign" backgroundSizeRatio={0.3} />
                 }
               />
             )}
@@ -97,8 +81,8 @@ export default function DropDownListItem({
 
 const styles = StyleSheet.create({
   listItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 5,
 
     backgroundColor: colors.white,
@@ -111,12 +95,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     color: colors.dark,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   subTitle: { fontSize: 12, color: colors.dimGray },
   leftContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 15,
   },
   subSubTitle: {

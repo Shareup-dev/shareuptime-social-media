@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -14,24 +14,24 @@ import {
 
 import colors from '../config/colors';
 
-import {RNCamera} from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 import CameraBottomActions from '../components/CameraBottomActions';
 import CameraHeader from '../components/headers/CameraHeader';
 import Icon from '../components/Icon';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import AuthContext from '../authContext';
 import Video from 'react-native-video';
 import storyService from '../services/story.service';
-import {load} from 'npm';
-import {ProgressBar} from 'react-native-paper';
+import { load } from 'npm';
+import { ProgressBar } from 'react-native-paper';
 
-export default function AddStoryScreen({navigation}) {
+export default function AddStoryScreen({ navigation }) {
   let cameraRef;
   let playerRef = useRef();
 
   const windowWidth = Dimensions.get('screen').width;
 
-  const {userData} = useContext(AuthContext)?.userState;
+  const { userData } = useContext(AuthContext)?.userState;
 
   const [isUploading, setIsUploading] = useState(false);
   const [screen, setScreen] = useState('capture');
@@ -42,7 +42,7 @@ export default function AddStoryScreen({navigation}) {
   const scale = useRef(new Animated.Value(0)).current;
 
   const [duration, setDuration] = useState(10000);
-  const [caption, setCaption] = useState("");
+  const [caption, setCaption] = useState('');
 
   // const options = {
   //   onUploadProgress: e => {
@@ -112,7 +112,7 @@ export default function AddStoryScreen({navigation}) {
       maxWidth: 320,
       videoQuality: 'medium',
     })
-      .then(res => {
+      .then((res) => {
         if (res.didCancel) return;
         else if (res.assets[0].duration > 30) {
           Alert.alert('Ops..', "Sorry you can't upload this video", [null], {
@@ -123,7 +123,7 @@ export default function AddStoryScreen({navigation}) {
           setScreen('view');
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error('Error reading an image', error.message);
       });
 
@@ -133,7 +133,7 @@ export default function AddStoryScreen({navigation}) {
   };
 
   const handelRevertCamera = () => {
-    setCameraType(prev => (prev === 'back' ? 'front' : 'back'));
+    setCameraType((prev) => (prev === 'back' ? 'front' : 'back'));
   };
 
   const addStoryHandler = async () => {
@@ -144,21 +144,16 @@ export default function AddStoryScreen({navigation}) {
     const uniId = new Date().valueOf();
     storyData.append('caption', caption);
     storyData.append('stryfiles', {
-      name:
-        mode === 'photo'
-          ? `story-image-${uniId}.jpg`
-          : `story-video-${uniId}.mp4`,
+      name: mode === 'photo' ? `story-image-${uniId}.jpg` : `story-video-${uniId}.mp4`,
       type: mode === 'photo' ? 'image/jpg' : 'video/mp4',
       uri: story.uri,
     });
 
-
-
     storyService
       .addStory(userData.id, storyData)
-      .then(res => res)
-      .catch(e => console.error(e.message))
-      .finally(_ => {
+      .then((res) => res)
+      .catch((e) => console.error(e.message))
+      .finally((_) => {
         setIsUploading(false);
         navigation.goBack();
       });
@@ -172,12 +167,13 @@ export default function AddStoryScreen({navigation}) {
           style={styles.camera}
           ratio={'16:9'}
           captureAudio={true}
-          ref={ref => {
+          ref={(ref) => {
             cameraRef = ref;
           }}
-          type={cameraType}>
+          type={cameraType}
+        >
           <CameraBottomActions
-          title={'Story'}
+            title={'Story'}
             onPickFile={imagePickHandler}
             onCapture={onCapture}
             onRevertCamera={handelRevertCamera}
@@ -203,16 +199,16 @@ export default function AddStoryScreen({navigation}) {
         </RNCamera>
       ) : (
         <View style={styles.storyImgViewer}>
-          <CameraHeader
-            title="Story"
-            onClosePress={() => setScreen('capture')}
-          />
+          <CameraHeader title="Story" onClosePress={() => setScreen('capture')} />
           <View style={styles.forwardArrow}>
-            <TextInput placeholder="Caption" value={caption} onChangeText={e => setCaption(e)} multiline style={styles.caption} />
-            <TouchableOpacity
-              activeOpacity={0.6}
-              disabled={isUploading}
-              onPress={addStoryHandler}>
+            <TextInput
+              placeholder="Caption"
+              value={caption}
+              onChangeText={(e) => setCaption(e)}
+              multiline
+              style={styles.caption}
+            />
+            <TouchableOpacity activeOpacity={0.6} disabled={isUploading} onPress={addStoryHandler}>
               <Icon
                 type={'AntDesign'}
                 color={'#333'}
@@ -240,16 +236,13 @@ export default function AddStoryScreen({navigation}) {
             <Video
               resizeMode={'cover'}
               style={[styles.backgroundVideo]}
-              source={{uri: story.uri}}
+              source={{ uri: story.uri }}
               repeat
             />
           )}
-      
-        
-          
         </View>
       )}
-      <ProgressBar indeterminate={isUploading} visible={isUploading} color={'crimson'}  />
+      <ProgressBar indeterminate={isUploading} visible={isUploading} color={'crimson'} />
     </View>
   );
 }

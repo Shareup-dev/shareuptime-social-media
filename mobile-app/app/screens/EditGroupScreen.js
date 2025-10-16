@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Touchable} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, Touchable } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import Screen from '../components/Screen';
 import Icon from '../components/Icon';
@@ -8,19 +8,17 @@ import AppTextInput from '../components/TextInput';
 import colors from '../config/colors';
 import defaultStyles from '../config/styles';
 import ChoosePrivacyDrawer from '../components/drawers/ChoosePrivacyDrawer';
-import {Header, HeaderCloseIcon, HeaderTitle} from '../components/headers';
+import { Header, HeaderCloseIcon, HeaderTitle } from '../components/headers';
 
 import * as Yup from 'yup';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import GroupService from '../services/group.service';
 import routes from '../navigation/routes';
 
-export default function EditGroup({navigation, route}) {
+export default function EditGroup({ navigation, route }) {
   const groupData = route?.params;
   const [privacy, setPrivacy] = useState(groupData?.privacySetting);
   const [isPrivacyDrawerVisible, setIsPrivacyDrawerVisible] = useState(false);
-
-
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required().label('Name'),
@@ -28,21 +26,21 @@ export default function EditGroup({navigation, route}) {
     // privacySetting: Yup.string().required().label('Privacy option'),
   });
 
-  const handleEdit =  values => {
+  const handleEdit = (values) => {
     GroupService.editGroup(groupData.id, {
       ...values,
       privacySetting: privacy,
     })
-      .then( async res => {
+      .then(async (res) => {
         if (res.status === 200) {
           navigation.navigate({
             name: routes.GROUP_FEED,
             params: res.data,
-            merge:true
+            merge: true,
           });
         }
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   };
 
   return (
@@ -53,8 +51,9 @@ export default function EditGroup({navigation, route}) {
         privacySetting: '',
       }}
       validationSchema={validationSchema}
-      onSubmit={handleEdit}>
-      {({setFieldValue, handleSubmit, handleBlur, errors, values}) => {
+      onSubmit={handleEdit}
+    >
+      {({ setFieldValue, handleSubmit, handleBlur, errors, values }) => {
         return (
           <>
             <Screen>
@@ -77,10 +76,10 @@ export default function EditGroup({navigation, route}) {
                     <AppTextInput
                       style={styles.inputField}
                       backgroundColor={'white'}
-                      onChangeText={val => setFieldValue('name', val)}
+                      onChangeText={(val) => setFieldValue('name', val)}
                       onBlur={() => handleBlur('name')}
-                      value={values['name']}
-                      error={errors['name']}
+                      value={values.name}
+                      error={errors.name}
                     />
                   </View>
                   <View style={styles.input}>
@@ -91,9 +90,9 @@ export default function EditGroup({navigation, route}) {
                     <TextInput
                       multiline={true}
                       numberOfLines={10}
-                      onChangeText={val => setFieldValue('description', val)}
+                      onChangeText={(val) => setFieldValue('description', val)}
                       onBlur={() => handleBlur('description')}
-                      value={values['description']}
+                      value={values.description}
                       style={[styles.inputField, styles.groupDescription]}
                     />
                     <Text
@@ -101,24 +100,20 @@ export default function EditGroup({navigation, route}) {
                         color: 'crimson',
                         textAlign: 'right',
                         paddingHorizontal: 30,
-                      }}>
-                      {errors['description']}
+                      }}
+                    >
+                      {errors.description}
                     </Text>
                   </View>
                   <View
                     onTouchEnd={() => {
                       setIsPrivacyDrawerVisible(!isPrivacyDrawerVisible);
                     }}
-                    style={styles.input}>
+                    style={styles.input}
+                  >
                     <Text style={styles.title}>Privacy</Text>
-                    <Text style={styles.subTitle}>
-                      Choose the privacy setting of group
-                    </Text>
-                    <View
-                      style={[
-                        styles.privacySelector,
-                        {width: '88%', marginHorizontal: 30},
-                      ]}>
+                    <Text style={styles.subTitle}>Choose the privacy setting of group</Text>
+                    <View style={[styles.privacySelector, { width: '88%', marginHorizontal: 30 }]}>
                       <View style={defaultStyles.row}>
                         <Icon
                           type={!privacy ? 'Entypo' : 'Ionicons'}

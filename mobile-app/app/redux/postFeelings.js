@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   feeling: null,
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const postFeelingsSlice = createSlice({
-  name: "postFeelings",
+  name: 'postFeelings',
   initialState: initialState,
   reducers: {
     setFeel: (oldValue, newValue) => {

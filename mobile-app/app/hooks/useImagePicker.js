@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { useState } from 'react';
+import { launchImageLibrary } from 'react-native-image-picker';
 import * as ImagePicker from 'react-native-image-picker';
 
 export default function useImagesPicker() {
@@ -17,12 +17,12 @@ export default function useImagesPicker() {
       setFile(result.assets);
       return result.assets;
     } catch (error) {
-      console.error("Error reading an image", error);
+      console.error('Error reading an image', error);
     }
   };
 
   const clearFile = () => {
     setFile([]);
   };
-  return {file, pickImage, clearFile};
+  return { file, pickImage, clearFile };
 }

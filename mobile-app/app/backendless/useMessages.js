@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Backendless from "./Backendless";
+import { useState } from 'react';
+import Backendless from './Backendless';
 
-import conversation from "./conversation";
-import store from "../redux/store";
-import { messagesAction } from "../redux/messagesSlice";
+import conversation from './conversation';
+import store from '../redux/store';
+import { messagesAction } from '../redux/messagesSlice';
 
 let offset = 0;
 let pagesize = 50;
@@ -12,8 +12,8 @@ let hasNext = true;
 // hook function
 export default useMessages = (channelName) => {
   // Table constants
-  const TABLE_CONVERSATION = "Conversation";
-  const TABLE_CHAT_HISTORY = "ChatHistory";
+  const TABLE_CONVERSATION = 'Conversation';
+  const TABLE_CHAT_HISTORY = 'ChatHistory';
   // define the subscription of channel
   // const channel = Backendless.Messaging.subscribe(
   //   channelName === undefined ? "ChatRoom" : channelName
@@ -23,19 +23,16 @@ export default useMessages = (channelName) => {
   const queryBuilder = Backendless.DataQueryBuilder.create();
 
   // Query Builder
-  const loadRelationsQueryBuilder =
-    Backendless.LoadRelationsQueryBuilder.create();
-  loadRelationsQueryBuilder.setRelationName("chatHistory");
+  const loadRelationsQueryBuilder = Backendless.LoadRelationsQueryBuilder.create();
+  loadRelationsQueryBuilder.setRelationName('chatHistory');
 
   const [loading, setLoading] = useState(false);
 
   // get messages from DB
   const getStoredMessages = async () => {
     setLoading(true);
-    queryBuilder.setOffset(0).setPageSize(50).setSortBy("created DESC");
-    const storedMessages = await Backendless.Data.of("ChatHistory").find(
-      queryBuilder
-    );
+    queryBuilder.setOffset(0).setPageSize(50).setSortBy('created DESC');
+    const storedMessages = await Backendless.Data.of('ChatHistory').find(queryBuilder);
 
     store.dispatch(messagesAction.setMessages(storedMessages));
     setLoading(false);
@@ -45,20 +42,15 @@ export default useMessages = (channelName) => {
   const loadConversationMessages = async (user1, user2) => {
     setLoading(true);
 
-    const resultConversation = await conversation.findConversation(
-      user1,
-      user2
-    );
+    const resultConversation = await conversation.findConversation(user1, user2);
 
     if (resultConversation !== null) {
-      loadRelationsQueryBuilder
-        .setOffset(0)
-        .setPageSize(50)
-        .setSortBy("created DESC");
+      loadRelationsQueryBuilder.setOffset(0).setPageSize(50).setSortBy('created DESC');
 
-      const messages = await Backendless.Data.of(
-        TABLE_CONVERSATION
-      ).loadRelations(resultConversation.objectId, loadRelationsQueryBuilder);
+      const messages = await Backendless.Data.of(TABLE_CONVERSATION).loadRelations(
+        resultConversation.objectId,
+        loadRelationsQueryBuilder,
+      );
       store.dispatch(messagesAction.setMessages(messages));
     }
 
@@ -71,16 +63,12 @@ export default useMessages = (channelName) => {
 
     if (hasNext) {
       offset = offset + pagesize;
-      loadRelationsQueryBuilder
-        .setOffset(offset)
-        .setPageSize(pagesize)
-        .setSortBy("created DESC");
-      const nextPageMessages = await Backendless.Data.of(
-        TABLE_CONVERSATION
-      ).loadRelations(conversationId, loadRelationsQueryBuilder);
+      loadRelationsQueryBuilder.setOffset(offset).setPageSize(pagesize).setSortBy('created DESC');
+      const nextPageMessages = await Backendless.Data.of(TABLE_CONVERSATION).loadRelations(
+        conversationId,
+        loadRelationsQueryBuilder,
+      );
       store.dispatch(messagesAction.updateMessagesList(nextPageMessages));
-
-   
 
       if (nextPageMessages.length === 0) hasNext = false;
     }
@@ -96,7 +84,7 @@ export default useMessages = (channelName) => {
           messageData: message.message,
           objectId: message.messageId,
           publisher: message.publisherId,
-        })
+        }),
       );
   };
 
@@ -119,22 +107,16 @@ export default useMessages = (channelName) => {
       publisherId: `${publisherId}`,
     });
 
-    await Backendless.Messaging.publish(
-      channelName,
-      message,
-      publishOptions
-    ).catch((err) => console.error(err));
+    await Backendless.Messaging.publish(channelName, message, publishOptions).catch((err) =>
+      console.error(err),
+    );
 
     const response = await Backendless.Data.of(TABLE_CHAT_HISTORY).save({
       messageData: message,
       publisher: publisherId,
     });
 
-    await conversation.addToConversation(
-      publisherId,
-      contactId,
-      response.objectId
-    );
+    await conversation.addToConversation(publisherId, contactId, response.objectId);
   };
 
   return {

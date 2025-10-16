@@ -1,8 +1,8 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import Icon from "../components/Icon";
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import Icon from '../components/Icon';
+import colors from '../config/colors';
+import defaultStyles from '../config/styles';
 
 export default function DrawerButtons({ iconImage, title }) {
   return (
@@ -15,10 +15,10 @@ export default function DrawerButtons({ iconImage, title }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: colors.white,
     width: 120,
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 10,
     borderRadius: 5,
     margin: 5,

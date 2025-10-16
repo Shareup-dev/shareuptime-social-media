@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { 
-  useLoginMutation, 
-  useRegisterMutation,
-  useGetProfileQuery 
-} from '../redux/api';
+import { useLoginMutation, useRegisterMutation, useGetProfileQuery } from '../redux/api';
 import { setUser, logOut, setLoading } from '../redux/loggedInUser';
 
 interface LoginCredentials {
@@ -27,9 +23,7 @@ interface AuthError {
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated, isLoading } = useAppSelector(
-    (state) => state.loggedInUser
-  );
+  const { user, isAuthenticated, isLoading } = useAppSelector((state) => state.loggedInUser);
 
   const [loginMutation, { isLoading: isLoginLoading }] = useLoginMutation();
   const [registerMutation, { isLoading: isRegisterLoading }] = useRegisterMutation();
@@ -51,15 +45,15 @@ export const useAuth = () => {
       dispatch(setLoading(true));
 
       const result = await loginMutation(credentials).unwrap();
-      
+
       if (result.user && result.token) {
         // Store token in secure storage (implement this based on your needs)
         // await SecureStore.setItemAsync('authToken', result.token);
-        
+
         dispatch(setUser(result.user));
         return { success: true };
       }
-      
+
       throw new Error('Invalid login response');
     } catch (err: any) {
       const errorMessage = err?.data?.message || err?.message || 'Login failed';
@@ -75,15 +69,15 @@ export const useAuth = () => {
       dispatch(setLoading(true));
 
       const result = await registerMutation(userData).unwrap();
-      
+
       if (result.user && result.token) {
         // Store token in secure storage
         // await SecureStore.setItemAsync('authToken', result.token);
-        
+
         dispatch(setUser(result.user));
         return { success: true };
       }
-      
+
       throw new Error('Invalid registration response');
     } catch (err: any) {
       const errorMessage = err?.data?.message || err?.message || 'Registration failed';
@@ -97,7 +91,7 @@ export const useAuth = () => {
     try {
       // Remove token from secure storage
       // await SecureStore.deleteItemAsync('authToken');
-      
+
       dispatch(logOut());
       return { success: true };
     } catch (err: any) {
@@ -137,14 +131,14 @@ export const useAuth = () => {
     isAuthenticated,
     isLoading: isLoading || isLoginLoading || isRegisterLoading,
     error,
-    
+
     // Actions
     login,
     register,
     logout,
     refreshProfile,
     clearError: () => setError(null),
-    
+
     // Profile data
     profileData,
     profileError,

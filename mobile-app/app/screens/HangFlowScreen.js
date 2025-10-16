@@ -1,4 +1,4 @@
-import React, {useContext, useState, useCallback} from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import TextField from '../components/TextField';
 import Screen from '../components/Screen';
-import {Header, HeaderTitle} from '../components/headers';
-import {HeaderWithBackArrow} from '../components/headers';
+import { Header, HeaderTitle } from '../components/headers';
+import { HeaderWithBackArrow } from '../components/headers';
 import colors from '../config/colors';
 import Tab from '../components/buttons/Tab';
 import Icon from '../components/Icon';
 import routes from '../navigation/routes';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import authContext from '../Contexts/authContext';
 import IconButton from '../components/buttons/IconButton';
 import hangShareService from '../services/hangShare.service';
@@ -24,9 +24,9 @@ import constants from '../config/constants';
 import swapService from '../services/swap.service';
 import { Texts } from '../Materials/Text';
 
-export default function HangFlowScreen({navigation, route}) {
+export default function HangFlowScreen({ navigation, route }) {
   const postType = route.params;
-  const {userState} = useContext(authContext);
+  const { userState } = useContext(authContext);
   const [savedData, setSavedData] = useState([]);
 
   useFocusEffect(
@@ -43,20 +43,18 @@ export default function HangFlowScreen({navigation, route}) {
       }
     }, []),
   );
-  const getAllHang = userEmail => {
-    hangShareService.getAllHangData().then(res => {
+  const getAllHang = (userEmail) => {
+    hangShareService.getAllHangData().then((res) => {
       setSavedData(res.data);
     });
   };
-  const getAllSwap = userEmail => {
-    swapService.getAllSwap().then(res => {
+  const getAllSwap = (userEmail) => {
+    swapService.getAllSwap().then((res) => {
       setSavedData(res.data);
     });
   };
 
-  
-  
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <SwapCard
         navigation={navigation}
@@ -72,15 +70,13 @@ export default function HangFlowScreen({navigation, route}) {
     //setActivityIndicator(false);
   };
   return (
-    <ScrollView style={{backgroundColor: colors.white}}>
+    <ScrollView style={{ backgroundColor: colors.white }}>
       <HeaderWithBackArrow
         onBackButton={() => navigation.goBack()}
         title={
           <HeaderTitle>
             {' '}
-            {postType === constants.postTypes.HANG_SHARE
-              ? 'All In Hangs'
-              : 'Swaps'}
+            {postType === constants.postTypes.HANG_SHARE ? 'All In Hangs' : 'Swaps'}
           </HeaderTitle>
         }
         // rightComponent={
@@ -109,18 +105,18 @@ export default function HangFlowScreen({navigation, route}) {
           //     store.dispatch(recentSearchActions.setList(text))
           //   }}
         />
-      </View> 
+      </View>
 
       <FlatList
         initialNumToRender={10}
         data={savedData}
         // ListFooterComponent={ActivityIndicatorComponent}
-        keyExtractor={post => post.id.toString()}
+        keyExtractor={(post) => post.id.toString()}
         showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         onEndReached={hideActivityIndicator}
         ListEmptyComponent={() => (
-          <Texts style={{alignSelf: 'center', marginVertical: 50}} size={15}>
+          <Texts style={{ alignSelf: 'center', marginVertical: 50 }} size={15}>
             No posts Available
           </Texts>
         )}

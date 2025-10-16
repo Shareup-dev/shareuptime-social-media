@@ -1,23 +1,23 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {View,TouchableOpacity, StyleSheet, Text, TextInput} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, TouchableOpacity, StyleSheet, Text, TextInput } from 'react-native';
 import AuthContext from '../../Contexts/authContext';
-import {HeaderWithBackArrow} from '../../components/headers';
+import { HeaderWithBackArrow } from '../../components/headers';
 import Loading from '../../components/Loading';
 import colors from '../../config/colors';
 import profileService from '../../services/profile.service';
 import userService from '../../services/user.service';
 
-export default function ManageEmail({navigation, route}) {
-  const {title, value} = route.params;
+export default function ManageEmail({ navigation, route }) {
+  const { title, value } = route.params;
 
-  const [loading, setLoading] = useState({state: false, content: 'Loading...'});
+  const [loading, setLoading] = useState({ state: false, content: 'Loading...' });
   const [emailVerifying, setEmailVerifying] = useState(false);
   const [otp, setOtp] = useState('');
   const [emailStatus, setEmailStatus] = useState(null);
   const [error, setError] = useState('');
 
   const {
-    userState: {userData},
+    userState: { userData },
     authActions,
   } = useContext(AuthContext);
 
@@ -25,78 +25,72 @@ export default function ManageEmail({navigation, route}) {
     const checkOptEmailStatus = () => {
       userService
         .checkOptEmailVerified(userData.id)
-        .then(({data}) => setEmailStatus(data))
-        .catch(e => console.error(e.message));
+        .then(({ data }) => setEmailStatus(data))
+        .catch((e) => console.error(e.message));
     };
     checkOptEmailStatus();
   }, []);
 
   const removeOptionalEmail = () => {
-    setLoading({state: true, content: 'Deleting..'});
+    setLoading({ state: true, content: 'Deleting..' });
     profileService
       .removeOptionalEmail(userData.id)
-      .then(async ({status}) => {
+      .then(async ({ status }) => {
         if (status === 200) {
-          await authActions.updateUserInfo({...userData, optional_email: ''});
+          await authActions.updateUserInfo({ ...userData, optional_email: '' });
           navigation.goBack();
         }
       })
-      .catch(e => console.error(e))
-      .finally(_ => setLoading(prev => ({...prev, state: false})));
+      .catch((e) => console.error(e))
+      .finally((_) => setLoading((prev) => ({ ...prev, state: false })));
   };
 
   const verifyEmail = () => {
-    setLoading({state: true, content: 'Sending OTP..'});
+    setLoading({ state: true, content: 'Sending OTP..' });
 
     profileService
       .sendOTPtoVerifyEmail(userData.id)
-      .then(({status}) => status === 200 && setEmailVerifying(true))
-      .catch(e => console.error(e.message))
-      .finally(_ => setLoading(prev => ({...prev, state: false})));
+      .then(({ status }) => status === 200 && setEmailVerifying(true))
+      .catch((e) => console.error(e.message))
+      .finally((_) => setLoading((prev) => ({ ...prev, state: false })));
   };
 
-  const verifyOTP = _ => {
-    setLoading({state: true, content: 'Verifying..'});
+  const verifyOTP = (_) => {
+    setLoading({ state: true, content: 'Verifying..' });
 
     profileService
       .verifyOTP(userData.id, otp)
-      .then(res => res)
-      .catch(({response: {status, data}}) => {
+      .then((res) => res)
+      .catch(({ response: { status, data } }) => {
         if (status === 400) setError('Wrong OPT');
       })
-      .finally(_ => setLoading(prev => ({...prev, state: false})));
+      .finally((_) => setLoading((prev) => ({ ...prev, state: false })));
   };
   return (
     <>
       <View style={styles.container}>
-        <HeaderWithBackArrow
-          onBackButton={_ => navigation.goBack()}
-          title={title}
-        />
+        <HeaderWithBackArrow onBackButton={(_) => navigation.goBack()} title={title} />
         {loading.state && <Loading text={loading.content} modal />}
         <View style={styles.body}>
           <Text style={styles.title}>{value}</Text>
           <Text>{emailStatus ? 'Verified' : 'Pending'}</Text>
           {!emailVerifying && (
-            <View style={{flexDirection: 'row', alignSelf: 'flex-end'}}>
+            <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
               {emailStatus ? (
                 <TouchableOpacity style={styles.btn}>
-                  <Text style={{color: '#fff', fontWeight: '700'}}>
-                    Make it Primary
-                  </Text>
+                  <Text style={{ color: '#fff', fontWeight: '700' }}>Make it Primary</Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity onPress={verifyEmail} style={styles.btn}>
-                  <Text style={{color: '#fff', fontWeight: '700'}}>
-                    Verify
-                  </Text>
+                  <Text style={{ color: '#fff', fontWeight: '700' }}>Verify</Text>
                 </TouchableOpacity>
               )}
 
               <TouchableOpacity
                 onPress={removeOptionalEmail}
-                style={[styles.btn, {backgroundColor: 'crimson'}]}>
-                <Text style={{color: '#fff', fontWeight: '700'}}>Remove</Text>
+                style={[styles.btn, { backgroundColor: 'crimson' }]}
+              >
+                <Text style={{ color: '#fff', fontWeight: '700' }}>Remove</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -104,17 +98,16 @@ export default function ManageEmail({navigation, route}) {
         {emailVerifying && (
           <View style={styles.body}>
             <View style={styles.card}>
-              <Text style={{textAlign: 'center', marginVertical: 10}}>
+              <Text style={{ textAlign: 'center', marginVertical: 10 }}>
                 Shareup has sent you a verification code to the email
               </Text>
-              <View style={{alignItems: 'center'}}>
-                <Text
-                  style={[styles.label, {color: error ? 'crimson' : '#333'}]}>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={[styles.label, { color: error ? 'crimson' : '#333' }]}>
                   {error ? error : `Verification code`}
                 </Text>
                 <TextInput
                   value={otp}
-                  onChangeText={val => {
+                  onChangeText={(val) => {
                     setOtp(val);
                     setError('');
                   }}
@@ -130,7 +123,7 @@ export default function ManageEmail({navigation, route}) {
                 />
               </View>
 
-              <Text style={{textAlign: 'center'}}>
+              <Text style={{ textAlign: 'center' }}>
                 Verification code will expire after 5 minutes
               </Text>
               <TouchableOpacity
@@ -144,18 +137,14 @@ export default function ManageEmail({navigation, route}) {
                   width: 100,
                   alignSelf: 'center',
                   alignItems: 'center',
-                }}>
-                <Text
-                  style={{color: colors.iondigoDye, fontWeight: '700'}}
-                  onPress={verifyEmail}>
+                }}
+              >
+                <Text style={{ color: colors.iondigoDye, fontWeight: '700' }} onPress={verifyEmail}>
                   Re-send
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[styles.btn]}
-                disabled={otp.length < 6}
-                onPress={verifyOTP}>
+              <TouchableOpacity style={[styles.btn]} disabled={otp.length < 6} onPress={verifyOTP}>
                 <Text style={styles.btnText}>Verify</Text>
               </TouchableOpacity>
             </View>

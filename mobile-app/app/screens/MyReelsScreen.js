@@ -1,12 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Dimensions, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import Screen from '../components/Screen';
 import HeaderWithBackArrow from '../components/headers/HeaderWithBackArrow';
@@ -25,7 +18,7 @@ import axios from 'axios';
 const width = Dimensions.get('window').width / 2 - 15;
 const height = Dimensions.get('window').height / 3;
 
-const tabes = [{name: 'My Reels'}, {name: 'Followed'}, {name: 'Explore'}];
+const tabes = [{ name: 'My Reels' }, { name: 'Followed' }, { name: 'Explore' }];
 const dummyThumbnails = [
   require('../assets/images/reel1.png'),
   require('../assets/images/2.jpg'),
@@ -164,10 +157,10 @@ const myReels = [
   },
 ];
 
-export default function SwapScreen({navigation}) {
+export default function SwapScreen({ navigation }) {
   const [allReels, setAllReels] = useState([]);
   const [currentTab, setCurrentTab] = useState(tabes[0].name);
-  const handleTabbed = name => {
+  const handleTabbed = (name) => {
     setCurrentTab(name);
   };
 
@@ -181,13 +174,14 @@ export default function SwapScreen({navigation}) {
     // });
     store.dispatch(reelScreenDetector.actions.setReelScreen());
 
-    
     // StoriesService.getStories()
     // .then(({data}) => setAllReels(data))
     // .catch(e => console.error(e.message));
 
-    axios.get('https://6252a9697f7fa1b1dde87a9c.mockapi.io/api/v1/reels').then(({data})=>setAllReels(data));
-    
+    axios
+      .get('https://6252a9697f7fa1b1dde87a9c.mockapi.io/api/v1/reels')
+      .then(({ data }) => setAllReels(data));
+
     return () => {
       navigation.addListener('blur', () => {
         store.dispatch(reelScreenDetector.actions.unSetReelScreen());
@@ -221,24 +215,19 @@ export default function SwapScreen({navigation}) {
       />
 
       <FlatList
-        contentContainerStyle={[
-          defaultStyle.listContentContainerStyle,
-          styles.list,
-        ]}
+        contentContainerStyle={[defaultStyle.listContentContainerStyle, styles.list]}
         data={renderList()}
         numColumns={2}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        renderItem={({item,index}) => (
+        renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate(routes.REEL_PLAYER, {index,data:renderList()});
-            }}>
+              navigation.navigate(routes.REEL_PLAYER, { index, data: renderList() });
+            }}
+          >
             <View style={[styles.container]}>
-              <Image
-                source={{uri: fileStorage.baseUrl + item.image}}
-                style={styles.image}
-              />
+              <Image source={{ uri: fileStorage.baseUrl + item.image }} style={styles.image} />
             </View>
           </TouchableOpacity>
         )}

@@ -11,29 +11,26 @@ import {
 import Icon from '../components/Icon';
 import colors from '../config/colors';
 import defaultStyles from '../config/styles';
-import {StackActions} from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 import routes from '../navigation/routes';
 import store from '../redux/store';
-import {swapedImagesAction} from '../redux/swapedImages';
-const SwapDisplay = ({navigation, route}) => {
+import { swapedImagesAction } from '../redux/swapedImages';
+const SwapDisplay = ({ navigation, route }) => {
   return (
     <ImageBackground
       style={{
-  flex: 1
-        
+        flex: 1,
       }}
-      source={{uri: route.params.swapImage}}>
-      <View
-        style={[
-          defaultStyles.row,
-          {justifyContent: 'space-between', paddingHorizontal: 30},
-        ]}>
+      source={{ uri: route.params.swapImage }}
+    >
+      <View style={[defaultStyles.row, { justifyContent: 'space-between', paddingHorizontal: 30 }]}>
         <Text style={styles.title}>Swap</Text>
         <TouchableOpacity
           onPress={() => {
             const popAction = StackActions.pop(1);
             navigation.dispatch(popAction);
-          }}>
+          }}
+        >
           <Icon
             type={'FontAwesome'}
             name={'close'}
@@ -44,7 +41,7 @@ const SwapDisplay = ({navigation, route}) => {
           />
         </TouchableOpacity>
       </View>
-      <View style={{borderBottomWidth: 2, borderColor: colors.white}}></View>
+      <View style={{ borderBottomWidth: 2, borderColor: colors.white }} />
       {/* <Image
         style={{
           width: Dimensions.get("screen").width,
@@ -57,10 +54,11 @@ const SwapDisplay = ({navigation, route}) => {
       <View
         style={{
           justifyContent: 'flex-end',
-          alignItems:"flex-end",
+          alignItems: 'flex-end',
           flex: 1,
-          padding: 15
-        }}>
+          padding: 15,
+        }}
+      >
         <TouchableOpacity
           onPress={() => {
             if (route.params.returnSwap) {
@@ -68,17 +66,18 @@ const SwapDisplay = ({navigation, route}) => {
               store.dispatch(
                 swapedImagesAction.setImages([
                   ...previousState,
-                  {...route.params, swapImage: route.params.swapImage},
+                  { ...route.params, swapImage: route.params.swapImage },
                 ]),
               );
-              navigation.navigate(routes.FEED, {...route.params});
+              navigation.navigate(routes.FEED, { ...route.params });
             } else {
               navigation.navigate(routes.ADD_POST, {
                 postType: 'swapPost',
                 swapImage: route.params.swapImage,
               });
             }
-          }}>
+          }}
+        >
           <Icon
             type={'Ionicons'}
             name={'arrow-forward-sharp'}

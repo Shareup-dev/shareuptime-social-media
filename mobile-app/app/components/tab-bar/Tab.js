@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 import colors from '../../config/colors';
 
@@ -22,7 +22,8 @@ export default function Tab({
               fontWeight: '500',
               fontSize: fontSize,
             },
-          ]}>
+          ]}
+        >
           {text}
         </Text>
 

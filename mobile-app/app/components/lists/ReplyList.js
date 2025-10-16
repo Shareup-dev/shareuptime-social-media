@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState, useCallback} from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -25,19 +25,13 @@ import postService from '../../services/post.service';
 // import { useFocusEffect } from "@react-navigation/native";
 // import OptionsDrawer from "../drawers/OptionsDrawer";
 import CommentItem from '../comments/CommentItem';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function ReplyList({
-  comment,
-  postType,
-  refresh,
-  refreshComments
-}) {
+export default function ReplyList({ comment, postType, refresh, refreshComments }) {
   const [replyList, setReplyList] = useState([]);
 
-  const {userState} = useContext(authContext);
+  const { userState } = useContext(authContext);
   const [isEdit, setIsEdit] = useState(false);
-
 
   useFocusEffect(
     useCallback(() => {
@@ -69,38 +63,38 @@ export default function ReplyList({
       },
       onPress: () =>
         Alert.alert('Delete', 'Are you sure you want to delete this comment?', [
-          {text: 'Yes', onPress: () => handleDeleteComment()},
-          {text: 'No'},
+          { text: 'Yes', onPress: () => handleDeleteComment() },
+          { text: 'No' },
         ]),
     },
   ];
   const handleDeleteComment = () => {
     postService
       .deleteReply(comment.id)
-      .then(res => {
+      .then((res) => {
         refreshComments();
         Keyboard.dismiss();
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
 
     // scrollToListBottom();
   };
 
-  const handleLongPress = commendId => {
+  const handleLongPress = (commendId) => {
     setIsOptionsVisible(true);
   };
 
   const loadReply = () => {
     postService
       .getAllReply(userState.userData.id, comment.id)
-      .then(res => {
+      .then((res) => {
         const replyArray = res.data; //.reverse();
         setReplyList(replyArray);
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   };
 
-  const handleReply = commentId => {
+  const handleReply = (commentId) => {
     onReply(commentId, true);
     setshowReply(true);
     loadReply(commentId);
@@ -109,7 +103,7 @@ export default function ReplyList({
     setshowReply(false);
     onReply(comment.id, false);
   };
-  const handleEditComment = status => {
+  const handleEditComment = (status) => {
     setIsEdit(status);
   };
   const refreshList = async () => {
@@ -117,31 +111,28 @@ export default function ReplyList({
     loadReply();
     setRefreshing(false);
   };
-  const handleReactions = async cid => {
-    const params = {reaction: 'null'};
+  const handleReactions = async (cid) => {
+    const params = { reaction: 'null' };
     postService
       .likeUnlikeReply(userState?.userData?.id, cid, params)
-      .then(res => {
+      .then((res) => {
         loadReply();
         //setIsUserLiked(!isUserLiked)
       }) //need to get likePostIds
-      .catch(e => console.error(e));
-
+      .catch((e) => console.error(e));
   };
 
   return (
     <View>
       <FlatList
         data={replyList}
-        keyExtractor={comment => comment.id.toString()}
+        keyExtractor={(comment) => comment.id.toString()}
         refreshing={refresh}
         onRefresh={refreshList}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <CommentItem
             comment={item}
-            reactionsLength={
-              item?.reactions?.length ? item?.reactions?.length : 0
-            }
+            reactionsLength={item?.reactions?.length ? item?.reactions?.length : 0}
             isUserLiked={item.replyLiked}
             onInteraction={handleReactions}
             //handleDelete={handleDeleteComment}

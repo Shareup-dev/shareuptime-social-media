@@ -29,24 +29,10 @@ const ListHeader: React.FC<ListHeaderProps> = ({
   return (
     <View style={[styles.container, alignmentStyle, containerStyle]}>
       {title && (
-        <Text
-          style={[
-            styles.title,
-            defaultStyles.titleFontSize,
-            titleStyle,
-          ]}
-        >
-          {title}
-        </Text>
+        <Text style={[styles.title, defaultStyles.titleFontSize, titleStyle]}>{title}</Text>
       )}
       {subtitle && (
-        <Text
-          style={[
-            styles.subtitle,
-            defaultStyles.fontWeightMedium,
-            subtitleStyle,
-          ]}
-        >
+        <Text style={[styles.subtitle, defaultStyles.fontWeightMedium, subtitleStyle]}>
           {subtitle}
         </Text>
       )}

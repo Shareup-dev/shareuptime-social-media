@@ -117,7 +117,7 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
         VALUES ($1, $2, $3, $4, $5, 0, true)
         RETURNING *
       `;
-      const inserted = await client.query(insertQuery, [
+      const _inserted = await client.query(insertQuery, [
         commentId,
         postId,
         userId,

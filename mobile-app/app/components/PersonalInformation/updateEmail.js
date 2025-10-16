@@ -1,5 +1,5 @@
-import {Formik} from 'formik';
-import React, {useContext, useState} from 'react';
+import { Formik } from 'formik';
+import React, { useContext, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import AuthContext from '../../Contexts/authContext';
-import {HeaderWithBackArrow} from '../../components/headers';
+import { HeaderWithBackArrow } from '../../components/headers';
 import colors from '../../config/colors';
 import * as Yup from 'yup';
 import Loading from '../../components/Loading';
@@ -20,13 +20,13 @@ import Icon from '../../components/Icon';
 import profileService from '../../services/profile.service';
 import routes from '../../navigation/routes';
 
-export default function UpdateEmail({navigation}) {
+export default function UpdateEmail({ navigation }) {
   const {
-    userState: {userData, username},
+    userState: { userData, username },
     authActions,
   } = useContext(AuthContext);
 
-  const [loading, setLoading] = useState({state: false, content: 'Loading..'});
+  const [loading, setLoading] = useState({ state: false, content: 'Loading..' });
   const [verifying, setVerifying] = useState(false);
   const [optionalEmail, setOptionalEmail] = useState('');
   const [step, setStep] = useState(0);
@@ -35,57 +35,54 @@ export default function UpdateEmail({navigation}) {
     email: Yup.string().email().label('Email').required(),
   });
 
-  const handleSubmit = values => {
-    setLoading(prev => ({...prev, state: true}));
+  const handleSubmit = (values) => {
+    setLoading((prev) => ({ ...prev, state: true }));
     userService
       .editProfile(username, values)
-      .then(({status, data}) => {
+      .then(({ status, data }) => {
         if (status === 200) {
           authActions.updateUserInfo(data);
-          setLoading(prev => ({...prev, state: false}));
+          setLoading((prev) => ({ ...prev, state: false }));
           navigation.goBack();
         }
       })
-      .catch(e => console.error(e.message));
+      .catch((e) => console.error(e.message));
   };
 
-  const sendOtp = ({email}) => {
+  const sendOtp = ({ email }) => {
     if (!email) {
       return;
     }
     setVerifying(true);
 
     profileService
-      .sendOTPtoVerifyEmail(userData.id, {email: email})
-      .then(res => res)
-      .catch(e => console.error(e))
-      .finally(_ => setVerifying(false));
+      .sendOTPtoVerifyEmail(userData.id, { email: email })
+      .then((res) => res)
+      .catch((e) => console.error(e))
+      .finally((_) => setVerifying(false));
   };
 
-  const addOptionalEmail = ({email}) => {
-    setLoading(prev => ({content: 'Saving', state: true}));
+  const addOptionalEmail = ({ email }) => {
+    setLoading((prev) => ({ content: 'Saving', state: true }));
     profileService
       .addOptionalEmail(userData.id, email)
-      .then(({status}) => {
+      .then(({ status }) => {
         if (status === 200) {
-           authActions.updateUserInfo({
+          authActions.updateUserInfo({
             ...userData,
             optional_email: email,
           });
         }
       })
-      .catch(e => e.message)
-      .finally(_ => setLoading(prev => ({...prev, state: false})));
+      .catch((e) => e.message)
+      .finally((_) => setLoading((prev) => ({ ...prev, state: false })));
   };
 
   return (
     <View style={styles.container}>
-      <HeaderWithBackArrow
-        onBackButton={_ => navigation.goBack()}
-        title="Email"
-      />
+      <HeaderWithBackArrow onBackButton={(_) => navigation.goBack()} title="Email" />
       {loading.state && <Loading text={loading.content} modal />}
-      <TouchableOpacity activeOpacity={1} style={{flex: 1}}>
+      <TouchableOpacity activeOpacity={1} style={{ flex: 1 }}>
         <View style={styles.card}>
           <TouchableOpacity
             // onPress={_ =>
@@ -100,10 +97,11 @@ export default function UpdateEmail({navigation}) {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-            }}>
-            <View style={{flexDirection: 'row'}}>
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
               <Icon name={'email'} color="#fff" backgroundColor="#333333" />
-              <View style={{marginLeft: 10}}>
+              <View style={{ marginLeft: 10 }}>
                 <Text style={styles.label}>Primary Email</Text>
                 <Text>{userData.email}</Text>
               </View>
@@ -113,7 +111,7 @@ export default function UpdateEmail({navigation}) {
 
           {userData.optional_email ? (
             <TouchableOpacity
-              onPress={_ =>
+              onPress={(_) =>
                 navigation.navigate(routes.MANAGE_EMAIL, {
                   value: userData.optional_email,
                   title: 'Secondary Email',
@@ -124,10 +122,11 @@ export default function UpdateEmail({navigation}) {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-              }}>
-              <View style={{flexDirection: 'row'}}>
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
                 {/* <Icon name={'email'} color="#fff" backgroundColor="#333333" /> */}
-                <View style={{marginLeft: 10}}>
+                <View style={{ marginLeft: 10 }}>
                   <Text style={styles.label}>Secondary Email</Text>
                   <Text>{userData.optional_email}</Text>
                 </View>
@@ -136,19 +135,17 @@ export default function UpdateEmail({navigation}) {
             </TouchableOpacity>
           ) : (
             <Formik
-              initialValues={{email: ''}}
+              initialValues={{ email: '' }}
               onSubmit={addOptionalEmail}
               // validateOnChange={false}
-              validationSchema={Validation}>
-              {({handleChange, handleBlur, values, handleSubmit, errors}) => (
+              validationSchema={Validation}
+            >
+              {({ handleChange, handleBlur, values, handleSubmit, errors }) => (
                 <>
                   <Text style={styles.label}>Secondary Email</Text>
                   <TextInput
-                    style={[
-                      styles.input,
-                      {borderColor: errors['email'] ? 'crimson' : '#cacaca'},
-                    ]}
-                    value={values['email']}
+                    style={[styles.input, { borderColor: errors.email ? 'crimson' : '#cacaca' }]}
+                    value={values.email}
                     onBlur={handleBlur('email')}
                     keyboardType="email-address"
                     onChangeText={handleChange('email')}
@@ -168,7 +165,7 @@ export default function UpdateEmail({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: { flex: 1 },
   btnText: {
     color: '#fff',
     fontSize: 14,

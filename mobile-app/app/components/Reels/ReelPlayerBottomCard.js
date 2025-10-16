@@ -1,6 +1,6 @@
 import moment from 'moment';
-import React, {useContext, useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import AuthContext from '../../Contexts/authContext';
 import routes from '../../navigation/routes';
 import ReelsService from '../../services/Reels.service';
@@ -20,32 +20,28 @@ const BottomCard = React.memo(
     navigation,
   }) => {
     const {
-      userState: {userData},
+      userState: { userData },
     } = useContext(AuthContext);
-    const {firstName, lastName, id: userID} = user;
+    const { firstName, lastName, id: userID } = user;
 
     const [date, setDate] = useState(
       moment(publishedDate, 'DD MMMM YYYY hh:mm:ss').fromNow(),
       // null
     );
     const [like, setLike] = useState(Boolean(reelLiked));
-    const [totalLikes, setTotalLikes] = useState(
-      numberOfReaction ? numberOfReaction : 0,
-    );
-    const [totalComments, setTotalComments] = useState(
-      numberOfComments ? numberOfComments : 0,
-    );
+    const [totalLikes, setTotalLikes] = useState(numberOfReaction ? numberOfReaction : 0);
+    const [totalComments, setTotalComments] = useState(numberOfComments ? numberOfComments : 0);
 
     const toggleLike = () => {
       ReelsService.likeUnLike(userData.id, rid, {})
-        .then(({status}) => {
+        .then(({ status }) => {
           if (status === 200) {
-            if (like) setTotalLikes(prev => prev - 1);
-            else setTotalLikes(prev => prev + 1);
-            setLike(prev => !prev);
+            if (like) setTotalLikes((prev) => prev - 1);
+            else setTotalLikes((prev) => prev + 1);
+            setLike((prev) => !prev);
           }
         })
-        .catch(e => console.error(e.message));
+        .catch((e) => console.error(e.message));
     };
 
     const navigateToComments = () =>
@@ -63,12 +59,10 @@ const BottomCard = React.memo(
             style={{
               backgroundColor: '#33333345',
               borderRadius: 35,
-            }}>
+            }}
+          >
             <View style={styles.reelsInfo}>
-              <UserProfilePicture
-                profilePicture={user?.profilePicturePath}
-                size={50}
-              />
+              <UserProfilePicture profilePicture={user?.profilePicturePath} size={50} />
 
               <View>
                 <Text
@@ -77,28 +71,25 @@ const BottomCard = React.memo(
                     marginTop: 2,
                     marginLeft: 5,
                     fontSize: 14,
-                  }}>
+                  }}
+                >
                   {`${firstName} ${lastName}`}
                 </Text>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                  }}>
+                  }}
+                >
                   <Icon
                     color={like ? '#FFCE45' : '#fff'}
                     name={like ? 'star' : 'star-o'}
                     noBackground
                     type="FontAwesome"
                   />
-                  <Text style={{color: '#fff'}}>{totalLikes}</Text>
-                  <Icon
-                    color="#fff"
-                    name="comment"
-                    noBackground
-                    type="Octicons"
-                  />
-                  <Text style={{color: '#fff'}}>{totalComments}</Text>
+                  <Text style={{ color: '#fff' }}>{totalLikes}</Text>
+                  <Icon color="#fff" name="comment" noBackground type="Octicons" />
+                  <Text style={{ color: '#fff' }}>{totalComments}</Text>
                 </View>
               </View>
             </View>
@@ -108,7 +99,8 @@ const BottomCard = React.memo(
                 marginTop: 2,
                 marginHorizontal: 15,
                 fontSize: 14,
-              }}>
+              }}
+            >
               {`Posted on: ${date}`}
             </Text>
             <Text
@@ -118,7 +110,8 @@ const BottomCard = React.memo(
                 marginHorizontal: 15,
                 marginBottom: 10,
                 fontSize: 14,
-              }}>
+              }}
+            >
               {content}
             </Text>
           </View>
@@ -128,7 +121,7 @@ const BottomCard = React.memo(
             <Icon
               color={like ? '#FFCE45' : '#fff'}
               name={like ? 'star' : 'star-o'}
-              style={{marginVertical: 5}}
+              style={{ marginVertical: 5 }}
               backgroundSizeRatio={0.7}
               noBackground
               type="FontAwesome"
@@ -138,10 +131,11 @@ const BottomCard = React.memo(
             // onPress={_ =>
             //   navigation.navigate(routes.ADD_COMMENT_REEL, {reelId: rid})
             // }
-            onPress={navigateToComments}>
+            onPress={navigateToComments}
+          >
             <Icon
               color="#fff"
-              style={{marginVertical: 5}}
+              style={{ marginVertical: 5 }}
               name="comment"
               noBackground
               backgroundSizeRatio={0.7}

@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React, { useCallback, useState, useEffect } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
 export default function CommentText({ readMoreStyle, text, textStyle, style }) {
   const [showMoreButton, setShowMoreButton] = useState(false);
@@ -21,7 +21,7 @@ export default function CommentText({ readMoreStyle, text, textStyle, style }) {
         setNumLines(3);
       }
     },
-    [textShown]
+    [textShown],
   );
 
   return (
@@ -37,7 +37,7 @@ export default function CommentText({ readMoreStyle, text, textStyle, style }) {
 
       {showMoreButton ? (
         <Text onPress={toggleTextShown} style={readMoreStyle}>
-          {textShown ? "...Read Less" : "Read More..."}
+          {textShown ? '...Read Less' : 'Read More...'}
         </Text>
       ) : null}
     </View>
@@ -46,6 +46,6 @@ export default function CommentText({ readMoreStyle, text, textStyle, style }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
+    width: '80%',
   },
 });

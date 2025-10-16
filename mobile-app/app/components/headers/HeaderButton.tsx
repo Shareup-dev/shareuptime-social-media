@@ -25,21 +25,15 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
     style,
   ];
 
-  return (
-    <Button
-      title={title}
-      onPress={disabled ? undefined : onPress}
-      style={buttonStyle}
-    />
-  );
+  return <Button title={title} onPress={disabled ? undefined : onPress} style={buttonStyle} />;
 };
 
 const styles = StyleSheet.create({
-  activeButton: { 
+  activeButton: {
     color: colors.iondigoDye,
     fontWeight: '600',
   },
-  inactiveButton: { 
+  inactiveButton: {
     color: colors.dimGray,
     fontWeight: '400',
   },

@@ -1,24 +1,16 @@
 import React from 'react';
-import {ColorValue, Text, TextStyle} from 'react-native';
-
-
+import { ColorValue, Text, TextStyle } from 'react-native';
 
 type Props = {
-  children: String;
+  children: string;
   style?: TextStyle;
   size?: number;
   color?: ColorValue;
 };
 
-const Header: React.FC<Props> = ({
-  children,
-  style,
-  size = 18,
-  color = '#333',
-  ...rest
-}) => {
+const Header: React.FC<Props> = ({ children, style, size = 18, color = '#333', ...rest }) => {
   return (
-    <Text {...rest} style={[style, {fontSize: size, color: color}]}>
+    <Text {...rest} style={[style, { fontSize: size, color: color }]}>
       {children}
     </Text>
   );

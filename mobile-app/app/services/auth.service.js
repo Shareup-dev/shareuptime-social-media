@@ -8,23 +8,23 @@ class AuthService {
     axios({
       method: 'POST',
       url: `${url}/users/authenticate`,
-      data: {username, password},
+      data: { username, password },
     });
 
-  signup = user =>
+  signup = (user) =>
     axios({
       method: 'POST',
       url: `${url}/register`,
       data: user,
     });
 
-  verifyUser = username =>
+  verifyUser = (username) =>
     axios({
       method: 'GET',
       url: `${url}/users/email/${username}`,
     });
 
-  passwordResetOTP = username =>
+  passwordResetOTP = (username) =>
     axios({
       method: 'PUT',
       url: `${url}/send_otp/${username}`,
@@ -39,7 +39,7 @@ class AuthService {
       },
     });
 
-  verifyEmailOTP = username =>
+  verifyEmailOTP = (username) =>
     axios({
       method: 'PUT',
       url: `${url}/send_otp_verify_email/${username}`,

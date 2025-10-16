@@ -1,12 +1,13 @@
 import React from 'react';
-import {StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import colors from '../config/colors';
 
-export default function Screen({children, style}) {
+export default function Screen({ children, style }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
-      style={[styles.view, style]}>
+      style={[styles.view, style]}
+    >
       {children}
     </KeyboardAvoidingView>
   );

@@ -1,15 +1,9 @@
 import React from 'react';
 
-import {StyleSheet, Dimensions, StatusBar} from 'react-native';
+import { StyleSheet, Dimensions, StatusBar } from 'react-native';
 import CameraHeader from './headers/CameraHeader';
 
-export default function AppCamera({
-  children,
-  style,
-  type,
-  statusPadding = true,
-  forwardRef,
-}) {
+export default function AppCamera({ children, style, type, statusPadding = true, forwardRef }) {
   // return (
   //   <Camera
   //     ratio={'16:9'}

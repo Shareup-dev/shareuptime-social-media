@@ -1,8 +1,8 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text,Alert,Share} from 'react-native';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, Alert, Share } from 'react-native';
+import { useSelector } from 'react-redux';
 import ImageView from 'react-native-image-viewing';
-import {SliderBox} from 'react-native-image-slider-box';
+import { SliderBox } from 'react-native-image-slider-box';
 import colors from '../../config/colors';
 import fileStorage from '../../config/fileStorage';
 import PostOptionDrawer from '../drawers/PostOptionsDrawer';
@@ -12,25 +12,23 @@ import SwapActionContainer from '../posts/SwapActionContainer';
 import AuthContext from '../../authContext';
 import onShare from '../Share';
 const imageSize = 160;
-const SwapCard = React.memo(({item, navigation, userId, style}) => {
+const SwapCard = React.memo(({ item, navigation, userId, style }) => {
   const actionsTabSizeRatio = 0.5;
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
-  const [numberOfComments, setNumberOfComments] = useState(
-    item.numberOfComments,
-  );
+  const [numberOfComments, setNumberOfComments] = useState(item.numberOfComments);
 
   const [sliderWidth, setSliderWidth] = useState();
   const [currentImage, setCurrentImage] = useState();
   const [images, setImages] = useState([]);
   const [imageViewerVisible, setImageViewerVisible] = useState(false);
-  const swapedPosts = useSelector(state => state.swapedImages);
+  const swapedPosts = useSelector((state) => state.swapedImages);
 
-  const {userState} = useContext(AuthContext);
+  const { userState } = useContext(AuthContext);
 
-  const getSwapedImage = swapId => {
-    let foundSwap = swapedPosts.filter(swap => swap.swapPostId === swapId)[0];
+  const getSwapedImage = (swapId) => {
+    let foundSwap = swapedPosts.filter((swap) => swap.swapPostId === swapId)[0];
     if (foundSwap) {
-      return {imagePath: foundSwap.swapImage, found: true};
+      return { imagePath: foundSwap.swapImage, found: true };
     } else {
       let image = {
         imagePath: '../assets/icons/swap-square-dashed.png',
@@ -44,11 +42,10 @@ const SwapCard = React.memo(({item, navigation, userId, style}) => {
     loadImages();
   }, []);
 
-  const {userData : user} =
-    useContext(AuthContext)?.userState;
+  const { userData: user } = useContext(AuthContext)?.userState;
   const loadImages = () => {
     if (item.media.length !== 0) {
-      setImages(item.media.map(image => fileStorage.baseUrl + image.mediaPath));
+      setImages(item.media.map((image) => fileStorage.baseUrl + image.mediaPath));
     }
   };
 
@@ -73,7 +70,7 @@ const SwapCard = React.memo(({item, navigation, userId, style}) => {
     },
     {
       title: 'Swap',
-      icon: {image: require('../../assets/post-options-icons/swap-icon.png')},
+      icon: { image: require('../../assets/post-options-icons/swap-icon.png') },
       onPress: () => {
         alert('Swap');
       },
@@ -116,27 +113,25 @@ const SwapCard = React.memo(({item, navigation, userId, style}) => {
     },
   ];
   const showDeleteAlert = () =>
-  Alert.alert('Delete', 'Are you sure to delete this post', [
-    {
-      text: 'Yes',
-      onPress: deletePost,
-      style: 'cancel',
-    },
-    {
-      text: 'No',
-      style: 'cancel',
-    },
-  ]) 
+    Alert.alert('Delete', 'Are you sure to delete this post', [
+      {
+        text: 'Yes',
+        onPress: deletePost,
+        style: 'cancel',
+      },
+      {
+        text: 'No',
+        style: 'cancel',
+      },
+    ]);
 
-const deletePost = async () => {
- 
+  const deletePost = async () => {
     // const result = await PostService.deletePost(postId)
     // .then(res => setPosts(res.data))
     // .catch(e => console.error(e));
-  
-  //reloadPosts();
-};
-  const onLayout = e => {
+    //reloadPosts();
+  };
+  const onLayout = (e) => {
     setSliderWidth(e.nativeEvent.layout.width);
   };
 
@@ -145,7 +140,7 @@ const deletePost = async () => {
       {currentImage && (
         <ImageView
           visible={imageViewerVisible}
-          images={[{uri: currentImage}]}
+          images={[{ uri: currentImage }]}
           imageIndex={0}
           onRequestClose={() => {
             setImageViewerVisible(false);
@@ -161,7 +156,7 @@ const deletePost = async () => {
             ImageComponentStyle={styles.image}
             imageLoadingColor={colors.iondigoDye}
             parentWidth={sliderWidth}
-            onCurrentImagePressed={index => {
+            onCurrentImagePressed={(index) => {
               setCurrentImage(images[index]);
               setImageViewerVisible(true);
             }}
@@ -193,12 +188,13 @@ const deletePost = async () => {
         postType={'swapPost'}
       />
 
-      <View style={{flexDirection: 'row'}}>
+      <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => {
             setIsOptionsVisible(true);
-          }}></TouchableOpacity>
+          }}
+        />
 
         <PostOptionDrawer
           source={'newfeed'}

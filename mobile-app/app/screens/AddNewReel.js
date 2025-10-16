@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -14,23 +14,23 @@ import {
 
 import colors from '../config/colors';
 
-import {RNCamera} from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 import CameraBottomActions from '../components/CameraBottomActions';
 import CameraHeader from '../components/headers/CameraHeader';
 import Icon from '../components/Icon';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import AuthContext from '../authContext';
 import Video from 'react-native-video';
 import ReelService from '../services/Reels.service';
-import {ProgressBar} from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 
-export default function AddReelScreen({navigation}) {
+export default function AddReelScreen({ navigation }) {
   let cameraRef;
   let playerRef = useRef();
 
   const windowWidth = Dimensions.get('screen').width;
 
-  const {userData} = useContext(AuthContext)?.userState;
+  const { userData } = useContext(AuthContext)?.userState;
 
   const [isUploading, setIsUploading] = useState(false);
   const [screen, setScreen] = useState('capture');
@@ -65,10 +65,12 @@ export default function AddReelScreen({navigation}) {
     setCapturing(true);
 
     // startInterval();
-    cameraRef.recordAsync({
-      maxDuration: 10,
-      quality: RNCamera.Constants.VideoQuality['288p'],
-    }).then(res => console.log(res))
+    cameraRef
+      .recordAsync({
+        maxDuration: 10,
+        quality: RNCamera.Constants.VideoQuality['288p'],
+      })
+      .then((res) => console.log(res));
 
     // setReel(video);
     setScreen('view');
@@ -90,7 +92,7 @@ export default function AddReelScreen({navigation}) {
       maxWidth: 320,
       videoQuality: 'medium',
     })
-      .then(res => {
+      .then((res) => {
         if (res.didCancel) return;
         else if (res.assets[0].duration > 30) {
           Alert.alert('Ops..', "Sorry you can't upload this video", [null], {
@@ -101,13 +103,13 @@ export default function AddReelScreen({navigation}) {
           setScreen('view');
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.error('Error reading an image', error.message);
       });
   };
 
   const handelRevertCamera = () => {
-    setCameraType(prev => (prev === 'back' ? 'front' : 'back'));
+    setCameraType((prev) => (prev === 'back' ? 'front' : 'back'));
   };
 
   const addReelHandler = async () => {
@@ -124,9 +126,9 @@ export default function AddReelScreen({navigation}) {
     });
 
     ReelService.addStory(userData.id, reelData)
-      .then(res => res)
-      .catch(e => console.error(e.message))
-      .finally(_ => {
+      .then((res) => res)
+      .catch((e) => console.error(e.message))
+      .finally((_) => {
         setIsUploading(false);
         navigation.goBack();
       });
@@ -146,10 +148,11 @@ export default function AddReelScreen({navigation}) {
           style={styles.camera}
           ratio={'16:9'}
           captureAudio={true}
-          ref={ref => {
+          ref={(ref) => {
             cameraRef = ref;
           }}
-          type={cameraType}>
+          type={cameraType}
+        >
           <CameraBottomActions
             onlyVideo={true}
             title="Reels"
@@ -186,22 +189,16 @@ export default function AddReelScreen({navigation}) {
         </RNCamera>
       ) : (
         <View style={styles.storyImgViewer}>
-          <CameraHeader
-            title="Story"
-            onClosePress={() => setScreen('capture')}
-          />
+          <CameraHeader title="Story" onClosePress={() => setScreen('capture')} />
           <View style={styles.forwardArrow}>
             <TextInput
               placeholder="Caption"
               value={caption}
-              onChangeText={e => setCaption(e)}
+              onChangeText={(e) => setCaption(e)}
               multiline
               style={styles.caption}
             />
-            <TouchableOpacity
-              activeOpacity={0.6}
-              disabled={isUploading}
-              onPress={addReelHandler}>
+            <TouchableOpacity activeOpacity={0.6} disabled={isUploading} onPress={addReelHandler}>
               <Icon
                 type={'AntDesign'}
                 color={'#333'}
@@ -217,16 +214,12 @@ export default function AddReelScreen({navigation}) {
           <Video
             resizeMode={'cover'}
             style={[styles.backgroundVideo]}
-            source={{uri: story.uri}}
+            source={{ uri: story.uri }}
             repeat
           />
         </View>
       )}
-      <ProgressBar
-        indeterminate={isUploading}
-        visible={isUploading}
-        color={'crimson'}
-      />
+      <ProgressBar indeterminate={isUploading} visible={isUploading} color={'crimson'} />
     </View>
   );
 }

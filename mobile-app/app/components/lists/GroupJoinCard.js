@@ -1,12 +1,5 @@
-import React, {useContext, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Tab from '../buttons/Tab';
 import colors from '../../config/colors';
 import defaultStyle from '../../config/styles';
@@ -16,19 +9,17 @@ import GroupService from '../../services/GroupService';
 import AuthContext from '../../authContext';
 
 const resizeRatio = 0.7;
-export default function GroupJoinCard({item, navigation}) {
-  const {image, name, description, privacySetting, id} = item;
+export default function GroupJoinCard({ item, navigation }) {
+  const { image, name, description, privacySetting, id } = item;
 
-  const [joinBackGroundColor, setJoinBackGroundColor] = useState(
-    colors.iondigoDye,
-  );
-  const {userData: loggedInUser} = useContext(AuthContext).userState;
+  const [joinBackGroundColor, setJoinBackGroundColor] = useState(colors.iondigoDye);
+  const { userData: loggedInUser } = useContext(AuthContext).userState;
 
   const [joinTitle, setJoinTitle] = useState('Join');
   const [joinTitleColor, setJoinTitleColor] = useState(colors.white);
 
   const handleJoin = () => {
-    GroupService.joinGroup(loggedInUser.id, id).then(resp => resp.data);
+    GroupService.joinGroup(loggedInUser.id, id).then((resp) => resp.data);
     if (joinTitle == 'Join') {
       setJoinBackGroundColor(colors.lighterGray);
       setJoinTitle('Leave');
@@ -44,21 +35,15 @@ export default function GroupJoinCard({item, navigation}) {
   return (
     <View style={[styles.container, defaultStyle.cardBorder]}>
       {image ? (
-        <Image
-          source={{uri: fileStorage.baseUrl + image}}
-          style={styles.image}
-        />
+        <Image source={{ uri: fileStorage.baseUrl + image }} style={styles.image} />
       ) : (
-        <Image
-          source={require('../../assets/images/group-texture.png')}
-          style={styles.image}
-        />
+        <Image source={require('../../assets/images/group-texture.png')} style={styles.image} />
       )}
       <TouchableOpacity
         onPress={() => {
-   
           navigation.navigate(routes.GROUP_FEED, item);
-        }}>
+        }}
+      >
         <Text numberOfLines={1} style={styles.name}>
           {name}
         </Text>

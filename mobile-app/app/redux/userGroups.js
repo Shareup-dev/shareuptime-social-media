@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const userGroupsSlice = createSlice({
   initialState: [],
-  name: "userGroupsSlice",
+  name: 'userGroupsSlice',
   reducers: {
     setGroups: (oldGroups, newGroups) => {
       return (oldGroups = newGroups.payload);

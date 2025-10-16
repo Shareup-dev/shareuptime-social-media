@@ -1,17 +1,17 @@
-import React, {useState} from 'react';
-import {Text, View, StyleSheet, StatusBar} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, StatusBar } from 'react-native';
 
 import Modal from 'react-native-modal';
 
-import {Header, HeaderButton, HeaderTitle} from './headers';
+import { Header, HeaderButton, HeaderTitle } from './headers';
 import colors from '../config/colors';
 
-export default function MultiImagePicker({isVisible, setIsVisible}) {
+export default function MultiImagePicker({ isVisible, setIsVisible }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasCameraRollPermission, setHasCameraRollPermission] = useState(null);
 
-  const imagesCallback = callback => {
-    callback.then(photos => photos).catch(e => console.error(e));
+  const imagesCallback = (callback) => {
+    callback.then((photos) => photos).catch((e) => console.error(e));
   };
 
   const updateHandler = (count, onSubmit) => {
@@ -21,21 +21,16 @@ export default function MultiImagePicker({isVisible, setIsVisible}) {
     // });
   };
 
-  const renderSelectedComponent = number => (
+  const renderSelectedComponent = (number) => (
     <View style={styles.countBadge}>
       <Text style={styles.countBadgeText}>{number}</Text>
     </View>
   );
 
   const emptyStayComponent = <Text style={styles.emptyStay}>Empty =(</Text>;
-  const noCameraPermissionComponent = (
-    <Text style={styles.emptyStay}>No access to camera</Text>
-  );
+  const noCameraPermissionComponent = <Text style={styles.emptyStay}>No access to camera</Text>;
   return (
-    <Modal
-      isVisible={isVisible}
-      setIsVisible={setIsVisible}
-      style={styles.modal}>
+    <Modal isVisible={isVisible} setIsVisible={setIsVisible} style={styles.modal}>
       <View style={styles.container}>
         <Header
           left={<HeaderButton title="Cancel" isActive={true} />}

@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import colors from '../config/colors';
 
 export default React.memo(function Loading(props) {
-  const {text, color = colors.LightGray, ...rest} = props;
+  const { text, color = colors.LightGray, ...rest } = props;
   return (
     <View style={styles.container}>
       <ActivityIndicator color={color} {...rest} />

@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const stories = createSlice({
-  name: "stories",
+  name: 'stories',
   initialState: [],
   reducers: {
     setStories: (previousState, newStories) => {

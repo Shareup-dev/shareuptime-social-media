@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,15 +11,10 @@ import {
 import Icon from './Icon';
 import ImageInput from './ImageInput';
 
-export default function ImageInputList({
-  imageUris,
-  onAddImage,
-  onRemoveImage,
-  isSwap,
-}) {
+export default function ImageInputList({ imageUris, onAddImage, onRemoveImage, isSwap }) {
   const scrollView = useRef();
   //const imageUrisSet = imageUris.map((imageUris) => imageUris.replace('file:', ''));
-  const {width, height} = Dimensions.get('screen');
+  const { width, height } = Dimensions.get('screen');
   return (
     <View style={styles.container}>
       <FlatList
@@ -29,34 +24,23 @@ export default function ImageInputList({
         showsHorizontalScrollIndicator={false}
         data={imageUris}
         keyExtractor={(item, i) => i.toString()}
-        renderItem={({item, index}) => {
-          return (
-        
-              <Image source={{uri:item}} style={{width: width, height: height / 2,  }} />
-         
-          );
-        }}>
-        {imageUris.map(uri => (
+        renderItem={({ item, index }) => {
+          return <Image source={{ uri: item }} style={{ width: width, height: height / 2 }} />;
+        }}
+      >
+        {imageUris.map((uri) => (
           <View key={uri} style={isSwap ? null : styles.imagePadding}>
-            <ImageInput
-              imageUri={uri}
-              onChangeImage={() => onRemoveImage(uri)}
-            />
-            {isSwap &&
-              imageUris.indexOf(uri) == 0 &&
-              imageUris.length === 2 && (
-                <Icon
-                image={require('../assets/icons/swap-icon.png')}
-                style={styles.swapIcon}
-                />
-                )}
+            <ImageInput imageUri={uri} onChangeImage={() => onRemoveImage(uri)} />
+            {isSwap && imageUris.indexOf(uri) == 0 && imageUris.length === 2 && (
+              <Icon image={require('../assets/icons/swap-icon.png')} style={styles.swapIcon} />
+            )}
           </View>
         ))}
 
         {isSwap && imageUris.length < 2 && (
-          <ImageInput onChangeImage={uri => onAddImage(uri)} isSwap={isSwap} />
-          )}
-          </FlatList>
+          <ImageInput onChangeImage={(uri) => onAddImage(uri)} isSwap={isSwap} />
+        )}
+      </FlatList>
     </View>
   );
 }

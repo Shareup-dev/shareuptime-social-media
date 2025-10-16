@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, TextInput, Text, StyleSheet, ViewStyle, TextStyle, DimensionValue } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+  DimensionValue,
+} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import defaultStyles from '../config/styles';
 import colors from '../config/colors';
@@ -16,7 +24,20 @@ interface AppTextInputProps {
   onBlur?: () => void;
   onFocus?: () => void;
   secureTextEntry?: boolean;
-  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'url' | 'number-pad' | 'name-phone-pad' | 'decimal-pad' | 'twitter' | 'web-search' | 'ascii-capable' | 'numbers-and-punctuation' | 'visible-password';
+  keyboardType?:
+    | 'default'
+    | 'email-address'
+    | 'numeric'
+    | 'phone-pad'
+    | 'url'
+    | 'number-pad'
+    | 'name-phone-pad'
+    | 'decimal-pad'
+    | 'twitter'
+    | 'web-search'
+    | 'ascii-capable'
+    | 'numbers-and-punctuation'
+    | 'visible-password';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   autoCorrect?: boolean;
   multiline?: boolean;
@@ -24,7 +45,18 @@ interface AppTextInputProps {
   maxLength?: number;
   editable?: boolean;
   autoFocus?: boolean;
-  returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send' | 'default' | 'emergency-call' | 'google' | 'join' | 'route' | 'yahoo';
+  returnKeyType?:
+    | 'done'
+    | 'go'
+    | 'next'
+    | 'search'
+    | 'send'
+    | 'default'
+    | 'emergency-call'
+    | 'google'
+    | 'join'
+    | 'route'
+    | 'yahoo';
   onSubmitEditing?: () => void;
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
@@ -79,11 +111,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
           {...otherProps}
         />
       </View>
-      {hasError && (
-        <Text style={[styles.errorText, errorStyle]}>
-          {error}
-        </Text>
-      )}
+      {hasError && <Text style={[styles.errorText, errorStyle]}>{error}</Text>}
     </>
   );
 };

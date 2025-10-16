@@ -1,71 +1,51 @@
-import React, {useContext,useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  Alert,
-  TouchableWithoutFeedback,
-  
-} from 'react-native';
-import {useSelector} from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, Alert, TouchableWithoutFeedback } from 'react-native';
+import { useSelector } from 'react-redux';
 import Screen from '../components/Screen';
-import {Header, HeaderTitle} from '../components/headers';
+import { Header, HeaderTitle } from '../components/headers';
 import Icon from '../components/Icon';
 import authContext from '../authContext';
 import ListItem from '../components/lists/ListItem';
 import UserService from '../services/user.service';
 import store from '../redux/store';
-import {sentRequestsActions} from '../redux/sentRequests';
+import { sentRequestsActions } from '../redux/sentRequests';
 import colors from '../config/colors';
 import defaultStyles from '../config/styles';
 import ActivityScreen from './ActivityScreen';
 import routes from '../navigation/routes';
 
-
-export default function SentRequests({navigation}) {
-  
+export default function SentRequests({ navigation }) {
   //const {user: loggedInUser} = useContext(authContext);
-  const {userState} = useContext(authContext);
+  const { userState } = useContext(authContext);
   const [sentto, setSentto] = useState([]);
-  const [fetch,setFetch] = useState(false)
+  const [fetch, setFetch] = useState(false);
   //let sentto = useSelector(state => state.sentRequests);
 
   useEffect(() => {
-    let mounted = true
-    if (mounted){
-    UserService.getFriendRequestSent(userState?.userData?.email).then(resp => {
-      setSentto(resp.data);
-      resp.data.forEach(request => {
-
+    let mounted = true;
+    if (mounted) {
+      UserService.getFriendRequestSent(userState?.userData?.email).then((resp) => {
+        setSentto(resp.data);
+        resp.data.forEach((request) => {});
       });
-    });
     }
-    return () => mounted = false
+    return () => (mounted = false);
   }, [fetch]);
- 
-  const redirectToProfile = () => {
 
-  }
-  const onCancelRequest = friend => {
-    sentto = sentto.filter(dost => dost.email !== friend.email);
+  const redirectToProfile = () => {};
+  const onCancelRequest = (friend) => {
+    sentto = sentto.filter((dost) => dost.email !== friend.email);
     //store.dispatch(sentRequestsActions.setList(sentto));
-    UserService.declineFriendRequest(userState?.userData?.id, friend.id).then(
-      resp => {
-
-      },
-    );
-    setFetch(true)
-   //setSentto(alreadySentTo);   
-   }
+    UserService.declineFriendRequest(userState?.userData?.id, friend.id).then((resp) => {});
+    setFetch(true);
+    //setSentto(alreadySentTo);
+  };
 
   const renderSentRequestsList = () => {
     if (sentto.length === 0) {
       return (
         <View style={styles.container}>
-          <Text style={styles.emptyText}>
-            You dont't have any sent requests
-          </Text>
+          <Text style={styles.emptyText}>You dont't have any sent requests</Text>
         </View>
       );
     } else {
@@ -74,27 +54,25 @@ export default function SentRequests({navigation}) {
           <FlatList
             contentContainerStyle={styles.groupsList}
             data={sentto}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => (
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
               <ListItem
                 user={item}
                 image={item.profilePicturePath}
                 title={item.firstName}
                 showCloseButton={false}
                 tabTitle={
-                  sentto.filter(user => user.email === item.email)[0]
+                  sentto.filter((user) => user.email === item.email)[0]
                     ? 'Cancel Request'
                     : 'Cancelled'
                 }
                 color={
-                  sentto.filter(user => user.email === item.email)[0]
+                  sentto.filter((user) => user.email === item.email)[0]
                     ? colors.iondigoDye
                     : colors.lighterGray
                 }
                 fontColor={
-                  sentto.filter(user => user.email === item.email)[0]
-                    ? colors.white
-                    : colors.dark
+                  sentto.filter((user) => user.email === item.email)[0] ? colors.white : colors.dark
                 }
                 subTitle="Sent"
                 onPress={onCancelRequest}
@@ -115,19 +93,14 @@ export default function SentRequests({navigation}) {
         backgroundColor={colors.white}
         left={
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-             {/* reset(
+            {/* reset(
              {
                 index: 0,
                 actions: [
                   navigation.navigate(routes.ACTIVITY)
                 ]
               })}> */}
-            <Icon
-              name="chevron-back"
-              type="Ionicons"
-              size={25}
-              backgroundSizeRatio={1}
-            />
+            <Icon name="chevron-back" type="Ionicons" size={25} backgroundSizeRatio={1} />
           </TouchableWithoutFeedback>
         }
         middle={<HeaderTitle>Pending Requests</HeaderTitle>}

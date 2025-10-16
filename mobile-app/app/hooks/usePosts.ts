@@ -31,7 +31,7 @@ interface CreateCommentData {
 export const usePosts = () => {
   const dispatch = useAppDispatch();
   const { posts, isLoading, error } = useAppSelector((state) => state.feedPosts);
-  
+
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -62,7 +62,7 @@ export const usePosts = () => {
 
   const loadMorePosts = useCallback(() => {
     if (!isFeedLoading) {
-      setPage(prev => prev + 1);
+      setPage((prev) => prev + 1);
     }
   }, [isFeedLoading]);
 
@@ -71,19 +71,19 @@ export const usePosts = () => {
     try {
       const formData = new FormData();
       formData.append('content', postData.content);
-      
+
       if (postData.location) {
         formData.append('location', postData.location);
       }
-      
+
       if (postData.feeling) {
         formData.append('feeling', postData.feeling);
       }
-      
+
       if (postData.tags?.length) {
         formData.append('tags', JSON.stringify(postData.tags));
       }
-      
+
       if (postData.media?.length) {
         postData.media.forEach((file, index) => {
           formData.append(`media`, file);
@@ -91,12 +91,12 @@ export const usePosts = () => {
       }
 
       const result = await createPostMutation(formData).unwrap();
-      
+
       if (result) {
         dispatch(addFeedPost(result));
         return { success: true, post: result };
       }
-      
+
       throw new Error('Failed to create post');
     } catch (err: any) {
       const errorMessage = err?.data?.message || err?.message || 'Failed to create post';
@@ -109,14 +109,14 @@ export const usePosts = () => {
     try {
       // Optimistic update
       dispatch(toggleLike(postId));
-      
+
       const result = await likePostMutation(postId).unwrap();
-      
+
       return { success: true, result };
     } catch (err: any) {
       // Revert optimistic update on error
       dispatch(toggleLike(postId));
-      
+
       const errorMessage = err?.data?.message || err?.message || 'Failed to like post';
       return { success: false, error: errorMessage };
     }
@@ -126,12 +126,12 @@ export const usePosts = () => {
   const addComment = async (commentData: CreateCommentData) => {
     try {
       const result = await createCommentMutation(commentData).unwrap();
-      
+
       if (result) {
         dispatch(incrementCommentCount(commentData.postId));
         return { success: true, comment: result };
       }
-      
+
       throw new Error('Failed to add comment');
     } catch (err: any) {
       const errorMessage = err?.data?.message || err?.message || 'Failed to add comment';
@@ -154,19 +154,19 @@ export const usePosts = () => {
     isLikingPost,
     error: error || feedError,
     refreshing,
-    
+
     // Feed operations
     refreshFeed,
     loadMorePosts,
-    
+
     // Post operations
     createPost,
     likePost,
     addComment,
-    
+
     // Comments
     usePostComments,
-    
+
     // Data
     feedData,
   };

@@ -1,16 +1,11 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, View, Image, TouchableWithoutFeedback } from 'react-native';
 
-import colors from "../../config/colors";
-import AppText from "../Text";
-import Icon from "../Icon";
-import defaultStyle from "../../config/styles";
-import IconButton from "../buttons/IconButton";
+import colors from '../../config/colors';
+import AppText from '../Text';
+import Icon from '../Icon';
+import defaultStyle from '../../config/styles';
+import IconButton from '../buttons/IconButton';
 
 export default function ListItemEnhanced({
   title,
@@ -45,7 +40,7 @@ export default function ListItemEnhanced({
 
           <View style={styles.leftContainer}>
             <IconButton
-              onPress={() => alert("Item Added")}
+              onPress={() => alert('Item Added')}
               IconComponent={
                 <Icon
                   name="plussquare"
@@ -64,8 +59,8 @@ export default function ListItemEnhanced({
 
 const styles = StyleSheet.create({
   listItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 5,
 
     backgroundColor: colors.white,
@@ -78,12 +73,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     color: colors.dark,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   subTitle: { fontSize: 12, color: colors.dimGray },
   leftContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 15,
   },
   subSubTitle: {

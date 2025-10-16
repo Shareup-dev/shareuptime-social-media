@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import {View, Image} from 'react-native';
+import React, { Fragment } from 'react';
+import { View, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -59,12 +59,7 @@ export default function Icon({
             />
           )}
           {type === 'Entypo' && (
-            <Entypo
-              size={size * backgroundSizeRatio}
-              name={name}
-              color={color}
-              {...otherProps}
-            />
+            <Entypo size={size * backgroundSizeRatio} name={name} color={color} {...otherProps} />
           )}
           {type === 'EvilIcons' && (
             <EvilIcons
@@ -75,12 +70,7 @@ export default function Icon({
             />
           )}
           {type === 'Feather' && (
-            <Feather
-              size={size * backgroundSizeRatio}
-              name={name}
-              color={color}
-              {...otherProps}
-            />
+            <Feather size={size * backgroundSizeRatio} name={name} color={color} {...otherProps} />
           )}
           {type === 'FontAwesome' && (
             <FontAwesome
@@ -99,12 +89,7 @@ export default function Icon({
             />
           )}
           {type === 'Fontisto' && (
-            <Fontisto
-              size={size * backgroundSizeRatio}
-              name={name}
-              color={color}
-              {...otherProps}
-            />
+            <Fontisto size={size * backgroundSizeRatio} name={name} color={color} {...otherProps} />
           )}
           {type === 'Foundation' && (
             <Foundation
@@ -123,12 +108,7 @@ export default function Icon({
             />
           )}
           {type === 'Octicons' && (
-            <Octicons
-              size={size * backgroundSizeRatio}
-              name={name}
-              color={color}
-              {...otherProps}
-            />
+            <Octicons size={size * backgroundSizeRatio} name={name} color={color} {...otherProps} />
           )}
           {type === 'SimpleLineIcons' && (
             <SimpleLineIcons
@@ -139,20 +119,10 @@ export default function Icon({
             />
           )}
           {type === 'Zocial' && (
-            <Zocial
-              size={size * backgroundSizeRatio}
-              name={name}
-              color={color}
-              {...otherProps}
-            />
+            <Zocial size={size * backgroundSizeRatio} name={name} color={color} {...otherProps} />
           )}
           {type === 'Ionicons' && (
-            <Ionicons
-              size={size * backgroundSizeRatio}
-              name={name}
-              color={color}
-              {...otherProps}
-            />
+            <Ionicons size={size * backgroundSizeRatio} name={name} color={color} {...otherProps} />
           )}
         </>
       );
@@ -169,7 +139,8 @@ export default function Icon({
           alignItems: 'center',
         },
         style,
-      ]}>
+      ]}
+    >
       {renderImageOrIcon()}
     </View>
   );

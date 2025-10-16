@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, Alert, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import * as Yup from 'yup';
 
-import {Form, FormField, SubmitButton} from '../components/forms';
+import { Form, FormField, SubmitButton } from '../components/forms';
 import routes from '../navigation/routes';
 
 import defaultStyles from '../config/styles';
@@ -11,14 +11,11 @@ import colors from '../config/colors';
 import authService from '../services/auth.service';
 
 const validationSchema = Yup.object().shape({
-  otp: Yup.string('Invalid Code')
-    .required()
-    .label('Verification code')
-    .length(6),
+  otp: Yup.string('Invalid Code').required().label('Verification code').length(6),
 });
 
-export default function PasswordResetOTP({navigation, route}) {
-  const {email: username} = route?.params;
+export default function PasswordResetOTP({ navigation, route }) {
+  const { email: username } = route?.params;
 
   const [message, setMessage] = useState({
     text: 'Shareup has sent you a verification code to the email',
@@ -30,38 +27,34 @@ export default function PasswordResetOTP({navigation, route}) {
 
   React.useEffect(
     () =>
-      navigation.addListener('beforeRemove', e => {
+      navigation.addListener('beforeRemove', (e) => {
         e.preventDefault();
-        Alert.alert(
-          'Discard changes?',
-          'Are you sure to discard and leave the screen?',
-          [
-            {text: "Don't leave", style: 'cancel', onPress: () => {}},
-            {
-              text: 'Discard',
-              style: 'destructive',
-              onPress: () => navigation.dispatch(e.data.action),
-            },
-          ],
-        );
+        Alert.alert('Discard changes?', 'Are you sure to discard and leave the screen?', [
+          { text: "Don't leave", style: 'cancel', onPress: () => {} },
+          {
+            text: 'Discard',
+            style: 'destructive',
+            onPress: () => navigation.dispatch(e.data.action),
+          },
+        ]);
       }),
     [navigation],
   );
 
   const handleSubmit = async (values, props) => {
-    const {setFieldError} = props;
+    const { setFieldError } = props;
 
     setLoading(true);
     authService
       .verifyPasswordResetOTP(username, values.otp)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           navigation.navigate(routes.PASSWORD_RESET, {
             username,
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.message === 'Request failed with status code 400')
           setFieldError('otp', 'Incorrect code');
         else if (e.message === 'Request failed with status code 408')
@@ -72,11 +65,11 @@ export default function PasswordResetOTP({navigation, route}) {
   };
 
   const resendOTP = () => {
-    setMessage({...message, isSending: true});
+    setMessage({ ...message, isSending: true });
     authService
 
       .passwordResetOTP(username)
-      .then(res =>
+      .then((res) =>
         res.status === 200
           ? setMessage({
               isSending: false,
@@ -85,7 +78,7 @@ export default function PasswordResetOTP({navigation, route}) {
             })
           : null,
       )
-      .catch(e =>
+      .catch((e) =>
         setMessage({
           isSending: false,
           text: 'Verification code not send',
@@ -101,13 +94,13 @@ export default function PasswordResetOTP({navigation, route}) {
           otp: '',
         }}
         onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
+        validationSchema={validationSchema}
+      >
         <Text
           style={
-            message.type === 'success'
-              ? {color: 'green'}
-              : message.type === 'error' && 'crimson'
-          }>
+            message.type === 'success' ? { color: 'green' } : message.type === 'error' && 'crimson'
+          }
+        >
           {message.text}
         </Text>
         <FormField
@@ -129,19 +122,14 @@ export default function PasswordResetOTP({navigation, route}) {
             paddingVertical: 6,
             borderRadius: 30,
           }}
-          disabled={message.isSending}>
-          <Text
-            style={{color: colors.iondigoDye, fontWeight: '700'}}
-            onPress={resendOTP}>
+          disabled={message.isSending}
+        >
+          <Text style={{ color: colors.iondigoDye, fontWeight: '700' }} onPress={resendOTP}>
             {message.isSending ? 'Sending..' : 'Re-send'}
           </Text>
         </TouchableOpacity>
 
-        <SubmitButton
-          title="Verify"
-          disabled={loading}
-          style={styles.submitButton}
-        />
+        <SubmitButton title="Verify" disabled={loading} style={styles.submitButton} />
       </Form>
     </RegistrationContainer>
   );

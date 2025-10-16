@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { Pool } from 'pg';
-import { createClient as createRedisClient } from 'redis';
+// import { createClient as createRedisClient } from 'redis';
 
 dotenv.config();
 
@@ -65,13 +65,13 @@ export const redisClient = {
   ping: async () => {
     throw new Error('Redis disabled');
   },
-  get: async (key: string) => null,
-  setEx: async (key: string, seconds: number, value: string) => {},
-  del: async (key: string | string[]) => 0,
-  exists: async (key: string) => 0,
-  keys: async (pattern: string) => [],
-  incr: async (key: string) => 1,
-  expire: async (key: string, seconds: number) => false,
+  get: async (_key: string) => null,
+  setEx: async (_key: string, _seconds: number, _value: string) => {},
+  del: async (_key: string | string[]) => 0,
+  exists: async (_key: string) => 0,
+  keys: async (_pattern: string) => [],
+  incr: async (_key: string) => 1,
+  expire: async (_key: string, _seconds: number) => false,
 };
 
 // ShareUpTime için özel database initialization
@@ -93,7 +93,7 @@ export const initializeDatabase = async () => {
     if (!redisClient.isOpen) {
       await redisClient.connect();
     }
-  } catch (redisError) {
+  } catch (_redisError) {
     console.warn('⚠️ Redis bağlantısı başarısız, cache özelliği kullanılamayacak');
     // Redis retry disabled to prevent spam
   }

@@ -7,7 +7,7 @@ let authAxios = null;
 
 const authenticate = async () => {
   await AuthService.getCurrentUser().then(
-    res => {
+    (res) => {
       authAxios = axios.create({
         baseURL: baseUrl,
         headers: {
@@ -16,7 +16,7 @@ const authenticate = async () => {
         },
       });
     },
-    error => {
+    (error) => {
       console.error(error);
     },
   );
@@ -38,7 +38,6 @@ class GroupService {
       const result = await authAxios.post(`/ ${uid} / create`, groupDetails);
       return result;
     } catch (error) {
-
       return false;
     }
   };
@@ -49,25 +48,22 @@ class GroupService {
     return result;
   };
 
-  getGroupById = async id => {
+  getGroupById = async (id) => {
     const result = await authAxios.get(`/ id / ${id}`);
     return result;
   };
 
-  getGroupByCurrentUser = async email => {
+  getGroupByCurrentUser = async (email) => {
     const result = await authAxios.get(`/ email / ${email}`);
     return result;
   };
 
-  getGroupsPostsById = async id => {
+  getGroupsPostsById = async (id) => {
     const result = await authAxios.get(`/posts/${id}`);
     return result;
   };
-  getUserGroups = async email => {
- 
-    const result = await authAxios.get(
-      `${settings.apiUrl}/api/v1/${email}/groups`,
-    );
+  getUserGroups = async (email) => {
+    const result = await authAxios.get(`${settings.apiUrl}/api/v1/${email}/groups`);
     return result;
   };
   joinGroup = async (uid, gid) => {
@@ -82,4 +78,3 @@ class GroupService {
 }
 
 export default new GroupService();
-

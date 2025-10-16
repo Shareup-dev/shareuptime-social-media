@@ -10,8 +10,7 @@ let authAxios = null;
 
 const authenticate = async () => {
   await AuthService.getCurrentUser().then(
-    res => {
-
+    (res) => {
       authAxios = axios.create({
         baseURL: baseURL,
         headers: {
@@ -20,7 +19,7 @@ const authenticate = async () => {
         },
       });
     },
-    error => {
+    (error) => {
       console.error(error);
     },
   );
@@ -33,7 +32,7 @@ class UserService {
     return result;
   };
 
-  createUser = async user => {
+  createUser = async (user) => {
     const result = await axios.post(`${baseURL}users/`, user);
     return result;
   };
@@ -43,20 +42,20 @@ class UserService {
     return result;
   };
 
-  getUserByEmail = async email => {
+  getUserByEmail = async (email) => {
     authenticate();
-    const result = await authAxios.get('users/email/' + email).then(res => res);
+    const result = await authAxios.get('users/email/' + email).then((res) => res);
     return result;
   };
 
-  getUserById = async userId => {
+  getUserById = async (userId) => {
     authenticate();
     const result = await authAxios.get('users/' + userId);
 
     return result;
   };
 
-  getFriends = async email => {
+  getFriends = async (email) => {
     try {
       const result = await authAxios.get('/friends/email/' + email);
       return result;
@@ -65,22 +64,22 @@ class UserService {
     }
   };
 
-  getFollowers = async email => {
+  getFollowers = async (email) => {
     const result = await authAxios.get(`${email}/followers`);
     return result;
   };
 
-  getFollowing = async email => {
+  getFollowing = async (email) => {
     const result = await authAxios.get(`${email}/following`);
     return result;
   };
 
-  getFriendRequestSent = async email => {
+  getFriendRequestSent = async (email) => {
     const result = await authAxios.get(`${email}/friend_request_sent`);
     return result;
   };
 
-  getFriendRequestRecieved = async email => {
+  getFriendRequestRecieved = async (email) => {
     const result = await authAxios.get(`${email}/friend_request_recieved`);
     return result;
   };
@@ -96,19 +95,13 @@ class UserService {
   };
 
   uploadProfilePicture = async (email, formdata) => {
-    const result = await authAxios.post(
-      `users/${email}/upload_profile_picture`,
-      formdata,
-    );
+    const result = await authAxios.post(`users/${email}/upload_profile_picture`, formdata);
 
     return result;
   };
 
   uploadCoverPicture = async (email, formdata) => {
-    const result = await authAxios.post(
-      `users/${email}/upload_cover_picture`,
-      formdata,
-    );
+    const result = await authAxios.post(`users/${email}/upload_cover_picture`, formdata);
     return result;
   };
 
