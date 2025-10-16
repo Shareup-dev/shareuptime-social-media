@@ -51,6 +51,36 @@ tabanlı backend API'sini içerir.
    npm start
    ```
 
+  ## 🧰 Geliştirme Komutları (Hızlı Rehber)
+
+  Aşağıdaki komutlar; hem backend hem de mobile-app için tip/format/lint kontrollerini hızlıca çalıştırmanıza yardımcı olur.
+
+  Backend (bu klasör):
+
+  ```
+  # Tipik akış
+  npm install
+  npm run lint
+  npm run format
+  npm run build
+
+  # Otomatik düzeltme (gerekirse)
+  npm run lint:fix
+  npm run format:fix
+  ```
+
+  Mobile app (kardeş klasör):
+
+  ```
+  cd ../mobile-app
+  npm install
+  npm run type-check
+  npm run lint
+  # (isteğe bağlı) npm run lint:fix
+  ```
+
+  Not: Mobile lint kuralları bilerek katıdır ve çok sayıda uyarı raporlayabilir; UI/UX’e dokunmayan küçük ve güvenli partiler halinde ele alıyoruz.
+
 ## ⚡ Hızlı Başlangıç (Quick Start)
 
 Geliştirme ortamında arka ucu ve mobil Metro sunucusunu hızlıca başlatmak için:
@@ -107,6 +137,32 @@ Sağlık kontrolleri:
 GET http://localhost:4000/health
 GET http://localhost:4000/
 ```
+
+## 🧾 Mobil Uygulama UI Envanteri (Güncel)
+
+Son tarama sonuçları:
+
+- Ekran (Screens): 73
+- Bileşen (Components): 143
+- Varlık (Assets): 452
+
+Bu sayıların amacı, kapsama ve temizlik çalışmalarını küçük partilerde planlamaktır. Değerler düzenli aralıklarla güncellenecektir.
+
+## 🗄️ Arşiv Politikası
+
+Eski/legacy dosyalar silinmek yerine arşivlenir:
+
+- Arşiv yolu: `docs/archive/`
+- Örnek: `mobile-app/app/services/old/*` → `docs/archive/mobile-app/app/services/old/*`
+
+Bu yaklaşım, değişiklikleri tersine çevirmeyi kolaylaştırır ve PR’ları daha okunur kılar.
+
+## 🧭 Sonraki Adımlar (Kısa Plan)
+
+- Legacy/backup dosyaları için ikinci hafif tarama ve arşivleme
+- Reactions/TabView etrafında kademeli tip daraltma (UI davranışını etkilemeden)
+- Küçük lint/hijyen iyileştirmeleri (örn. kullanılmayan değişkenler)
+- Dokümantasyonun periyodik güncellenmesi (envanter/komutlar)
 
 ## 📁 Proje Yapısı
 

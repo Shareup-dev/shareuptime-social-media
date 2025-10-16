@@ -35,7 +35,6 @@ const ListOfReactions: React.FC<Props> = (props) => {
   } = props;
 
   // Geçici stub veri ile reaksiyonları gösteriyoruz (postService bulunamadı)
-// Reaction tipini tahmini olarak tanımladım. Gerekirse alanlar genişletilebilir.
   const [data, setData] = useState<Record<string, Reaction[]>>({});
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -47,15 +46,15 @@ const ListOfReactions: React.FC<Props> = (props) => {
           { id: '1', profilePicture: '', firstName: 'Ali', lastName: 'Veli' },
           { id: '2', profilePicture: '', firstName: 'Ayşe', lastName: 'Fatma' },
         ],
-        love: [
-          { id: '3', profilePicture: '', firstName: 'Mehmet', lastName: 'Can' },
-        ],
+        love: [{ id: '3', profilePicture: '', firstName: 'Mehmet', lastName: 'Can' }],
       });
       setLoading(false);
     }, 500);
   }, []);
 
-  const reactions: Array<[string, Reaction[]]> = Object.entries(data).filter(([_, value]) => Array.isArray(value) && (value as Reaction[]).length > 0).map(([k, v]) => [k, v as Reaction[]]);
+  const reactions: Array<[string, Reaction[]]> = Object.entries(data)
+    .filter(([_, value]) => Array.isArray(value) && (value as Reaction[]).length > 0)
+    .map(([k, v]) => [k, v as Reaction[]]);
 
   const goBack = () => navigation.goBack();
 
