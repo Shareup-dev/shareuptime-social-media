@@ -17,7 +17,6 @@ import authContext from '../authContext';
 import UserService from '../services/user.service';
 import GroupService from '../services/group.service';
 import Icon from '../components/Icon';
-import AppButton from '../components/buttons/Button';
 import Loading from '../components/Loading';
 import { Header, HeaderTitle } from '../components/headers';
 

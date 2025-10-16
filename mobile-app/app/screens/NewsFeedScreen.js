@@ -224,16 +224,6 @@ const styles = StyleSheet.create({
   comments: {
     marginRight: 10,
   },
-  optionsIcon: {
-    alignSelf: 'flex-end',
-    top: 8,
-  },
-  menuButton: {
-    padding: 3,
-    alignSelf: 'flex-end',
-    width: 60,
-    marginTop: -5,
-  },
   listFooter: {
     height: 60,
   },
