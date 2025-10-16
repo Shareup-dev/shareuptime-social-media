@@ -12,7 +12,7 @@ const ManageGroupCard = ({ item, navigation, deleteGroup }) => {
     <View style={styles.groupCard}>
       <TouchableOpacity
         activeOpacity={0.6}
-        onPress={(_) => navigation.navigate(routes.GROUP_FEED, item)}
+        onPress={(_e) => navigation.navigate(routes.GROUP_FEED, item)}
       >
         <View style={styles.rowCenter}>
           <Image
@@ -33,7 +33,7 @@ const ManageGroupCard = ({ item, navigation, deleteGroup }) => {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.rowCenter}
-          onPress={(_) => navigation.navigate(routes.MEMBER_REQUEST, item)}
+          onPress={(_e) => navigation.navigate(routes.MEMBER_REQUEST, item)}
         >
           <Icon name={'md-people-sharp'} noBackground size={50} type="Ionicons" />
           <Text style={styles.actionText}>Member Requests</Text>
@@ -70,7 +70,7 @@ export default function ManageGroups({ navigation }) {
         onPress: () =>
           groupService
             .deleteGroup(userData.id, gid)
-            .then((_) => setGroups((prev) => prev.filter((item) => item.id !== gid)))
+            .then((_res) => setGroups((prev) => prev.filter((item) => item.id !== gid)))
             .catch((e) => console.error(e.message)),
       },
       { text: 'Cancel', style: 'cancel', onPress: () => {} },
@@ -78,7 +78,7 @@ export default function ManageGroups({ navigation }) {
   };
   const [groups, setGroups] = useState([]);
   useEffect(() => {
-    navigation.addListener('focus', async (e) => {
+    navigation.addListener('focus', async (_e) => {
       // setSearch(initSearchVal);
       await groupService
         .getGroupsOfOwner(userData.id)

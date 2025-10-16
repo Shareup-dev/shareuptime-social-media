@@ -22,7 +22,7 @@ import routes from '../navigation/routes';
 
 export default function AllFriendsScreen({ navigation }) {
   const [friends, setFriends] = useState([]);
-  const [removed, setremoved] = useState([]);
+  const [_removed, _setRemoved] = useState([]);
   const { userData: loggedInUser } = useContext(authContext).userState;
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function AllFriendsScreen({ navigation }) {
       { text: 'No', onPress: () => {} },
     ]);
   };
-  const onClickAddFriends = () => {
+  const _onClickAddFriends = () => {
     navigation.navigate(routes.Add_NEW_FRIEND);
   };
 
