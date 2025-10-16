@@ -5,7 +5,7 @@ import defaultStyles from '../config/styles';
 import Tab from '../components/buttons/Tab';
 
 const FriendList = ({
-  navigation,
+  navigation: _navigation,
   users,
   subTitle,
   buttonTitle,
@@ -23,9 +23,7 @@ const FriendList = ({
         <TouchableOpacity
           style={styles.addFriendsButton}
           color={colors.LightGray}
-          onPress={() => {
-            noUsersAction;
-          }}
+          onPress={noUsersAction}
         >
           <Text>{noUsersSubtitle}</Text>
         </TouchableOpacity>
@@ -61,7 +59,9 @@ const FriendList = ({
               </View>
             );
           }}
-          keyExtractor={(user) => Math.random().toString()}
+          keyExtractor={(user) =>
+            String(user.id ?? user.objectId ?? user.username ?? user.email ?? user)
+          }
         />
       </View>
     );
@@ -70,14 +70,6 @@ const FriendList = ({
 
 export default FriendList;
 const styles = StyleSheet.create({
-  noFriendsContainer: {
-    marginTop: 125,
-    alignItems: 'center',
-  },
-  noFriendsText: {
-    fontSize: 25,
-    marginBottom: 25,
-  },
   noFriendsContainer: {
     marginTop: 125,
     alignItems: 'center',

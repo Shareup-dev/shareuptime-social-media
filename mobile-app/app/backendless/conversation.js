@@ -6,17 +6,14 @@ import store from '../redux/store';
 import { conversationAction } from '../redux/ConversationsSlice';
 
 const TABLE_CONVERSATION = 'Conversation';
-const TABLE_CHAT_HISTORY = 'ChatHistory';
 
 const { calendarFormatter } = dateFormatter;
 
-const queryBuilder = Backendless.DataQueryBuilder.create();
+// Helpers will construct their own query builders to avoid shared state
 
 // user1: the user who started the conversation
 const addToConversation = async (user1, user2, messageId) => {
-  const whereConversation = `user1 in ('${user1}', '${user2}') and user2 in ('${user1}', '${user2}')`;
-
-  queryBuilder.setWhereClause(whereConversation);
+  // where-clause computed inside findConversation
 
   try {
     const result = await findConversation(user1, user2);
@@ -61,7 +58,7 @@ const createConversation = async (user1, user2) => {
 
 const findConversation = async (user1, user2) => {
   const whereConversation = `user1 in ('${user1}', '${user2}') and user2 in ('${user1}', '${user2}')`;
-  queryBuilder.setWhereClause(whereConversation);
+  const queryBuilder = Backendless.DataQueryBuilder.create().setWhereClause(whereConversation);
 
   const result = await Backendless.Data.of(TABLE_CONVERSATION).find(queryBuilder);
 
@@ -146,9 +143,9 @@ const mapConversation = async (conversation, userId, lastMessage) => {
 };
 
 const getContactUser = async (userId, conversation) => {
-  if (userId == conversation.user1) {
+  if (userId === conversation.user1) {
     return await callUserApi(conversation.user2);
-  } else if (userId == conversation.user2) {
+  } else if (userId === conversation.user2) {
     return await callUserApi(conversation.user1);
   } else {
     return null;
@@ -156,7 +153,7 @@ const getContactUser = async (userId, conversation) => {
 };
 
 const callUserApi = async (userId) => {
-  const id = parseInt(userId);
+  const id = parseInt(userId, 10);
   const response = await UserService.getUserById(id);
   return response.data;
 };

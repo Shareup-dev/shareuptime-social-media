@@ -1,21 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, Image, TouchableWithoutFeedback, Alert } from 'react-native';
-
-import { MaterialCommunityIcons } from 'react-native-vector-icons';
-
+import { launchImageLibrary } from 'react-native-image-picker';
 import colors from '../config/colors';
 import Icon from './Icon';
 
 export default function ImageInput({ imageUri, onChangeImage, isSwap }) {
-  useEffect(() => {
-    requestPermission();
-  }, []);
-
-  const requestPermission = async () => {
-    const { granted } = await ImagePicker.requestCameraPermissionsAsync();
-    if (!granted) alert('You need to enable permission to access the library');
-  };
-
   const onPress = () => {
     if (!imageUri) selectImage();
     else
@@ -27,15 +16,17 @@ export default function ImageInput({ imageUri, onChangeImage, isSwap }) {
 
   const selectImage = async () => {
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        allowsMultipleSelection: true,
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
         quality: 0.5,
+        selectionLimit: 1,
+        includeBase64: false,
       });
-      if (!result.cancelled) onChangeImage(result.uri);
-    } catch (error) {
-      console.error('Error reading an image', error);
+      if (!result.didCancel && result.assets && result.assets.length > 0) {
+        onChangeImage(result.assets[0].uri);
+      }
+    } catch (e) {
+      console.error('Error reading an image', e);
     }
   };
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
-
 import Modal from 'react-native-modal';
-import { Ionicons, Feather } from 'react-native-vector-icons';
+import Constants from 'expo-constants';
 
 import { Header, HeaderButton, HeaderTitle } from './headers';
 import colors from '../config/colors';
