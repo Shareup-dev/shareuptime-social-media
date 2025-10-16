@@ -20,8 +20,14 @@ import EnhancedOptionsDrawer from '../components/drawers/EnhancedOptionsDrawer';
 //import UserService from '../services/UserService';
 
 export default function CommentsScreen({ navigation, route }) {
-  const { userId, postId, setNumberOfComments: _setNumberOfComments, postType, swapId, fromReply } =
-    route.params;
+  const {
+    userId,
+    postId,
+    setNumberOfComments: _setNumberOfComments,
+    postType,
+    swapId,
+    fromReply,
+  } = route.params;
   const commentsListRef = useRef();
   const commentTextFieldRef = useRef();
   //const [isUserLiked, setIsUserLiked] = useState(false);
@@ -214,21 +220,21 @@ export default function CommentsScreen({ navigation, route }) {
     setCommentContent(text);
   };
 
-    const scrollToListBottom = () => {
+  const scrollToListBottom = () => {
     commentsListRef.current.scrollToEnd({ animated: true });
   };
 
-    const handleReactions = async (cid, isUserLiked) => {
-      const params = { reaction: isUserLiked };
-      postService
-        .likeUnlikeComment(userState?.userData?.id, cid, params)
-        .then((res) => {
-          console.log('responseLike', res.data);
-          //setIsUserLiked(!isUserLiked)
-        }) // need to get likePostIds
-        .catch((e) => console.error('4', e));
+  const handleReactions = async (cid, isUserLiked) => {
+    const params = { reaction: isUserLiked };
+    postService
+      .likeUnlikeComment(userState?.userData?.id, cid, params)
+      .then((res) => {
+        console.log('responseLike', res.data);
+        // setIsUserLiked(!isUserLiked)
+      }) // need to get likePostIds
+      .catch((e) => console.error('4', e));
 
-    //refreshComments();
+    // refreshComments();
   };
 
   return !fromReply ? (
