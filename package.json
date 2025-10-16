@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,json,md,css,scss,html}": "prettier --write"
+  },
   "dependencies": {
     "@elastic/elasticsearch": "^9.1.1",
     "dotenv": "^17.2.3",
@@ -9,6 +15,8 @@
     "redis": "^5.8.3"
   },
   "devDependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
