@@ -50,12 +50,12 @@ const GroupFeedScreen = ({ navigation, route }) => {
           setIsMember(res[1].data);
         })
         .catch((e) => console.error(e))
-        .finally((_) => setLoading(false));
+        .finally(() => setLoading(false));
     };
     getGroupInfo();
   }, [route.params]);
 
-  const deleteGroup = (_) => {
+  const deleteGroup = () => {
     Alert.alert('Delete group?', 'Are you sure to this group?', [
       { text: 'Cancel', style: 'cancel', onPress: () => {} },
       {
@@ -149,7 +149,7 @@ const GroupFeedScreen = ({ navigation, route }) => {
         rightComponent={
           <>
             {checkOwner() && (
-              <TouchableOpacity activeOpacity={0.6} onPress={(_) => setMenuOpen((prev) => !prev)}>
+              <TouchableOpacity activeOpacity={0.6} onPress={() => setMenuOpen((prev) => !prev)}>
                 <Icon type="SimpleLineIcons" name="options" />
               </TouchableOpacity>
             )}
