@@ -6,6 +6,59 @@ import Icon from '../components/Icon';
 import routes from '../navigation/routes';
 import groupService from '../services/group.service';
 
+// Hoisted to avoid defining components during render
+const ManageGroupCard = ({ item, navigation, deleteGroup }) => {
+  return (
+    <View style={styles.groupCard}>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        onPress={(_) => navigation.navigate(routes.GROUP_FEED, item)}
+      >
+        <View style={styles.rowCenter}>
+          <Image
+            source={
+              item.groupImagePath
+                ? { uri: item.groupImagePath }
+                : require('../assets/images/group-texture.png')
+            }
+            style={styles.img}
+          />
+          <View style={styles.item}>
+            <Text style={styles.title}>{item.name}</Text>
+            <Text style={styles.smallText}>{item.description}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+      <View style={styles.actionContainer}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={styles.rowCenter}
+          onPress={(_) => navigation.navigate(routes.MEMBER_REQUEST, item)}
+        >
+          <Icon name={'md-people-sharp'} noBackground size={50} type="Ionicons" />
+          <Text style={styles.actionText}>Member Requests</Text>
+        </TouchableOpacity>
+        <Text />
+      </View>
+      <View style={styles.actionContainer}>
+        <View style={styles.rowCenter}>
+          <Icon name={'report'} noBackground size={50} type="Octicons" />
+          <Text style={styles.actionText}>Reports</Text>
+        </View>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => deleteGroup(item.id)}
+          style={styles.rowCenter}
+        >
+          <Icon name={'delete'} noBackground size={50} />
+          <Text style={styles.actionText}>Delete this group</Text>
+        </TouchableOpacity>
+        <Text />
+      </View>
+    </View>
+  );
+};
+
 export default function ManageGroups({ navigation }) {
   const { userData } = useContext(AuthContext).userState;
 
@@ -34,99 +87,28 @@ export default function ManageGroups({ navigation }) {
     });
   }, [navigation]);
 
-  const ManageGroupCard = ({ item }) => {
-    return (
-      <View
-        style={{
-          marginHorizontal: 15,
-          paddingHorizontal: 10,
-          paddingVertical: 10,
-          backgroundColor: '#fff',
-          borderRadius: 10,
-          borderColor: '#cacaca',
-          borderWidth: 0.3,
-          marginVertical: 5,
-        }}
-      >
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={(_) => navigation.navigate(routes.GROUP_FEED, item)}
-          // navigation.navigate(routes.GROUP_FEED, item)}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <Image
-              source={
-                item.groupImagePath
-                  ? { uri: item.groupImagePath }
-                  : require('../assets/images/group-texture.png')
-              }
-              style={styles.img}
-            />
-            <View style={styles.item}>
-              <Text style={[styles.title]}>{item.name}</Text>
-              <Text style={{ fontSize: 13 }}>{item.description}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.actionContainer}>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={{ flexDirection: 'row', alignItems: 'center' }}
-            onPress={(_) => navigation.navigate(routes.MEMBER_REQUEST, item)}
-          >
-            <Icon name={'md-people-sharp'} noBackground size={50} type="Ionicons" />
-            <Text style={{ fontSize: 16 }}>Member Requests</Text>
-          </TouchableOpacity>
-          <Text />
-        </View>
-        <View style={styles.actionContainer}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon name={'report'} noBackground size={50} type="Octicons" />
-            <Text style={{ fontSize: 16 }}>Reports</Text>
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => deleteGroup(item.id)}
-            style={{ flexDirection: 'row', alignItems: 'center' }}
-          >
-            <Icon name={'delete'} noBackground size={50} />
-            <Text style={{ fontSize: 16 }}>Delete this group</Text>
-          </TouchableOpacity>
-          <Text />
-        </View>
-      </View>
-    );
-  };
-
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.flex1}>
       <HeaderWithBackArrow
         title={'Your Groups'}
         onBackButton={() => {
           navigation.goBack();
         }}
       />
-      <View style={[styles.container, { paddingTop: 15 }]}>
+      <View style={[styles.container, styles.paddingTop15]}>
         {!groups.length ? (
-          <Text style={{ textAlign: 'center', fontSize: 12 }}>
-            You don't have any groups to manage
-          </Text>
+          <Text style={styles.centerSmallText}>You don't have any groups to manage</Text>
         ) : (
           <React.Fragment>
             <FlatList
               ListHeaderComponent={
-                <Text style={[{ marginVertical: 5, textAlign: 'center' }, styles.title]}>
-                  Groups you manage
-                </Text>
+                <Text style={[styles.listHeaderText, styles.title]}>Groups you manage</Text>
               }
               data={groups}
               keyExtractor={(item, i) => i.toString()}
-              renderItem={({ item }) => <ManageGroupCard item={item} />}
+              renderItem={({ item }) => (
+                <ManageGroupCard item={item} navigation={navigation} deleteGroup={deleteGroup} />
+              )}
             />
           </React.Fragment>
         )}
@@ -139,6 +121,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  flex1: { flex: 1 },
+  paddingTop15: { paddingTop: 15 },
   img: {
     backgroundColor: '#33333360',
     width: 70,
@@ -156,6 +140,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#333',
   },
+  smallText: { fontSize: 13 },
+  actionText: { fontSize: 16 },
+  rowCenter: { flexDirection: 'row', alignItems: 'center' },
   actionContainer: {
     borderTopWidth: 1,
 
@@ -166,4 +153,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  groupCard: {
+    marginHorizontal: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    borderColor: '#cacaca',
+    borderWidth: 0.3,
+    marginVertical: 5,
+  },
+  centerSmallText: { textAlign: 'center', fontSize: 12 },
+  listHeaderText: { marginVertical: 5, textAlign: 'center' },
 });
