@@ -1,8 +1,16 @@
-import React, { useContext, useState, useRef, useEffect, useMemo, Component } from 'react';
-import { StyleSheet, View, Image, TextInput, TouchableOpacity, Platform } from 'react-native';
+import React, { useContext, useState, useRef, useEffect, useMemo } from 'react';
+import {
+  StyleSheet,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Platform,
+  Alert,
+} from 'react-native';
 import Icon from '../components/Icon';
 import StackActions from '@react-navigation/routers';
-import { ProgressBar, Colors } from 'react-native-paper';
+// import { ProgressBar, Colors } from 'react-native-paper';
 import { groupPostsActions } from '../redux/groupPosts';
 import EnhancedOptionsDrawer from '../components/drawers/EnhancedOptionsDrawer';
 import IconButton from '../components/buttons/IconButton';
@@ -30,7 +38,7 @@ import RadioOptionDrawer from '../components/drawers/RadioOptionDrawer';
 import OptionBox from '../components/posts/OptionBox';
 import { useDispatch, useSelector } from 'react-redux';
 import { postFeelingsActions } from '../redux/postFeelings';
-import { ScrollView } from 'react-native-gesture-handler';
+// import { ScrollView } from 'react-native-gesture-handler';
 
 export default function AddPostScreen({ navigation, route }) {
   const { userData: user } = useContext(authContext)?.userState;
@@ -74,7 +82,7 @@ export default function AddPostScreen({ navigation, route }) {
         image: require('../assets/add-post-options-icons/sell-and-share-gradient-icon.png'),
       },
       onPress: () => {
-        alert('Sell and Share');
+        Alert.alert('Sell and Share');
       },
     },
     {
@@ -92,7 +100,7 @@ export default function AddPostScreen({ navigation, route }) {
         image: require('../assets/add-post-options-icons/location-gradient-icon.png'),
       },
       onPress: () => {
-        alert('Location');
+        Alert.alert('Location');
       },
     },
     {
@@ -101,7 +109,7 @@ export default function AddPostScreen({ navigation, route }) {
         image: require('../assets/add-post-options-icons/live-gradient-icon.png'),
       },
       onPress: () => {
-        alert('Live');
+        Alert.alert('Live');
       },
     },
   ];
@@ -112,35 +120,35 @@ export default function AddPostScreen({ navigation, route }) {
         title: 'Share Feed',
         icon: { image: require('../assets/icons/gray-feed-icon.png') },
         onPress: () => {
-          alert('Share Feed');
+          Alert.alert('Share Feed');
         },
       },
       {
         title: 'Share time',
         icon: { image: require('../assets/icons/gray-share-time-icon.png') },
         onPress: () => {
-          alert('Share time');
+          Alert.alert('Share time');
         },
       },
       {
         title: 'Share Friends',
         icon: { image: require('../assets/icons/gray-share-friends-icon.png') },
         onPress: () => {
-          alert('Share Friends');
+          Alert.alert('Share Friends');
         },
       },
       {
         title: 'Share Point',
         icon: { image: require('../assets/icons/gray-share-point-icon.png') },
         onPress: () => {
-          alert('Share Point');
+          Alert.alert('Share Point');
         },
       },
       {
         title: 'Share Groups',
         icon: { image: require('../assets/icons/gray-share-groups-icon.png') },
         onPress: () => {
-          alert('Share Groups');
+          Alert.alert('Share Groups');
         },
       },
       {
@@ -149,7 +157,7 @@ export default function AddPostScreen({ navigation, route }) {
           image: require('../assets/icons/gray-sell-and-share-icon.png'),
         },
         onPress: () => {
-          alert('Sell and Share');
+          Alert.alert('Sell and Share');
         },
       },
     ],
@@ -457,10 +465,8 @@ export default function AddPostScreen({ navigation, route }) {
               ) : (
                 <Icon name={postFeel.icon} color={postFeel.color} />
               )}
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={(styles.postFeelText, { fontWeight: '700', fontSize: 14 })}>
-                  {postFeel.feeling}
-                </Text>
+              <View style={styles.row}>
+                <Text style={[styles.postFeelText, styles.postFeelStrong]}>{postFeel.feeling}</Text>
                 {postFeel.type === 'activity' && (
                   <>
                     <Text>{' - '}</Text>
@@ -611,6 +617,9 @@ const styles = StyleSheet.create({
     color: '#333333',
     fontSize: 14,
     marginTop: 10,
+  },
+  postFeelStrong: {
+    fontWeight: '700',
   },
   feelingContainer: {
     flexDirection: 'row',
