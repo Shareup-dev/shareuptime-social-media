@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend lint and type-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type-check (build)
+        run: npm run build --silent
+
+      - name: Prettier (check)
+        run: npm run format
+
+  mobile:
+    name: Mobile lint and type-check
+    if: ${{ hashFiles('mobile-app/package.json') != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            mobile-app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: mobile-app
+        run: npm ci
+
+      - name: Lint
+        working-directory: mobile-app
+        run: |
+          if npm run | grep -q "lint"; then npm run lint; else echo "No lint script"; fi
+
+      - name: Type-check
+        working-directory: mobile-app
+        run: |
+          if npm run | grep -q "type-check"; then npm run type-check; else echo "No type-check script"; fi
