@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { StyleSheet, FlatList, Dimensions, ActivityIndicator, View } from 'react-native';
 import authContext from '../authContext';
 import Screen from '../components/Screen';
@@ -13,7 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export default function NewsFeedScreen({ navigation, route }) {
   const { userState } = useContext(authContext);
-  const [posts, setPosts] = useState([]);
+  const [_posts, _setPosts] = useState([]);
   const [activityIndicator, setActivityIndicator] = useState(true);
   useFocusEffect(
     useCallback(() => {
@@ -28,7 +28,7 @@ export default function NewsFeedScreen({ navigation, route }) {
       .getNewsFeed(userState?.userData?.email)
       .then((res) => {
         const postArray = res.data.reverse();
-        setPosts(postArray);
+        _setPosts(postArray);
       })
       .catch((e) => console.error(e));
   };
