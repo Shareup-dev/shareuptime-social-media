@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import Screen from '../components/Screen';
 import colors from '../config/colors';
@@ -6,7 +6,6 @@ import routes from '../navigation/routes';
 import store from '../redux/store';
 import { swapedImagesAction } from '../redux/swapedImages';
 import constants from '../config/constants';
-import authContext from '../Contexts/authContext';
 
 const CheckoutComplete = ({ navigation, route }) => {
   const { postType, swapedPostId } = route.params;

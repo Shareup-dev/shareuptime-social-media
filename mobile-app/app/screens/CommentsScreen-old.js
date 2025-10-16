@@ -13,20 +13,12 @@ import postService from '../services/post.service';
 import SwapService from '../services/swap.service';
 
 export default function CommentsScreen({ navigation, route }) {
-  const {
-    userId: _userId,
-    postId,
-    setNumberOfComments: _setNumberOfComments,
-    postType,
-    swapId,
-    fromDetailScreen,
-    writeComment,
-  } = route.params;
+  const { postId, postType, swapId, fromDetailScreen, writeComment } = route.params;
   const commentsListRef = useRef();
   const commentTextFieldRef = useRef();
   //const [isUserLiked, setIsUserLiked] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
-  const [replyList, _setReplyList] = useState([]);
+  const [replyList, _setReplyListUnused] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [commentContent, setCommentContent] = useState('');
   const [commentId, setCommentId] = useState('');

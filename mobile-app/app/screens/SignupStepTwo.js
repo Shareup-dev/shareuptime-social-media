@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { ErrorMessage, Form, FormField, SubmitButton } from '../components/forms';
 import Toast from 'react-native-toast-message';
@@ -50,9 +50,9 @@ const SignupStepTwo = ({ navigation, route }) => {
       return;
     }
     setLoading(true);
-    const isReachable = await checkIfReachable(settings.apiUrl);
+    const reachable = await checkIfReachable(settings.apiUrl);
 
-    if (isReachable === false) {
+    if (reachable === false) {
       setLoading(false);
       setRegisterError("Can't reach server please try later");
       return setRegisterFailed(true);
