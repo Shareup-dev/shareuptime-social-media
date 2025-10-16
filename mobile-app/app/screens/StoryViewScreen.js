@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  Alert,
   Animated,
 } from 'react-native';
 
@@ -14,12 +13,12 @@ import Video from 'react-native-video';
 import Icon from '../components/Icon';
 import colors from '../config/colors';
 import fileStorage from '../config/fileStorage';
-import DownModal from '../components/drawers/DownModal';
+// DownModal was only used in commented code; removing unused import.
 
 const windowWidth = Dimensions.get('screen').width;
 
 const StoryViewScreen = ({ navigation, route }) => {
-  const { stories_List: data, firstName, lastName, profilePicture } = route.params;
+  const { stories_List: data, firstName, lastName } = route.params;
 
   // const [menuOpen, setMenuOpen] = useState(false);
   const [paused, setPaused] = useState(false);
