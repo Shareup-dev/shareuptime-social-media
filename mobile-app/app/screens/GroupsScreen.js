@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     justifyContent: 'center',
   },
-  header: {
+  headerText: {
     marginTop: 15,
     marginBottom: 5,
     fontSize: 20,

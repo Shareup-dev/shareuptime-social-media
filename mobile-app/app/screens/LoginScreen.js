@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
 
 export default function LoginScreen({ navigation }) {
   const { authActions } = useContext(authContext);
-  const { isReachable, checkIfReachable } = useIsReachable();
+  const { checkIfReachable } = useIsReachable();
 
   const [loading, setLoading] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);

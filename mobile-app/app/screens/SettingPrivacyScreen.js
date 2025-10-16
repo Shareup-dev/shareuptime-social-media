@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, View, FlatList, Platform } from 'react-native';
 import Screen from '../components/Screen';
 import ListItem from '../components/lists/ListItem';
 import defaultStyles from '../config/styles';
