@@ -72,7 +72,6 @@ export class ShareUpTimeWebSocketClient {
     });
 
     this.socket.on('connect_error', (error: Error) => {
-      // eslint-disable-next-line no-console
       console.error('WebSocket connection error:', error);
       this.emit('connection_error', { error: error.message });
     });
