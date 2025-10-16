@@ -18,7 +18,7 @@ export default function CommentsScreen({ navigation, route }) {
   const commentTextFieldRef = useRef();
   //const [isUserLiked, setIsUserLiked] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
-  const [replyList, _setReplyListUnused] = useState([]);
+  // const [replyList] = useState([]); // unused
   const [isEdit, setIsEdit] = useState(false);
   const [commentContent, setCommentContent] = useState('');
   const [commentId, setCommentId] = useState('');
@@ -165,7 +165,7 @@ export default function CommentsScreen({ navigation, route }) {
     const params = { reaction: 'null' };
     postService
       .likeUnlikeComment(userState?.userData?.id, cid, params)
-      .then((res) => {
+      .then((_res) => {
         refreshComments();
         //setIsUserLiked(!isUserLiked)
       }) //need to get likePostIds
@@ -200,7 +200,7 @@ export default function CommentsScreen({ navigation, route }) {
             onReply={handleReplyComment}
             handleEdit={handleEditComment}
             isReply={false}
-            reply={replyList}
+            // reply={replyList}
             postType={postType}
             isEdit={isEdit}
             refresh={refreshing}

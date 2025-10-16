@@ -13,7 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export default function NewsFeedScreen({ navigation, route }) {
   const { userState } = useContext(authContext);
-  const [_posts, _setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]); // currently unused
   const [activityIndicator, setActivityIndicator] = useState(true);
   useFocusEffect(
     useCallback(() => {
@@ -28,7 +28,8 @@ export default function NewsFeedScreen({ navigation, route }) {
       .getNewsFeed(userState?.userData?.email)
       .then((res) => {
         const postArray = res.data.reverse();
-        _setPosts(postArray);
+        // setPosts(postArray); // unused for now
+        setActivityIndicator(false);
       })
       .catch((e) => console.error(e));
   };
