@@ -57,10 +57,10 @@ export default function LoginScreen({ navigation }) {
           text2: 'Logged in Successfully 👋',
         });
       })
-      .catch(async (e) => {
+  .catch(async (err) => {
         let message;
 
-        if (e.message === 'Request failed with status code 401') {
+  if (err.message === 'Request failed with status code 401') {
           // if the user not verified
           await authService
             .verifyEmailOTP(email)
@@ -73,12 +73,12 @@ export default function LoginScreen({ navigation }) {
                   fromLogin: true,
                 });
             })
-            .catch((e) => (message = 'Unexpected Error!'));
+            .catch(() => (message = 'Unexpected Error!'));
         } else {
-          if (e.message === 'Request failed with status code 500')
+          if (err.message === 'Request failed with status code 500')
             // if invalid password or username
             message = 'Username or Password incorrect';
-          else message = e.message;
+          else message = err.message;
 
           Toast.show({
             position: 'bottom',

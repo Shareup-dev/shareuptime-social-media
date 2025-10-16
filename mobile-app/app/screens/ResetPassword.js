@@ -3,9 +3,6 @@ import { StyleSheet, Alert } from 'react-native';
 import * as Yup from 'yup';
 
 import { Form, FormField, SubmitButton } from '../components/forms';
-import routes from '../navigation/routes';
-
-import defaultStyles from '../config/styles';
 import RegistrationContainer from '../components/forms/RegistrationContainer';
 import authService from '../services/auth.service';
 import AuthContext from '../authContext';
@@ -75,7 +72,7 @@ export default function ResetPassword({ navigation, route }) {
           authenticate(username, values?.password);
         }
       })
-      .catch((e) => {
+      .catch((_e) => {
         setFieldError('confirmPassword', 'Error while changing the Password.');
         setLoading(false);
       });

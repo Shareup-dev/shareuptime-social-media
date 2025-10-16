@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import Icon from '../components/Icon';
 import colors from '../config/colors';
 import defaultStyles from '../config/styles';
