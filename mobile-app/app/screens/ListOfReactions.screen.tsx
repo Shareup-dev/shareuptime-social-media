@@ -13,15 +13,12 @@ import { ParamListBase } from '@react-navigation/native';
 import { TabView } from '../components/Reactions';
 import { Texts } from '../Materials/Text';
 
-enum ContentTypeEnum {
-  post = 'post',
-  comment = 'comment',
-  reply = 'reply',
-}
+// Use a string union instead of enum to avoid no-shadow issues with TS/ESLint
+type ContentType = 'post' | 'comment' | 'reply';
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase>;
-  route: { params: { id: string; contentType?: keyof typeof ContentTypeEnum } };
+  route: { params: { id: string; contentType?: ContentType } };
 }
 
 const ListOfReactions: React.FC<Props> = (props) => {
