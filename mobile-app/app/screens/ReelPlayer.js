@@ -8,7 +8,6 @@ import {
   Dimensions,
   StatusBar,
   FlatList,
-  TextInput,
   KeyboardAvoidingView,
 } from 'react-native';
 import Icon from '../components/Icon';
@@ -18,7 +17,7 @@ import routes from '../navigation/routes';
 const ReelPlayer = ({ navigation, route }) => {
   const { index, data } = route.params;
 
-  const videoRef = React.useRef(null);
+  // const videoRef = React.useRef(null);
 
   const BottomCard = React.memo(() => {
     const [like, setLike] = useState(false);
