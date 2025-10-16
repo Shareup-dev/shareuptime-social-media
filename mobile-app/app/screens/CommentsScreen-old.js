@@ -13,13 +13,20 @@ import postService from '../services/post.service';
 import SwapService from '../services/swap.service';
 
 export default function CommentsScreen({ navigation, route }) {
-  const { userId, postId, setNumberOfComments, postType, swapId, fromDetailScreen, writeComment } =
-    route.params;
+  const {
+    userId: _userId,
+    postId,
+    setNumberOfComments: _setNumberOfComments,
+    postType,
+    swapId,
+    fromDetailScreen,
+    writeComment,
+  } = route.params;
   const commentsListRef = useRef();
   const commentTextFieldRef = useRef();
   //const [isUserLiked, setIsUserLiked] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
-  const [replyList, setReplyList] = useState([]);
+  const [replyList, _setReplyList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [commentContent, setCommentContent] = useState('');
   const [commentId, setCommentId] = useState('');
@@ -53,7 +60,7 @@ export default function CommentsScreen({ navigation, route }) {
           setCommentsList(commentArray);
         })
         .catch((e) => console.error(e.message));
-      setCommentsList(response.data.comments);
+      // removed invalid reference to undefined 'response'
     } else {
       postService
         .getAllComments(userState?.userData?.id, postId)
@@ -78,7 +85,7 @@ export default function CommentsScreen({ navigation, route }) {
         const comment = { content: commentContent };
         postService
           .addSwapComment(userState?.userData?.id, swapId, comment.content)
-          .then((resp) => {
+          .then((_resp) => {
             refreshComments();
             setCommentContent('');
             commentTextFieldRef.current.clear();
@@ -91,7 +98,7 @@ export default function CommentsScreen({ navigation, route }) {
         if (commentContent !== '') {
           postService
             .replay(userState?.userData?.id, commentId, comment)
-            .then((res) => {
+            .then((_res) => {
               refreshComments();
               setCommentContent('');
               commentTextFieldRef.current.clear();
@@ -106,20 +113,20 @@ export default function CommentsScreen({ navigation, route }) {
       if (postType === 'swap') {
         const comment = { content: commentContent };
         SwapService.createSwapcomment(userState?.userData?.id, swapId, comment.content)
-          .then((resp) => {
+          .then((_resp) => {
             refreshComments();
             setCommentContent('');
             commentTextFieldRef.current.clear();
             Keyboard.dismiss();
             // scrollToListBottom();
           })
-          .catch(console.error(e));
+          .catch((e) => console.error(e));
       } else {
         const comment = { content: commentContent };
         if (commentContent !== '') {
           postService
             .addComment(userState?.userData?.id, postId, comment)
-            .then((res) => {
+            .then((_res) => {
               refreshComments();
               setCommentContent('');
               commentTextFieldRef.current.clear();
@@ -135,9 +142,9 @@ export default function CommentsScreen({ navigation, route }) {
   const handleEditComment = (status) => {
     setIsEdit(status);
   };
-  const handleReplyComment = (commentId, showReply) => {
+  const handleReplyComment = (replyCommentId, showReply) => {
     if (showReply) {
-      setCommentId(commentId);
+      setCommentId(replyCommentId);
       //  postService.getAllReply(commentId)
       //   .then(res => {
       //     const replyArray = res.data//.reverse();
