@@ -208,16 +208,17 @@ export class MediaPickerService {
   static async uploadMedia(
     files: MediaFile[],
     uploadType: 'profile' | 'post' | 'story' | 'message',
-    onProgress?: (progress: number) => void,
+    _onProgress?: (progress: number) => void,
   ): Promise<string[]> {
     const formData = new FormData();
 
-    files.forEach((file, index) => {
+    files.forEach((file, _index) => {
+      // React Native FormData accepts { uri, type, name } objects; TS lib.dom types don't cover this.
       formData.append(uploadType === 'profile' ? 'profilePicture' : `${uploadType}Media`, {
         uri: file.uri,
         type: file.type,
         name: file.name,
-      } as any);
+      } as unknown as Blob);
     });
 
     try {
@@ -244,7 +245,7 @@ export class MediaPickerService {
   // Resize image for optimization
   static async resizeImage(
     file: MediaFile,
-    options: {
+    _options: {
       width?: number;
       height?: number;
       quality?: number;

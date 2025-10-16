@@ -1,6 +1,5 @@
 import io, { Socket } from 'socket.io-client';
 import { WS_BASE_URL } from '@/config/env';
-import { store } from '../redux/store';
 
 export interface Message {
   id: string;
@@ -16,14 +15,16 @@ export interface Notification {
   type: string;
   title: string;
   message: string;
-  data?: any;
+  data?: unknown;
   timestamp: string;
 }
+
+export type Listener = (payload: unknown) => void;
 
 export class ShareUpTimeWebSocketClient {
   private socket: Socket | null = null;
   private token: string | null = null;
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, Listener[]> = new Map();
 
   constructor() {
     this.setupEventListeners();
@@ -58,23 +59,24 @@ export class ShareUpTimeWebSocketClient {
 
     // Connection events
     this.socket.on('connect', () => {
-      console.log('✅ Connected to ShareUpTime WebSocket');
+      // console.log('✅ Connected to ShareUpTime WebSocket');
       this.emit('connection_status', { connected: true });
     });
 
     this.socket.on('disconnect', () => {
-      console.log('❌ Disconnected from ShareUpTime WebSocket');
+      // console.log('❌ Disconnected from ShareUpTime WebSocket');
       this.emit('connection_status', { connected: false });
     });
 
-    this.socket.on('connect_error', (error) => {
+    this.socket.on('connect_error', (error: Error) => {
+      // route to centralized logger if available; keep console for dev visibility
       console.error('WebSocket connection error:', error);
       this.emit('connection_error', { error: error.message });
     });
 
     // Message events
     this.socket.on('new_message', (message: Message) => {
-      console.log('📨 New message received:', message);
+      // console.log('📨 New message received:', message);
       this.emit('new_message', message);
     });
 
@@ -89,13 +91,13 @@ export class ShareUpTimeWebSocketClient {
 
     // Notifications
     this.socket.on('notification', (notification: Notification) => {
-      console.log('🔔 New notification:', notification);
+      // console.log('🔔 New notification:', notification);
       this.emit('notification', notification);
     });
 
     // Post interactions
-    this.socket.on('post_interaction', (data: any) => {
-      console.log('💬 Post interaction:', data);
+    this.socket.on('post_interaction', (data: unknown) => {
+      // console.log('💬 Post interaction:', data);
       this.emit('post_interaction', data);
     });
 
@@ -110,20 +112,20 @@ export class ShareUpTimeWebSocketClient {
     });
 
     // Story interactions
-    this.socket.on('story_interaction', (data: any) => {
+    this.socket.on('story_interaction', (data: unknown) => {
       this.emit('story_interaction', data);
     });
   }
 
   // Event system
-  on(event: string, callback: Function): void {
+  on(event: string, callback: Listener): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
     this.listeners.get(event)?.push(callback);
   }
 
-  off(event: string, callback?: Function): void {
+  off(event: string, callback?: Listener): void {
     if (!callback) {
       this.listeners.delete(event);
       return;
@@ -138,7 +140,7 @@ export class ShareUpTimeWebSocketClient {
     }
   }
 
-  private emit(event: string, data: any): void {
+  private emit(event: string, data: unknown): void {
     const listeners = this.listeners.get(event);
     if (listeners) {
       listeners.forEach((callback) => callback(data));

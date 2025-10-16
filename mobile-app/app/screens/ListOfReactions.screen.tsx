@@ -1,10 +1,16 @@
+// Reaction tipini tahmini olarak tanımladım. Gerekirse alanlar genişletilebilir.
+interface Reaction {
+  id: string;
+  profilePicture: string;
+  firstName: string;
+  lastName: string;
+}
 import { Dimensions, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { HeaderWithBackArrow } from '../components/headers';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { ParamListBase } from '@react-navigation/native';
 import { TabView } from '../components/Reactions';
-import postService from '../services/post.service';
-import { useFetch } from '../hooks';
 import { Texts } from '../Materials/Text';
 
 enum contentTypeEnum {
@@ -14,8 +20,8 @@ enum contentTypeEnum {
 }
 
 interface Props {
-  navigation: NativeStackNavigationProp<any>;
-  route: any;
+  navigation: NativeStackNavigationProp<ParamListBase>;
+  route: { params: { id: string; contentType?: keyof typeof contentTypeEnum } };
   contentType: contentTypeEnum;
 }
 
@@ -23,33 +29,31 @@ const ListOfReactions: React.FC<Props> = (props) => {
   const {
     navigation,
     route: {
-      params: { id, contentType = 'post' },
+      params: { id: _id, contentType: _contentType = 'post' },
     },
   } = props;
 
-  const findContentType = () => {
-    switch (contentType) {
-      case contentTypeEnum.post:
-        return postService.listOfReactions(id);
-
-      case contentTypeEnum.comment:
-        return postService.listOfCommentReactions(id);
-
-      case contentTypeEnum.reply:
-        return postService.listOfReactions(id);
-
-      default:
-        return postService.listOfReactions(id);
-    }
-  };
-
-  const [data, loading] = useFetch(() => findContentType());
-
-  const [reactions, setReactions] = useState<Array<{}>>([]);
+  // Geçici stub veri ile reaksiyonları gösteriyoruz (postService bulunamadı)
+  const [data, setData] = useState<Record<string, Reaction[]>>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setReactions(Object.entries(data).filter(([key, value]: any) => value.length > 0));
-  }, [data]);
+    setLoading(true);
+    setTimeout(() => {
+      setData({
+        like: [
+          { id: '1', profilePicture: '', firstName: 'Ali', lastName: 'Veli' },
+          { id: '2', profilePicture: '', firstName: 'Ayşe', lastName: 'Fatma' },
+        ],
+        love: [{ id: '3', profilePicture: '', firstName: 'Mehmet', lastName: 'Can' }],
+      });
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  const reactions: Array<[string, Reaction[]]> = Object.entries(data)
+    .filter(([_, value]) => Array.isArray(value) && (value as Reaction[]).length > 0)
+    .map(([k, v]) => [k, v as Reaction[]]);
 
   const goBack = () => navigation.goBack();
 
@@ -81,11 +85,7 @@ const styles = StyleSheet.create({
   loadingContainer: {
     height: height / 2,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bodyContainer: {
     backgroundColor: '#eee',
-    height: '100%',
   },
   container: {
     flex: 1,

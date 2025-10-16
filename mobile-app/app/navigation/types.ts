@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type {
   CompositeNavigationProp,

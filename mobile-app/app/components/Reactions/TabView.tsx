@@ -6,7 +6,13 @@ import colors from '../../config/colors';
 import BetterImage from '../betterImage/BetterImage';
 import { findEmoji } from '../../Constants/reactions';
 
-type TabTuple = [string, Array<any>];
+interface ReactionListItem {
+  profilePicture: string;
+  firstName: string;
+  lastName: string;
+}
+
+type TabTuple = [string, ReactionListItem[]];
 interface Props {
   tabs: TabTuple[];
 }
@@ -17,7 +23,7 @@ const TabView: React.FC<Props> = (props) => {
   const { tabs } = props;
   const [activeIndex, setactiveIndex] = useState<number>(0);
 
-  const renderReactions = ({ item }: { item: any }) => {
+  const renderReactions = ({ item }: { item: ReactionListItem }) => {
     return (
       <View style={styles.card}>
         <BetterImage style={styles.img} source={{ uri: item.profilePicture }} />

@@ -1,4 +1,4 @@
-import ApiIntegrationTester from '../services/ApiIntegrationTester';
+// import ApiIntegrationTester from '../services/ApiIntegrationTester';
 
 /**
  * ShareUpTime Mobile App - API Integration Test Runner
@@ -7,7 +7,7 @@ import ApiIntegrationTester from '../services/ApiIntegrationTester';
  * entegrasyonunu test eder.
  */
 
-import { shareUpTimeApi } from '../redux/api';
+// import { shareUpTimeApi } from '../redux/api';
 
 export class ApiIntegrationTest {
   async testBackendConnection(): Promise<boolean> {
