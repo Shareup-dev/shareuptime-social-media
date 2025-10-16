@@ -1,25 +1,16 @@
 import React, { useState, useRef, useContext, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Keyboard,
-  Animated,
-  TouchableOpacity,
-  Dimensions,
-  Text,
-} from 'react-native';
+import { View, StyleSheet, FlatList, Keyboard, Text, Alert } from 'react-native';
 
 import { Header, HeaderCloseIcon, HeaderTitle } from '../components/headers';
 import Screen from '../components/Screen';
 import CommentItem from '../components/comments/CommentItem';
 import CommentTextField from '../components/comments/CommentTextField';
-import EmojiesBar from '../components/comments/EmojiesBar';
-import constants from '../config/constants';
-import { prepareDataForValidation } from 'formik';
+// import EmojiesBar from '../components/comments/EmojiesBar';
+// import constants from '../config/constants';
+// import { prepareDataForValidation } from 'formik';
 import colors from '../config/colors';
 import AuthContext from '../authContext';
-import { color } from 'react-native-reanimated';
+// import { color } from 'react-native-reanimated';
 
 import { useFocusEffect } from '@react-navigation/native';
 import postService from '../services/post.service';
@@ -29,7 +20,8 @@ import EnhancedOptionsDrawer from '../components/drawers/EnhancedOptionsDrawer';
 //import UserService from '../services/UserService';
 
 export default function CommentsScreen({ navigation, route }) {
-  const { userId, postId, setNumberOfComments, postType, swapId, fromReply } = route.params;
+  const { userId, postId, setNumberOfComments: _setNumberOfComments, postType, swapId, fromReply } =
+    route.params;
   const commentsListRef = useRef();
   const commentTextFieldRef = useRef();
   //const [isUserLiked, setIsUserLiked] = useState(false);
@@ -43,15 +35,7 @@ export default function CommentsScreen({ navigation, route }) {
   const { userState } = useContext(AuthContext);
   //const [frmReply,setFrmReply] = useState(fromReply)
 
-  useFocusEffect(
-    useCallback(() => {
-      loadComments();
-      // loadStories();
-      // return setActivityIndicator(false);
-      return;
-    }, []),
-  );
-  const loadComments = async () => {
+  const loadComments = useCallback(async () => {
     console.log('postId', postId);
     postService
       .getAllComments(postId)
@@ -61,7 +45,14 @@ export default function CommentsScreen({ navigation, route }) {
         setCommentsList(commentArray);
       })
       .catch((e) => console.error(e.message));
-  };
+  }, [postId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadComments();
+      return;
+    }, [loadComments]),
+  );
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const options = [
     {
@@ -70,16 +61,16 @@ export default function CommentsScreen({ navigation, route }) {
         image: require('../assets/post-options-icons/unfollow-icon.png'),
       },
       onPress: () => {
-        alert('Edit');
+        Alert.alert('Edit');
       },
     },
     {
-      title: <Text style={{ color: colors.red }}>Delete</Text>,
+      title: <Text style={styles.deleteText}>Delete</Text>,
       icon: {
         image: require('../assets/post-options-icons/delete-red-icon.png'),
       },
       onPress: () => {
-        alert('Delete');
+        Alert.alert('Delete');
       },
     },
   ];
@@ -223,21 +214,19 @@ export default function CommentsScreen({ navigation, route }) {
     setCommentContent(text);
   };
 
-  const scrollToListBottom = () => {
+    const scrollToListBottom = () => {
     commentsListRef.current.scrollToEnd({ animated: true });
   };
 
-  const handleReactions = async (cid, isUserLiked) => {
-    const params = { reaction: isUserLiked };
-    postService
-      .likeUnlikeComment(userState?.userData?.id, cid, params)
-      .then((res) => {
-        console.log('responseLike', res.data);
-        //setIsUserLiked(!isUserLiked)
-      }) //need to get likePostIds
-      .catch((e) => console.log('4', e))
-
-      .catch((e) => console.error(e));
+    const handleReactions = async (cid, isUserLiked) => {
+      const params = { reaction: isUserLiked };
+      postService
+        .likeUnlikeComment(userState?.userData?.id, cid, params)
+        .then((res) => {
+          console.log('responseLike', res.data);
+          //setIsUserLiked(!isUserLiked)
+        }) // need to get likePostIds
+        .catch((e) => console.error('4', e));
 
     //refreshComments();
   };
@@ -286,7 +275,7 @@ export default function CommentsScreen({ navigation, route }) {
     </Screen>
   ) : (
     <Screen style={styles.replayContainer}>
-      <Text style={{ color: colors.iondigoDye, fontSize: 12 }} onPress={hideReply}>
+      <Text style={styles.hideReplies} onPress={hideReply}>
         -- Hide replies
       </Text>
       <FlatList
@@ -338,5 +327,12 @@ const styles = StyleSheet.create({
     marginStart: '20%',
     // width: "50%",
     alignItems: 'flex-start',
+  },
+  deleteText: {
+    color: colors.red,
+  },
+  hideReplies: {
+    color: colors.iondigoDye,
+    fontSize: 12,
   },
 });
