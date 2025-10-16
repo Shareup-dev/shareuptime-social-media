@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { View, StyleSheet, Text, Image, Touchable } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, StyleSheet, Text, Image } from 'react-native';
 
 import Screen from '../components/Screen';
 import colors from '../config/colors';
@@ -18,16 +18,19 @@ export default function FeelingAndActivity({ navigation }) {
   const postFeel = useSelector((state) => state.postFeel);
   const dispatch = useDispatch();
 
-  const tabMenus = useMemo(() => [
-    {
-      name: 'Feelings',
-      component: <ListOfFeelings navigation={navigation} />,
-    },
-    {
-      name: 'Activities',
-      component: <ListOfActivities navigation={navigation} />,
-    },
-  ]);
+  const tabMenus = useMemo(
+    () => [
+      {
+        name: 'Feelings',
+        component: <ListOfFeelings navigation={navigation} />,
+      },
+      {
+        name: 'Activities',
+        component: <ListOfActivities navigation={navigation} />,
+      },
+    ],
+    [navigation],
+  );
 
   return (
     <Screen style={styles.container}>

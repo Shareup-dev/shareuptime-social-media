@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import * as Yup from 'yup';
 
 import { Form, FormField, SubmitButton } from '../components/forms';
@@ -39,11 +39,9 @@ export default function SignUpScreen({ navigation }) {
       .catch((e) => {
         if (e.message === 'Request failed with status code 404') {
           // if user not exist move to next step
-          {
-            navigation.navigate(routes.SIGNUP_STEP2, {
-              ...values,
-            });
-          }
+          navigation.navigate(routes.SIGNUP_STEP2, {
+            ...values,
+          });
         } else setError('Unexpected Error.');
       })
       .finally(() => setLoading(false));

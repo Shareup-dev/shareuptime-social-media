@@ -6,7 +6,7 @@ interface ApiTestResult {
   success: boolean;
   responseTime: number;
   error?: string;
-  data?: any;
+  data?: unknown;
 }
 
 class ApiIntegrationTester {
@@ -20,14 +20,18 @@ class ApiIntegrationTester {
   private async testEndpoint(
     endpoint: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
-    data?: any,
+    data?: unknown,
     headers?: Record<string, string>,
   ): Promise<ApiTestResult> {
     const startTime = Date.now();
     const url = `${this.baseUrl}${endpoint}`;
 
     try {
-      const requestOptions: RequestInit = {
+      const requestOptions: {
+        method: string;
+        headers?: Record<string, string>;
+        body?: string;
+      } = {
         method,
         headers: {
           'Content-Type': 'application/json',
