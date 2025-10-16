@@ -13,11 +13,11 @@ const CheckoutComplete = ({ navigation, route }) => {
   const { postTypes } = constants;
   const { userData: _user } = useContext(authContext)?.userState;
 
-  const createPostFormData = (content) => {
+  const createPostFormData = (_content) => {
     const formData = new FormData();
-    formData.append('content', content.text);
-    if (content.images.length !== 0) {
-      content.images.forEach((image) => {
+    formData.append('content', _content.text);
+    if (_content.images.length !== 0) {
+      _content.images.forEach((image) => {
         // const splitPathArr = image.split('/');
         formData.append(`files`, {
           name: 'String(splitPathArr.slice(-1).pop())',
@@ -27,11 +27,11 @@ const CheckoutComplete = ({ navigation, route }) => {
       });
     }
 
-    if (content.groupId) {
-      formData.append('groupid', content.groupId);
+    if (_content.groupId) {
+      formData.append('groupid', _content.groupId);
     }
-    if (content.category) {
-      formData.append('category', content.category);
+    if (_content.category) {
+      formData.append('category', _content.category);
     }
     return formData;
   };
