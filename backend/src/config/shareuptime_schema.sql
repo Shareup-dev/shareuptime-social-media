@@ -171,11 +171,11 @@ CREATE TABLE IF NOT EXISTS group_members (
 -- Notifications table
 CREATE TABLE IF NOT EXISTS notifications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    recipient_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     type VARCHAR(50) NOT NULL,
-    title VARCHAR(200) NOT NULL,
     message TEXT NOT NULL,
-    data JSONB, -- Additional notification data
+    actor_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    post_id UUID REFERENCES posts(id) ON DELETE SET NULL,
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -195,7 +195,8 @@ CREATE INDEX IF NOT EXISTS idx_stories_user_id ON stories(user_id);
 CREATE INDEX IF NOT EXISTS idx_stories_active ON stories(is_active, expires_at);
 CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id);
 CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_recipient_id ON notifications(recipient_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_actor_id ON notifications(actor_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(is_read);
 
 -- Update updated_at trigger function

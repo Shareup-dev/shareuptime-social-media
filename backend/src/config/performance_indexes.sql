@@ -106,8 +106,8 @@ SELECT p.*, u.username, u.first_name, u.last_name, u.profile_picture_url,
        COUNT(DISTINCT c.id) as comment_count
 FROM posts p
 JOIN users u ON p.user_id = u.id
-LEFT JOIN post_likes l ON p.id = l.post_id
-LEFT JOIN post_comments c ON p.id = c.post_id
+LEFT JOIN likes l ON p.id = l.target_id AND l.target_type = 'post'
+LEFT JOIN comments c ON p.id = c.post_id
 WHERE p.is_deleted = false AND p.privacy_level IN ('public', 'friends')
 GROUP BY p.id, u.id;
 
