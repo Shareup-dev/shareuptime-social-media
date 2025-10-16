@@ -1,12 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  SectionList,
-  Text,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 'react-native';
 import AuthContext from '../authContext';
 import { HeaderWithBackArrow } from '../components/headers';
 import fileStorage from '../config/fileStorage';

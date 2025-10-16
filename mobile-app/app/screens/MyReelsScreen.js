@@ -17,7 +17,6 @@ const height = Dimensions.get('window').height / 3;
 
 const tabes = [{ name: 'My Reels' }, { name: 'Followed' }, { name: 'Explore' }];
 
-
 export default function SwapScreen({ navigation }) {
   const [allReels, setAllReels] = useState([]);
   const [currentTab, setCurrentTab] = useState(tabes[0].name);
