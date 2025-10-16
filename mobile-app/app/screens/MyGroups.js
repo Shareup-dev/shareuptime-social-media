@@ -5,7 +5,6 @@ import {
   SectionList,
   Text,
   Image,
-  Touchable,
   TouchableOpacity,
 } from 'react-native';
 import AuthContext from '../authContext';

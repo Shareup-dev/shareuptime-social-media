@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, TouchableOpacity, Text } from 'react-native';
+import { View, FlatList, TouchableOpacity } from 'react-native';
 import { HeaderWithBackArrow } from '../components/headers';
 import Separator from '../components/Separator';
 import Screen from '../components/Screen';

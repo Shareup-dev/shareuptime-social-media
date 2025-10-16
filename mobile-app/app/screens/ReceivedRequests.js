@@ -5,7 +5,6 @@ import Screen from '../components/Screen';
 import { Header, HeaderTitle } from '../components/headers';
 import Icon from '../components/Icon';
 import UserService from '../services/user.service';
-import routes from '../navigation/routes';
 import authContext from '../authContext';
 import defaultStyles from '../config/styles';
 //import FriendService from '../services/FriendService';
@@ -24,7 +23,6 @@ export default function ReceivedRequests({ navigation }) {
     if (mounted) {
       UserService.getFriendRequestRecieved(user.email).then((resp) => {
         setRequests(resp.data);
-        requests.forEach((request) => {});
       });
     }
     return () => (mounted = false);
