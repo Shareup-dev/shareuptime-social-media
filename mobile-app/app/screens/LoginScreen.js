@@ -57,10 +57,10 @@ export default function LoginScreen({ navigation }) {
           text2: 'Logged in Successfully 👋',
         });
       })
-  .catch(async (err) => {
+      .catch(async (err) => {
         let message;
 
-  if (err.message === 'Request failed with status code 401') {
+        if (err.message === 'Request failed with status code 401') {
           // if the user not verified
           await authService
             .verifyEmailOTP(email)
