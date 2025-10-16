@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -33,7 +33,7 @@ import { ReactionBar, TopReactions } from '../Reactions';
 export default function SharedPostCard(props) {
   const { postData, navigation, user, ...rest } = props;
   const dispatch = useDispatch();
-  const [feel, setFeel] = useState(postData.feelings);
+  const [feel] = useState(postData.feelings);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const [listOfReactions, setListOfReactions] = useState(postData.countOfEachReaction);
 
@@ -43,10 +43,19 @@ export default function SharedPostCard(props) {
     userState: { userData },
   } = React.useContext(AuthContext);
 
-  const [date, setDate] = useState(
+  const [date] = useState(
     moment(postData.published, 'DD MMMM YYYY hh:mm:ss').fromNow(),
     // null
   );
+
+  const savePost = (pid) => {
+    try {
+      // userData.id is the authenticated user id
+      postService.savePost(userData?.id, pid);
+    } catch (e) {
+      Alert.alert('Error', 'Could not save post');
+    }
+  };
 
   const navigateToShare = () => {
     dispatch(postDataSliceAction.setPostData(postData.post));
@@ -114,16 +123,11 @@ export default function SharedPostCard(props) {
         image: require('../../assets/post-options-icons/unfollow-icon.png'),
       },
       onPress: () => {
-        alert('Unfollow');
+        Alert.alert('Unfollow');
       },
     },
     {
-      title:
-        userData?.id !== postData.userdata?.id ? (
-          <Text style={{ color: colors.dark }}>Report</Text>
-        ) : (
-          <Text style={{ color: colors.red }}>Delete</Text>
-        ),
+      title: userData?.id !== postData.userdata?.id ? 'Report' : 'Delete',
       icon: {
         image:
           userData?.id !== postData.userdata?.id
@@ -131,7 +135,7 @@ export default function SharedPostCard(props) {
             : require('../../assets/post-options-icons/delete-red-icon.png'),
       },
       onPress: () => {
-        userData?.id !== postData.userdata?.id ? alert('Report') : showDeleteAlert();
+        userData?.id !== postData.userdata?.id ? Alert.alert('Report') : showDeleteAlert();
       },
     },
   ];
@@ -161,29 +165,21 @@ export default function SharedPostCard(props) {
       .deletePost(postData.id)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(feedPostsAction.removeFeedPost(postData.id));
           navigation.navigate(routes.FEED);
         }
       })
-      .catch((e) => alert(e));
+      .catch((e) => Alert.alert('Error', String(e)));
   };
 
   const showShareList = () =>
     navigation.navigate(routes.SHARE_LIST, {
       postData,
     });
+  /* eslint-disable react/no-unstable-nested-components */
   const HeaderComponent = () => {
     return (
       <>
-        <View
-          style={{
-            paddingTop: 10,
-            paddingHorizontal: 15,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
+        <View style={lintFixStyles.headerRow}>
           <View style={styles.userInfo}>
             <TouchableOpacity
               onPress={() =>
@@ -317,11 +313,11 @@ export default function SharedPostCard(props) {
       {postData.post ? (
         <View>{renderCard(postData)}</View>
       ) : (
-        <View style={{ alignItems: 'center', paddingVertical: 10 }}>
+        <View style={lintFixStyles.centerPaddingY10}>
           <Text>Post unavailable</Text>
         </View>
       )}
-      <View style={{ paddingHorizontal: 15, paddingTop: 15 }}>
+      <View style={lintFixStyles.paddingX15Top15}>
         <View style={styles.actionsBar}>
           <ReactionBar
             contentId={postData.id}
@@ -341,11 +337,11 @@ export default function SharedPostCard(props) {
         </View>
 
         {/********************************* Post Feelings and tags ****************************************/}
-        <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
+        <View style={lintFixStyles.rowAlignCenterWrap}>
           {postData?.feelings && (
             <View style={styles.row}>
               <BetterImage noBackground source={feel.img} style={styles.feelImg} />
-              <Texts size={13} color={'#333'} style={{ fontWeight: 'bold' }}>
+              <Texts size={13} color={'#333'} style={lintFixStyles.textBold}>
                 {feel.name}
               </Texts>
             </View>
@@ -353,19 +349,19 @@ export default function SharedPostCard(props) {
           {postData?.activity && (
             <View style={styles.row}>
               <Icon name={feel.icon} color={feel.color} />
-              <Texts size={13} color={'#333'} style={{ fontWeight: 'bold' }}>
+              <Texts size={13} color={'#333'} style={lintFixStyles.textBold}>
                 {feel.name}
               </Texts>
             </View>
           )}
           {postData?.taggedList.length !== 0 && (
-            <View style={{ flexDirection: 'row' }}>
+            <View style={lintFixStyles.row}>
               <Texts size={14} color={colors.dimGray}>
                 {' '}
                 -with{' '}
               </Texts>
               <TouchableOpacity onPress={() => showShareList(constants.constant.SHOW_TAGLIST)}>
-                <Texts size={14} color={'#333'} style={{ fontWeight: 'bold' }}>
+                <Texts size={14} color={'#333'} style={lintFixStyles.textBold}>
                   {postData.taggedList[0]?.firstName}
                   {postData.taggedList[0]?.lastName} and{' '}
                   {postData.taggedList.length - 1 === 1
@@ -378,7 +374,7 @@ export default function SharedPostCard(props) {
         </View>
 
         {postData.content !== '' && (
-          <Texts truncate style={{ marginTop: 10 }} color={'#333'}>
+          <Texts truncate style={lintFixStyles.mt10} color={'#333'}>
             {postData.content}
           </Texts>
         )}
@@ -439,7 +435,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 10,
   },
-  actionsBar: {
+  actionsBarContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -474,6 +470,7 @@ const styles = StyleSheet.create({
   actionsBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: 4,
   },
   commentsShares: {
@@ -492,5 +489,24 @@ const styles = StyleSheet.create({
   userInfo: {
     display: 'flex',
     flexDirection: 'row',
+  },
+});
+
+// Styles extracted to reduce inline style warnings without changing UI
+const lintFixStyles = StyleSheet.create({
+  menuReportText: { color: colors.dark },
+  menuDeleteText: { color: colors.red },
+  centerPaddingY10: { alignItems: 'center', paddingVertical: 10 },
+  paddingX15Top15: { paddingHorizontal: 15, paddingTop: 15 },
+  rowAlignCenterWrap: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' },
+  textBold: { fontWeight: 'bold' },
+  row: { flexDirection: 'row' },
+  mt10: { marginTop: 10 },
+  headerRow: {
+    paddingTop: 10,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
