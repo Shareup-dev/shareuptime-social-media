@@ -1,9 +1,6 @@
 import io, { Socket } from 'socket.io-client';
 import { WS_BASE_URL } from '@/config/env';
 
-import io, { Socket } from 'socket.io-client';
-import { WS_BASE_URL } from '@/config/env';
-
 export interface Message {
   id: string;
   senderId: string;
@@ -72,6 +69,7 @@ export class ShareUpTimeWebSocketClient {
     });
 
     this.socket.on('connect_error', (error: Error) => {
+      // route to centralized logger if available; keep console for dev visibility
       console.error('WebSocket connection error:', error);
       this.emit('connection_error', { error: error.message });
     });

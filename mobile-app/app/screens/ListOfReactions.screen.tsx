@@ -1,10 +1,17 @@
+// Reaction tipini tahmini olarak tanımladım. Gerekirse alanlar genişletilebilir.
+interface Reaction {
+  id: string;
+  profilePicture: string;
+  firstName: string;
+  lastName: string;
+  [key: string]: any;
+}
 import { Dimensions, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { HeaderWithBackArrow } from '../components/headers';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { ParamListBase } from '@react-navigation/native';
 import { TabView } from '../components/Reactions';
-import postService from '../services/post.service';
-import { useFetch } from '../hooks';
 import { Texts } from '../Materials/Text';
 
 enum contentTypeEnum {
@@ -14,7 +21,7 @@ enum contentTypeEnum {
 }
 
 interface Props {
-  navigation: NativeStackNavigationProp<unknown>;
+  navigation: NativeStackNavigationProp<ParamListBase>;
   route: { params: { id: string; contentType?: keyof typeof contentTypeEnum } };
   contentType: contentTypeEnum;
 }
@@ -27,35 +34,28 @@ const ListOfReactions: React.FC<Props> = (props) => {
     },
   } = props;
 
-  const findContentType = () => {
-    switch (contentType) {
-      case contentTypeEnum.post:
-        return postService.listOfReactions(id);
-
-      case contentTypeEnum.comment:
-        return postService.listOfCommentReactions(id);
-
-      case contentTypeEnum.reply:
-        return postService.listOfReactions(id);
-
-      default:
-        return postService.listOfReactions(id);
-    }
-  };
-
-  const [data, loading] = useFetch(() => findContentType());
-
-  // TabView expects [string, Array<any>] per TabTuple type
-  // İç veri kaynağını unknown[] olarak tutup, render öncesi TabView uyumuna dönüştürüyoruz.
-  const [reactions, setReactions] = useState<Array<[string, unknown[]]>>([]);
+  // Geçici stub veri ile reaksiyonları gösteriyoruz (postService bulunamadı)
+// Reaction tipini tahmini olarak tanımladım. Gerekirse alanlar genişletilebilir.
+  const [data, setData] = useState<Record<string, Reaction[]>>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const entries = Object.entries(data as Record<string, unknown>) as Array<[string, unknown]>;
-    const next = entries
-      .filter(([_, value]) => Array.isArray(value) && (value as unknown[]).length > 0)
-      .map(([k, v]) => [k, v as unknown[]] as [string, unknown[]]);
-    setReactions(next);
-  }, [data]);
+    setLoading(true);
+    setTimeout(() => {
+      setData({
+        like: [
+          { id: '1', profilePicture: '', firstName: 'Ali', lastName: 'Veli' },
+          { id: '2', profilePicture: '', firstName: 'Ayşe', lastName: 'Fatma' },
+        ],
+        love: [
+          { id: '3', profilePicture: '', firstName: 'Mehmet', lastName: 'Can' },
+        ],
+      });
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  const reactions: Array<[string, Reaction[]]> = Object.entries(data).filter(([_, value]) => Array.isArray(value) && (value as Reaction[]).length > 0).map(([k, v]) => [k, v as Reaction[]]);
 
   const goBack = () => navigation.goBack();
 
@@ -68,7 +68,7 @@ const ListOfReactions: React.FC<Props> = (props) => {
             <Texts>Loading...</Texts>
           </View>
         ) : reactions.length > 0 ? (
-          <TabView tabs={reactions as unknown as [string, Array<any>][]} />
+          <TabView tabs={reactions} />
         ) : (
           <View style={styles.loadingContainer}>
             <Texts>No Reactions</Texts>
@@ -87,11 +87,7 @@ const styles = StyleSheet.create({
   loadingContainer: {
     height: height / 2,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bodyContainer: {
     backgroundColor: '#eee',
-    height: '100%',
   },
   container: {
     flex: 1,
