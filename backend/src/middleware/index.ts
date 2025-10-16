@@ -60,7 +60,7 @@ export const rateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 6
       return;
     }
 
-    const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+    const clientIP = req.ip || req.socket.remoteAddress || 'unknown';
     const now = Date.now();
 
     // Temizlik: eski kayıtları sil

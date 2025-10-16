@@ -234,7 +234,7 @@ curl -X POST http://localhost:4000/api/users/register \
 
 MIT License - detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
-## � Detaylı Dokümantasyon
+## 📚 Detaylı Dokümantasyon
 
 Bu proje kapsamlı dokümantasyona sahiptir:
 
@@ -308,7 +308,7 @@ Daha fazla örnek için [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) dosyasın
 - Mobile push notifications
 - Advanced moderation tools
 
-## �👥 Katkıda Bulunma
+## 👥 Katkıda Bulunma
 
 1. Fork yapın
 2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
