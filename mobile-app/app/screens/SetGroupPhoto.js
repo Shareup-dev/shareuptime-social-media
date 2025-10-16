@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -14,11 +14,8 @@ import Screen from '../components/Screen';
 import Icon from '../components/Icon';
 import AppButton from '../components/buttons/Button';
 import useImagePicker from '../hooks/useImagePicker';
-import GroupService from '../services/GroupService';
-import authContext from '../authContext';
 import routes from '../navigation/routes';
 import defautlStyles from '../config/styles';
-import fileStorage from '../config/fileStorage';
 import colors from '../config/colors';
 import { Header, HeaderTitle } from '../components/headers';
 import Toast from 'react-native-toast-message';

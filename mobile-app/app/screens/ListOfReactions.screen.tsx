@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { HeaderWithBackArrow } from '../components/headers';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

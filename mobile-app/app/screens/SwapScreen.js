@@ -12,7 +12,6 @@ import routes from '../navigation/routes';
 
 export default function SwapScreen({ navigation, route }) {
   // const [imageUri, setImageUri] = useState('');
-  const [file, setFile] = useState({});
   const imagePickHandler = () => {
     launchImageLibrary({
       quality: 0.5,

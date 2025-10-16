@@ -5,8 +5,6 @@ import { Header, HeaderCloseIcon, HeaderTitle } from '../components/headers';
 import Screen from '../components/Screen';
 import colors from '../config/colors';
 import routes from '../navigation/routes';
-import store from '../redux/store';
-import { swapedImagesAction } from '../redux/swapedImages';
 
 const ShippingAddress = ({ navigation, route }) => {
   return (

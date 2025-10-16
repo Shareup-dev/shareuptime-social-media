@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import AppCamera from '../components/Camera';
 import Screen from '../components/Screen';
 
-export default function TestScreen(props) {
+export default function TestScreen() {
   return (
     <Screen statusPadding={false}>
       <AppCamera />
@@ -12,6 +12,4 @@ export default function TestScreen(props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {},
-});
+const styles = StyleSheet.create({});

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import { HeaderWithBackArrow } from '../components/headers';
 import Separator from '../components/Separator';
-import Screen from '../components/Screen';
 import UserProfilePicture from '../components/UserProfilePicture';
 import colors from '../config/colors';
 import { Texts } from '../Materials/Text';
