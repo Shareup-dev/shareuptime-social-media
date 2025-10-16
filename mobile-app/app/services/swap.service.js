@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import axios, { Axios } from 'axios';
 import AuthAxios from './authAxios';
 
 class SwapService {

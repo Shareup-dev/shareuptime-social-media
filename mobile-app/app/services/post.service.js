@@ -24,13 +24,14 @@ class PostService {
   getAllComments = (pid) => AuthAxios.get(`comment/get_comment/${pid}`);
   getAllReply = (cid) => AuthAxios.get(`comment/get_replies/${cid}`);
 }
-let _progress = 0;
 const config = {
   onUploadProgress: (progressEvent) => {
-    _progress = (progressEvent.loaded / progressEvent.total) * 50;
+    // no-op: track progress if needed
+    const _ = (progressEvent.loaded / progressEvent.total) * 50;
   },
   onDownloadProgress: (progressEvent) => {
-    _progress = 50 + (progressEvent.loaded / progressEvent.total) * 50;
+    // no-op: track progress if needed
+    const _ = 50 + (progressEvent.loaded / progressEvent.total) * 50;
   },
 };
 export default new PostService();

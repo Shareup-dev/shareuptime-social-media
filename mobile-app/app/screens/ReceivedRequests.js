@@ -29,7 +29,7 @@ export default function ReceivedRequests({ navigation }) {
   }, []);
 
   const acceptFriendRequest = (friend) => {
-    UserService.acceptFriendRequest(user.id, friend.id).then((resp) => {});
+    UserService.acceptFriendRequest(user.id, friend.id).then((_resp) => {});
 
     setAcceptedFrom((previousState) => {
       return [...previousState, friend];
@@ -37,7 +37,7 @@ export default function ReceivedRequests({ navigation }) {
   };
 
   const rejectFriendRequest = (friend) => {
-    UserService.declineFriendRequest(user.id, friend.id).then((resp) => {});
+    UserService.declineFriendRequest(user.id, friend.id).then((_resp) => {});
 
     setRejectedFrom((previousState) => {
       return [...previousState, friend];
