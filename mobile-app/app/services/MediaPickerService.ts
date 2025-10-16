@@ -208,11 +208,13 @@ export class MediaPickerService {
   static async uploadMedia(
     files: MediaFile[],
     uploadType: 'profile' | 'post' | 'story' | 'message',
-    onProgress?: (progress: number) => void,
+    _onProgress?: (progress: number) => void,
   ): Promise<string[]> {
     const formData = new FormData();
 
-    files.forEach((file, index) => {
+    files.forEach((file, _index) => {
+      // React Native FormData accepts { uri, type, name } objects; TS lib.dom types don't cover this.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formData.append(uploadType === 'profile' ? 'profilePicture' : `${uploadType}Media`, {
         uri: file.uri,
         type: file.type,
@@ -240,20 +242,19 @@ export class MediaPickerService {
       throw error;
     }
   }
-
-  // Resize image for optimization
-  static async resizeImage(
-    file: MediaFile,
-    options: {
-      width?: number;
-      height?: number;
-      quality?: number;
-    },
-  ): Promise<MediaFile> {
+    // Resize image for optimization
+    static async resizeImage(
+      file: MediaFile,
+      _options: {
+        width?: number;
+        height?: number;
+        quality?: number;
+      },
+    ): Promise<MediaFile> {
     // This would typically use a library like react-native-image-resizer
     // For now, return the original file
     return file;
+    }
   }
-}
 
-export default MediaPickerService;
+  export default MediaPickerService;

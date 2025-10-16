@@ -14,8 +14,8 @@ enum contentTypeEnum {
 }
 
 interface Props {
-  navigation: NativeStackNavigationProp<any>;
-  route: any;
+  navigation: NativeStackNavigationProp<unknown>;
+  route: { params: { id: string; contentType?: keyof typeof contentTypeEnum } };
   contentType: contentTypeEnum;
 }
 
@@ -45,11 +45,12 @@ const ListOfReactions: React.FC<Props> = (props) => {
 
   const [data, loading] = useFetch(() => findContentType());
 
-  const [reactions, setReactions] = useState<Array<{}>>([]);
+    const [reactions, setReactions] = useState<Array<[string, unknown]>>([]);
 
-  useEffect(() => {
-    setReactions(Object.entries(data).filter(([key, value]: any) => value.length > 0));
-  }, [data]);
+    useEffect(() => {
+      const entries = Object.entries(data as Record<string, unknown>) as Array<[string, unknown]>;
+      setReactions(entries.filter(([_, value]) => Array.isArray(value) && value.length > 0));
+    }, [data]);
 
   const goBack = () => navigation.goBack();
 
