@@ -8,6 +8,67 @@ import fileStorage from '../config/fileStorage';
 import groupService from '../services/group.service';
 import AppTextField from '../components/TextField';
 
+// Hoisted components to avoid defining components during render
+const MemberItem = ({ item, title, onOpen, isOwner }) => (
+  <TouchableOpacity
+    activeOpacity={0.6}
+    style={styles.rowBetweenCenter}
+    disabled={!isOwner()}
+    onPress={() =>
+      onOpen({
+        member: item,
+        role: title,
+      })
+    }
+  >
+    <View style={styles.rowCenter}>
+      <Image
+        source={
+          item.image
+            ? { uri: fileStorage.baseUrl + item.image }
+            : require('../assets/images/group-texture.png')
+        }
+        style={styles.img}
+      />
+      <View style={styles.item}>
+        <Text style={styles.title}>{`${item.firstName}`}</Text>
+        <Text> {`@${item.lastName}-${item.id}`}</Text>
+      </View>
+    </View>
+  </TouchableOpacity>
+);
+
+const DropDownMenu = ({ selectedMember, addAdmin, removeFromGroup, checkOwner }) => (
+  <View style={styles.menuContainer}>
+    <View style={styles.alignCenter}>
+      <View style={styles.menuHandle} />
+    </View>
+    <TouchableOpacity style={styles.menu} onPress={() => addAdmin()}>
+      <Text style={styles.menuText}>
+        {selectedMember.role === 'Admin' ? 'Remove from admin' : 'Make admin'}
+      </Text>
+      <Text>
+        {selectedMember.role === 'Admin'
+          ? 'Remove from the admin role'
+          : `Make this member as admin`}
+      </Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.menu}
+      onPress={() => (checkOwner(selectedMember.member?.id) ? null : removeFromGroup())}
+    >
+      <Text style={styles.menuText}>
+        {checkOwner(selectedMember.member?.id) ? 'Left group' : 'Remove'}
+      </Text>
+      <Text>
+        {checkOwner(selectedMember.member?.id)
+          ? 'Left from this group'
+          : 'Remove this member from this group'}
+      </Text>
+    </TouchableOpacity>
+  </View>
+);
+
 export default function ListOfMembers({ navigation, route }) {
   const { userData } = useContext(AuthContext).userState;
   const { params: groupData } = route;
@@ -39,7 +100,7 @@ export default function ListOfMembers({ navigation, route }) {
     fetchData();
   }, []);
 
-  const SearchMembers = (_) => {
+  const SearchMembers = () => {
     if (search.keyword) {
       setSearch((prev) => ({ ...prev, loading: 1 }));
       groupService
@@ -84,7 +145,7 @@ export default function ListOfMembers({ navigation, route }) {
       .catch((e) => console.error(e));
   };
 
-  const removeFromGroup = (_) => {
+  const removeFromGroup = () => {
     groupService
       .deleteMember(userData.id, selectedMember.member?.id, groupData.id)
       .then(
@@ -111,91 +172,17 @@ export default function ListOfMembers({ navigation, route }) {
     else return false;
   };
 
-  const Item = ({ item, title }) => {
-    return (
-      <TouchableOpacity
-        activeOpacity={0.6}
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-        disabled={!checkOwner()}
-        onPress={() => {
-          setModelOpen(true);
-          setSelectedMember({
-            member: item,
-            role: title,
-          });
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <Image
-            source={
-              item.image
-                ? { uri: fileStorage.baseUrl + item.image }
-                : require('../assets/images/group-texture.png')
-            }
-            style={styles.img}
-          />
-          <View style={styles.item}>
-            <Text style={styles.title}>{`${item.firstName}`}</Text>
-            <Text> {`@${item.lastName}-${item.id}`}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const DropDownMenu = () => {
-    return (
-      <View style={styles.menuContainer}>
-        <View style={{ alignItems: 'center' }}>
-          <View
-            style={{
-              backgroundColor: '#cacaca',
-              width: 80,
-              height: 6,
-              borderRadius: 6,
-            }}
-          />
-        </View>
-        <TouchableOpacity style={styles.menu} onPress={() => addAdmin()}>
-          <Text style={styles.menuText}>
-            {selectedMember.role === 'Admin' ? 'Remove from admin' : 'Make admin'}
-          </Text>
-          <Text>
-            {selectedMember.role === 'Admin'
-              ? 'Remove from the admin role'
-              : `Make this member as admin`}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.menu}
-          onPress={(_) => (checkOwner(selectedMember.member?.id) ? null : removeFromGroup())}
-        >
-          <Text style={styles.menuText}>
-            {checkOwner(selectedMember.member?.id) ? 'Left group' : 'Remove'}
-          </Text>
-          <Text>
-            {checkOwner(selectedMember.member?.id)
-              ? 'Left from this group'
-              : 'Remove this member from this group'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  // Use hoisted components
 
   return (
     <>
       <DownModal isVisible={modelOpen} setIsVisible={handleCloseModel}>
-        <DropDownMenu />
+        <DropDownMenu
+          selectedMember={selectedMember}
+          addAdmin={addAdmin}
+          removeFromGroup={removeFromGroup}
+          checkOwner={checkOwner}
+        />
       </DownModal>
       <View style={styles.container}>
         <HeaderWithBackArrow
@@ -210,8 +197,8 @@ export default function ListOfMembers({ navigation, route }) {
               value={search.keyword}
               returnKeyType="search"
               endComponent={
-                <TouchableOpacity style={{ marginLeft: 10 }} onPress={handleClearSearch}>
-                  <Icon name="close" noBackground size={35} style={{ paddingHorizontal: 5 }} />
+                <TouchableOpacity style={styles.marginLeft10} onPress={handleClearSearch}>
+                  <Icon name="close" noBackground size={35} style={styles.paddingX5} />
                 </TouchableOpacity>
               }
             />
@@ -226,7 +213,17 @@ export default function ListOfMembers({ navigation, route }) {
           showsVerticalScrollIndicator={false}
           sections={members.sections}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, section }) => <Item item={item} title={section.title} />}
+          renderItem={({ item, section }) => (
+            <MemberItem
+              item={item}
+              title={section.title}
+              onOpen={(sel) => {
+                setModelOpen(true);
+                setSelectedMember(sel);
+              }}
+              isOwner={checkOwner}
+            />
+          )}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.header}>{title}</Text>
           )}
@@ -237,6 +234,8 @@ export default function ListOfMembers({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  rowBetweenCenter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  rowCenter: { flexDirection: 'row', alignItems: 'center' },
   menuContainer: {},
   menu: {
     paddingHorizontal: 20,
@@ -282,4 +281,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
   },
+  alignCenter: { alignItems: 'center' },
+  menuHandle: { backgroundColor: '#cacaca', width: 80, height: 6, borderRadius: 6 },
+  marginLeft10: { marginLeft: 10 },
+  paddingX5: { paddingHorizontal: 5 },
 });
