@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Alert, TouchableWithoutFeedback } from 'react-native';
-import { useSelector } from 'react-redux';
+import { View, Text, FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Screen from '../components/Screen';
 import { Header, HeaderTitle } from '../components/headers';
 import Icon from '../components/Icon';
@@ -11,8 +10,7 @@ import store from '../redux/store';
 import { sentRequestsActions } from '../redux/sentRequests';
 import colors from '../config/colors';
 import defaultStyles from '../config/styles';
-import ActivityScreen from './ActivityScreen';
-import routes from '../navigation/routes';
+// import routes from '../navigation/routes';
 
 export default function SentRequests({ navigation }) {
   //const {user: loggedInUser} = useContext(authContext);
@@ -34,11 +32,12 @@ export default function SentRequests({ navigation }) {
 
   const redirectToProfile = () => {};
   const onCancelRequest = (friend) => {
-    sentto = sentto.filter((dost) => dost.email !== friend.email);
+    // Remove the selected friend from the local list
+    const alreadySentTo = sentto.filter((dost) => dost.email !== friend.email);
     //store.dispatch(sentRequestsActions.setList(sentto));
-    UserService.declineFriendRequest(userState?.userData?.id, friend.id).then((resp) => {});
-    setFetch(true);
-    //setSentto(alreadySentTo);
+    UserService.declineFriendRequest(userState?.userData?.id, friend.id).then(() => {});
+    setSentto(alreadySentTo);
+    setFetch((prev) => !prev);
   };
 
   const renderSentRequestsList = () => {

@@ -1,23 +1,12 @@
 import React, { useContext, useState, useCallback } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  FlatList,
-  ScrollView,
-  View,
-} from 'react-native';
+import { StyleSheet, FlatList, ScrollView, View } from 'react-native';
 import TextField from '../components/TextField';
-import Screen from '../components/Screen';
-import { Header, HeaderTitle } from '../components/headers';
+import { HeaderTitle } from '../components/headers';
 import { HeaderWithBackArrow } from '../components/headers';
 import colors from '../config/colors';
-import Tab from '../components/buttons/Tab';
-import Icon from '../components/Icon';
-import routes from '../navigation/routes';
+// import routes from '../navigation/routes';
 import { useFocusEffect } from '@react-navigation/native';
 import authContext from '../Contexts/authContext';
-import IconButton from '../components/buttons/IconButton';
 import hangShareService from '../services/hangShare.service';
 import SwapCard from '../components/lists/SwapCard';
 import constants from '../config/constants';
