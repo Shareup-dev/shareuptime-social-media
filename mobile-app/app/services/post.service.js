@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import axios, { Axios } from 'axios';
 import AuthAxios from './authAxios';
 
 class PostService {
@@ -26,12 +24,13 @@ class PostService {
   getAllComments = (pid) => AuthAxios.get(`comment/get_comment/${pid}`);
   getAllReply = (cid) => AuthAxios.get(`comment/get_replies/${cid}`);
 }
+let _progress = 0;
 const config = {
   onUploadProgress: (progressEvent) => {
-    progress = (progressEvent.loaded / progressEvent.total) * 50;
+    _progress = (progressEvent.loaded / progressEvent.total) * 50;
   },
   onDownloadProgress: (progressEvent) => {
-    progress = 50 + (progressEvent.loaded / progressEvent.total) * 50;
+    _progress = 50 + (progressEvent.loaded / progressEvent.total) * 50;
   },
 };
 export default new PostService();

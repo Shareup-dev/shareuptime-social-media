@@ -1,52 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import AppButton from '../components/buttons/Tab';
 import colors from '../config/colors';
 import Geolocation from '@react-native-community/geolocation';
 import routes from '../navigation/routes';
-import { locationActions } from '../redux/locationSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { State } from 'react-native-gesture-handler';
 
-export default function MapViewScreen({ navigation, route }) {
-  const postData = route.params;
+export default function MapViewScreen({ navigation }) {
   const [region, setRegion] = useState({
-    region: {
-      latitude: 0,
-      longitude: 0,
-      latitudeDelta: 0,
-      longitudeDelta: 0,
-    },
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0.0421,
+    longitudeDelta: 0.0421,
   });
-  const dispatch = useDispatch();
+
   useEffect(() => {
-    Geolocation.getCurrentPosition((pos) => {
-      const crd = pos.coords;
-      setRegion({
-        latitude: crd.latitude,
-        longitude: crd.longitude,
-        latitudeDelta: 0.0421,
-        longitudeDelta: 0.0421,
-      });
-    }).catch((err) => {
-      console.error(err);
-    });
+    Geolocation.getCurrentPosition(
+      (pos) => {
+        const crd = pos.coords;
+        setRegion({
+          latitude: crd.latitude,
+          longitude: crd.longitude,
+          latitudeDelta: 0.0421,
+          longitudeDelta: 0.0421,
+        });
+      },
+      (err) => {
+        console.error(err);
+      },
+    );
   }, []);
 
-  const onRegionChange = (region) => {
-    setRegion(region);
+  const onRegionChange = (nextRegion) => {
+    setRegion(nextRegion);
   };
   const confirmLocation = () => {
-    location = region;
-    navigation.navigate(routes.SHIPPING_ADDRESS);
+    navigation.navigate(routes.SHIPPING_ADDRESS, { location: region });
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flex: 1, flexDirection: 'column' }}>
+    <ScrollView contentContainerStyle={styles.container}>
       <MapView
-        style={{ height: '50%' }}
+        style={styles.map}
         region={region}
         showsUserLocation={true}
         onRegionChange={onRegionChange}
@@ -70,6 +65,13 @@ export default function MapViewScreen({ navigation, route }) {
   );
 }
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  map: {
+    height: '50%',
+  },
   payButton: {
     borderRadius: 12,
     marginVertical: 50,

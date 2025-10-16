@@ -1,90 +1,28 @@
-import React, { useContext, useRef, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Image,
-  Animated,
-  TouchableOpacity,
-  TextInput,
-  StatusBar,
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View, Dimensions, Animated, StatusBar, Alert } from 'react-native';
 
 import colors from '../config/colors';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { RNCamera } from 'react-native-camera';
 import CameraBottomActions from '../components/CameraBottomActions';
-import CameraHeader from '../components/headers/CameraHeader';
-import Icon from '../components/Icon';
 import { launchImageLibrary } from 'react-native-image-picker';
-import AuthContext from '../Contexts/authContext';
-import Video from 'react-native-video';
-import storyService from '../services/story.service';
-import { ProgressBar } from 'react-native-paper';
 import routes from '../navigation/routes';
 import { postDataSliceAction } from '../redux/postDataSlice';
-import constants from '../config/constants';
 
 export default function ShareupCameraScreen({ navigation, route }) {
   let cameraRef;
-  let playerRef = useRef();
   const postType = route.params;
-  const windowWidth = Dimensions.get('screen').width;
-
-  const { userData } = useContext(AuthContext)?.userState;
   const dispatch = useDispatch();
-  const [isUploading, setIsUploading] = useState(false);
-  const [screen, setScreen] = useState('capture');
+  // State
   const [mode, setMode] = useState('photo');
   const [cameraType, setCameraType] = useState('back');
-  const [capturing, setCapturing] = useState(false);
-  const [story, setStory] = useState({});
+  const [capturing] = useState(false);
   const scale = useRef(new Animated.Value(0)).current;
-
-  const [duration, setDuration] = useState(10000);
-  const [caption, setCaption] = useState('');
-
-  // const options = {
-  //   onUploadProgress: e => {
-  //     const {loaded, total} = e;
-  //     const percentage = Math.floor((loaded * 1) / total);
-
-  //     setProgress(percentage - 0.1);
-  //   },
-  // };
-
-  let startTime;
-  // let pauseTime;
-
-  async function StopRecording() {
-    await cameraRef.stopRecording();
-    StopProgress();
-    setCapturing(false);
-  }
-
-  const startProgress = () => {
-    startTime = new Date().valueOf();
-    Animated.timing(scale, {
-      toValue: windowWidth,
-      useNativeDriver: true,
-      duration: duration,
-    }).start(() => {
-      StopProgress();
-      setCapturing(false);
-    });
-  };
-
-  const StopProgress = () => {
-    Animated.timing(scale).reset();
-  };
+  // const [duration, setDuration] = useState(10000);
 
   async function onCapture() {
     if (mode === 'photo') {
-      let photo = await cameraRef
+      await cameraRef
         .takePictureAsync({
           skipProcessing: true,
           quality: 0.5,
@@ -159,7 +97,7 @@ export default function ShareupCameraScreen({ navigation, route }) {
         }
       })
       .catch((e) => {
-        console.error('Error reading an image', error.message);
+        console.error('Error reading an image', e?.message);
       });
 
     // if (result.didCancel === true) {
@@ -171,28 +109,7 @@ export default function ShareupCameraScreen({ navigation, route }) {
     setCameraType((prev) => (prev === 'back' ? 'front' : 'back'));
   };
 
-  const addStoryHandler = async () => {
-    setIsUploading(true);
-
-    let storyData = new FormData();
-
-    const uniId = new Date().valueOf();
-    storyData.append('caption', caption);
-    storyData.append('stryfiles', {
-      name: mode === 'photo' ? `story-image-${uniId}.jpg` : `story-video-${uniId}.mp4`,
-      type: mode === 'photo' ? 'image/jpg' : 'video/mp4',
-      uri: story.uri,
-    });
-
-    storyService
-      .addStory(userData.id, storyData)
-      .then((res) => res)
-      .catch((e) => console.error(e.message))
-      .finally((_) => {
-        setIsUploading(false);
-        navigation.goBack();
-      });
-  };
+  // addStoryHandler removed: posting stories is out of scope for this screen right now
 
   return (
     <View style={styles.container}>
@@ -216,20 +133,7 @@ export default function ShareupCameraScreen({ navigation, route }) {
           setMode={setMode}
           navigation={navigation}
         />
-        <Animated.View
-          style={{
-            backgroundColor: 'crimson',
-            position: 'absolute',
-            bottom: 0,
-            transform: [
-              {
-                scaleX: scale,
-              },
-            ],
-            width: 2.1,
-            height: 6,
-          }}
-        />
+        <Animated.View style={[styles.progressBar, { transform: [{ scaleX: scale }] }]} />
       </RNCamera>
       {/* <ProgressBar indeterminate={isUploading} visible={isUploading} color={colors.iondigoDye}  /> */}
     </View>
@@ -257,6 +161,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: Dimensions.get('screen').height,
     width: Dimensions.get('screen').width,
+  },
+  progressBar: {
+    backgroundColor: 'crimson',
+    position: 'absolute',
+    bottom: 0,
+    width: 2.1,
+    height: 6,
   },
   storyImgViewer: {
     flex: 1,

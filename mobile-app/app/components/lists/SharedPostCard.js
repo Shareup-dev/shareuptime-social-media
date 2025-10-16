@@ -25,6 +25,7 @@ import { postDataSliceAction } from '../../redux/postDataSlice';
 import { useDispatch } from 'react-redux';
 
 import SwapCard from './SwapCard';
+import BetterImage from '../betterImage/BetterImage';
 import { Texts, Title } from '../../Materials/Text';
 import Tab from '../buttons/Tab';
 import { ReactionBar, TopReactions } from '../Reactions';
@@ -157,7 +158,7 @@ export default function SharedPostCard(props) {
     });
   const deletePost = async () => {
     postService
-      .deletePost(item.id)
+      .deletePost(postData.id)
       .then((res) => {
         if (res.status === 200) {
           dispatch(feedPostsAction.removeFeedPost(postData.id));
