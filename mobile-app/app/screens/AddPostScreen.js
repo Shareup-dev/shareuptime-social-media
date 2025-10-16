@@ -42,7 +42,7 @@ import { postFeelingsActions } from '../redux/postFeelings';
 
 export default function AddPostScreen({ navigation, route }) {
   const { userData: user } = useContext(authContext)?.userState;
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const postFeel = useSelector((state) => state.postFeel);
@@ -194,16 +194,16 @@ export default function AddPostScreen({ navigation, route }) {
     [],
   );
 
-  const [error, setError] = useState('');
+  const [, setError] = useState('');
   const [text, setText] = useState('');
   const { file, pickImage, clearFile } = useImagePicker();
 
-  const [displayImage, setDisplayImage] = useState(false);
+  const [, setDisplayImage] = useState(false);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const [isPrivacyOptionsVisible, setIsPrivacyOptionsVisible] = useState(false);
   const [images, setImages] = useState([]);
-  const [progress, setProgress] = useState(0);
+  // const [progress, setProgress] = useState(0);
   const [postPrivacyOption, setPostPrivacyOption] = useState(privacyOptions[0]); // object to present the current privacy option
 
   useEffect(() => {
@@ -237,16 +237,16 @@ export default function AddPostScreen({ navigation, route }) {
     return formData;
   };
 
-  const handleOnChangeText = (text) => {
-    setText(text);
-    handleButtonActivation(text, images);
+  const handleOnChangeText = (value) => {
+    setText(value);
+    handleButtonActivation(value, images);
   };
 
-  const handleButtonActivation = (text, images) => {
-    if (text !== '' || text !== undefined) setIsButtonActive(true);
-    if (images?.length > 0) setIsButtonActive(true);
-    if (images?.length === 0 && text === '') setIsButtonActive(false);
-    if (images?.length === 0 && text === undefined) setIsButtonActive(false);
+  const handleButtonActivation = (val, imgs) => {
+    if (val !== '' || val !== undefined) setIsButtonActive(true);
+    if (imgs?.length > 0) setIsButtonActive(true);
+    if (imgs?.length === 0 && val === '') setIsButtonActive(false);
+    if (imgs?.length === 0 && val === undefined) setIsButtonActive(false);
   };
 
   const handelPickImage = async () => {
@@ -256,8 +256,8 @@ export default function AddPostScreen({ navigation, route }) {
         return item.uri;
       });
       if (!result.cancelled) onAddImage(uri);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -267,7 +267,7 @@ export default function AddPostScreen({ navigation, route }) {
   };
 
   const onRemoveImage = (uri) => {
-    const updatedImages = images.filter((images) => images !== uri);
+    const updatedImages = images.filter((img) => img !== uri);
     setImages(updatedImages);
     handleButtonActivation(text, updatedImages);
   };
