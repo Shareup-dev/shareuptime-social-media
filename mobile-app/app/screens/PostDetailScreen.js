@@ -37,42 +37,12 @@ export default function PostDetailScreen({ navigation, route }) {
   const [writeComment, setWriteComment] = useState(false);
   const [isUserLiked, setIsUserLiked] = useState(false);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
-  const data = [
-    {
-      allPostsType: 'post',
-      content:
-        "If you're alive, you can't be bored in San Francisco \n\n@SanFrancisco\n#With_Friends##Feeling Happy",
-      group: null,
-      id: 1650184271184,
-      lastEdited: '13 April 2022 08:39:06',
-      liked: false,
-      media: [
-        {
-          comments: [],
-          id: 1650184271184,
-          media: '76B0732B-E7FE-4727-815E-4DBD51AFF7E6.jpg',
-          mediaPath:
-            '/Users/lokeesan/Documents/GitHub/Shareup-Mobile-App-CLI/app/assets/images/15.jpg',
-          mediaType: 'post',
-        },
-      ],
-      numberOfComments: 1,
-      numberOfReaction: 0,
-      numberOfshares: 0,
-      published: '13 April 2022 08:39:06',
-      saved: false,
-      userTag: null,
-      userdata: {
-        email: 'hagetap144@leafzie.com',
-        firstName: 'Steve',
-        id: 1649759197093,
-        lastName: 'Jobs',
-        profilePicture: 'profile-image-lokeesan@shareup.qa-1650259496598.jpg',
-        profilePicturePath: '/src/main/default.png',
-      },
-      views: 0,
-    },
-  ];
+  // inline loader for images based on post data
+  const loadImages = useCallback(() => {
+    if (postData.media?.length !== 0) {
+      setImages(postData.media?.map((image) => image.mediaPath));
+    }
+  }, [postData.media]);
   const options = [
     {
       title: 'Unsave',
@@ -98,13 +68,8 @@ export default function PostDetailScreen({ navigation, route }) {
   useFocusEffect(
     useCallback(() => {
       loadImages();
-    }, []),
+    }, [loadImages]),
   );
-  const loadImages = () => {
-    if (postData.media?.length !== 0) {
-      setImages(postData.media?.map((image) => image.mediaPath));
-    }
-  };
   const acceptHang = () => {
     navigation.navigate(routes.SHIPPING_ADDRESS, postData);
   };
@@ -114,7 +79,7 @@ export default function PostDetailScreen({ navigation, route }) {
   const handleReactions = async () => {
     postService
       .likePost(userState.userData?.id, postData.id)
-      .then((res) => {
+      .then((_res) => {
         setIsUserLiked(!isUserLiked);
         //setNumberOfReactions(res.data.numberOfReaction);
       }) //need to get likePostIds
