@@ -72,7 +72,7 @@ export default function ChatRoomScreen({ navigation, route }) {
         inverted={true}
         ref={messagesListRef}
         extraData={messages}
-        ListFooterComponent={() =>
+        ListFooterComponent={
           loading && messages.length > 10 ? (
             <ActivityIndicator
               size="large"
