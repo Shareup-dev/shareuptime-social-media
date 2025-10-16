@@ -14,7 +14,6 @@ import UserService from '../services/user.service';
 
 export default function SearchScreen({ navigation }) {
   const [searchResult, setSearchResult] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
   const [recentList] = useState([]);
   const searchTextFieldRef = useRef();
 
@@ -25,14 +24,13 @@ export default function SearchScreen({ navigation }) {
   //   },[])
   const onSearch = (searchKey) => {
     if (searchKey === '') {
-      setIsSearch(false);
+      setSearchResult([]);
     } else {
       UserService.search(searchKey).then((resp) => {
         // let filteredResult = resp.data.filter(
         //   person => person.id !== userState?.userData?.id,
         // );
         setSearchResult(resp.data);
-        setIsSearch(true);
       });
     }
     return;

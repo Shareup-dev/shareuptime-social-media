@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Dimensions, Platform } from 'react-native';
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
 import useKeyboardHeight from 'react-native-use-keyboard-height';
