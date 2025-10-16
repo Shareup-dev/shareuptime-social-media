@@ -55,3 +55,7 @@ jobs:
 
       - name: TypeScript check (no emit)
         run: npx tsc --noEmit
+
+      - name: Lint (non-blocking)
+        run: |
+          npm run lint || echo "Mobile lint skipped (non-blocking)"
