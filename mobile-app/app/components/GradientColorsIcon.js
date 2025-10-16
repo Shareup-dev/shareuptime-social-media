@@ -1,24 +1,17 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import { View, StyleSheet } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaskedView from '@react-native-masked-view/masked-view';
-import colors from '../config/colors';
 
 const size = 40;
 
 export function GradientColorsIcon({ ...rest }) {
   return (
-    <View style={{ width: size }} {...rest}>
+    <View style={styles.container} {...rest}>
       <MaskedView
-        style={{ flex: 1, flexDirection: 'row', height: size }}
+        style={styles.mask}
         maskElement={
-          <View
-            style={{
-              backgroundColor: 'transparent',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <View style={styles.maskInner}>
             <MaterialCommunityIcons name="power" size={size} color="black" style={styles.shadow} />
           </View>
         }
@@ -33,6 +26,9 @@ export function GradientColorsIcon({ ...rest }) {
 }
 
 const styles = StyleSheet.create({
+  container: { width: size },
+  mask: { flex: 1, flexDirection: 'row', height: size },
+  maskInner: { backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' },
   shadow: {
     shadowColor: 'black',
     shadowOpacity: 0.5,

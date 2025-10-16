@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import React, { useCallback, useEffect, useImperativeHandle } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
+import React, { useCallback, useImperativeHandle } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Extrapolate,
@@ -7,7 +7,6 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -27,16 +26,19 @@ const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps>(({ c
   const translateY = useSharedValue(0);
   const active = useSharedValue(false);
 
-  const scrollTo = useCallback((destination: number) => {
-    'worklet';
-    active.value = destination !== 0;
+  const scrollTo = useCallback(
+    (destination: number) => {
+      'worklet';
+      active.value = destination !== 0;
 
-    translateY.value = withSpring(destination, { damping: 50 });
-  }, []);
+      translateY.value = withSpring(destination, { damping: 50 });
+    },
+    [active, translateY],
+  );
 
   const isActive = useCallback(() => {
     return active.value;
-  }, []);
+  }, [active]);
 
   useImperativeHandle(ref, () => ({ scrollTo, isActive }), [scrollTo, isActive]);
 

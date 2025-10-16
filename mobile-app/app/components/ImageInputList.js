@@ -1,18 +1,9 @@
-import React, { useRef, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Image,
-  FlatList,
-  ImageBackground,
-  Dimensions,
-} from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Image, FlatList, Dimensions } from 'react-native';
 import Icon from './Icon';
 import ImageInput from './ImageInput';
 
 export default function ImageInputList({ imageUris, onAddImage, onRemoveImage, isSwap }) {
-  const scrollView = useRef();
   //const imageUrisSet = imageUris.map((imageUris) => imageUris.replace('file:', ''));
   const { width, height } = Dimensions.get('screen');
   return (
@@ -24,14 +15,14 @@ export default function ImageInputList({ imageUris, onAddImage, onRemoveImage, i
         showsHorizontalScrollIndicator={false}
         data={imageUris}
         keyExtractor={(item, i) => i.toString()}
-        renderItem={({ item, index }) => {
+        renderItem={({ item, index: _index }) => {
           return <Image source={{ uri: item }} style={{ width: width, height: height / 2 }} />;
         }}
       >
         {imageUris.map((uri) => (
           <View key={uri} style={isSwap ? null : styles.imagePadding}>
             <ImageInput imageUri={uri} onChangeImage={() => onRemoveImage(uri)} />
-            {isSwap && imageUris.indexOf(uri) == 0 && imageUris.length === 2 && (
+            {isSwap && imageUris.indexOf(uri) === 0 && imageUris.length === 2 && (
               <Icon image={require('../assets/icons/swap-icon.png')} style={styles.swapIcon} />
             )}
           </View>

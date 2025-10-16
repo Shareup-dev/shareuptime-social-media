@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, TouchableWithoutFeedback, Alert } from 'react-native';
-
-import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import React from 'react';
+import { StyleSheet, View, Image, TouchableWithoutFeedback } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import colors from '../config/colors';
 
-export default function ImageInput({ imageUri, onChangeImage }) {
+export default function ImageInput({ imageUri, onChangeImage: _onChangeImage }) {
   // useEffect(() => {
   //   requestPermission();
   // }, []);

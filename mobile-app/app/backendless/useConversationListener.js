@@ -14,7 +14,7 @@ export default function useConversationListener() {
 
   const addConversationListener = (userId) => {
     conversationEventHandler.addUpdateListener(
-      (conversation) => onConversationUpdate(conversation, userId),
+      (conv) => onConversationUpdate(conv, userId),
       onError,
     );
   };

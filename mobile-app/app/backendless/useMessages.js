@@ -10,7 +10,7 @@ let pagesize = 50;
 let hasNext = true;
 
 // hook function
-export default useMessages = (channelName) => {
+const useMessages = (channelName) => {
   // Table constants
   const TABLE_CONVERSATION = 'Conversation';
   const TABLE_CHAT_HISTORY = 'ChatHistory';
@@ -129,3 +129,5 @@ export default useMessages = (channelName) => {
     loading,
   };
 };
+
+export default useMessages;

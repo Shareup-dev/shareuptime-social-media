@@ -1,9 +1,9 @@
-import { Dimensions, Image, StyleSheet, Platform } from 'react-native';
+import { Dimensions, Image, StyleSheet } from 'react-native';
 
 import React from 'react';
 
 const renderImage = (mainLogo, style) => {
-  if (mainLogo == true)
+  if (mainLogo === true)
     return <Image style={[styles.logo, style]} source={require('../assets/logo.png')} />;
   else
     return (

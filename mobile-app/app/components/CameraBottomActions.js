@@ -108,6 +108,8 @@ export default function CameraBottomActions({
       backgroundColor: '#000',
       flexDirection: 'row',
     },
+    active: { color: 'crimson' },
+    inactive: { color: '#fff' },
   });
 
   return (
@@ -158,7 +160,7 @@ export default function CameraBottomActions({
                 color={mode === 'photo' ? 'crimson' : '#fff'}
                 type="Entypo"
               />
-              <Text style={[styles.modeText, { color: mode === 'photo' ? 'crimson' : '#fff' }]}>
+              <Text style={[styles.modeText, mode === 'photo' ? styles.active : styles.inactive]}>
                 Photo
               </Text>
             </TouchableOpacity>
@@ -170,7 +172,7 @@ export default function CameraBottomActions({
                 color={mode === 'video' ? 'crimson' : '#fff'}
                 type="Entypo"
               />
-              <Text style={[styles.modeText, { color: mode === 'video' ? 'crimson' : '#fff' }]}>
+              <Text style={[styles.modeText, mode === 'video' ? styles.active : styles.inactive]}>
                 Video
               </Text>
             </TouchableOpacity>
