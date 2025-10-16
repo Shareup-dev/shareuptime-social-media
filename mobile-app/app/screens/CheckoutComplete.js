@@ -9,32 +9,8 @@ import constants from '../config/constants';
 import authContext from '../Contexts/authContext';
 
 const CheckoutComplete = ({ navigation, route }) => {
-  const { postType, swapedPostId, item: _item } = route.params;
+  const { postType, swapedPostId } = route.params;
   const { postTypes } = constants;
-  const { userData: _user } = useContext(authContext)?.userState;
-
-  const createPostFormData = (_content) => {
-    const formData = new FormData();
-    formData.append('content', _content.text);
-    if (_content.images.length !== 0) {
-      _content.images.forEach((image) => {
-        // const splitPathArr = image.split('/');
-        formData.append(`files`, {
-          name: 'String(splitPathArr.slice(-1).pop())',
-          type: 'image/jpg',
-          uri: image, //Platform.OS === 'ios' ? image.replace('file://', '') : image,
-        });
-      });
-    }
-
-    if (_content.groupId) {
-      formData.append('groupid', _content.groupId);
-    }
-    if (_content.category) {
-      formData.append('category', _content.category);
-    }
-    return formData;
-  };
 
   const createHang = () => {
     //   const swapContent = {

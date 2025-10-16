@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function ResetPassword({ navigation, route }) {
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const { username } = route?.params;
   const { authActions } = useContext(AuthContext);
 

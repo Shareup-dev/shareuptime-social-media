@@ -53,7 +53,7 @@ const UpdateGroupPhoto = ({ navigation, route }) => {
             merge: true,
           }),
       )
-      .catch((e) =>
+      .catch((_e) =>
         Toast.show({
           position: 'bottom',
           visibilityTime: 5000,

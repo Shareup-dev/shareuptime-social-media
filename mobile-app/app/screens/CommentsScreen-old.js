@@ -76,9 +76,6 @@ export default function CommentsScreen({ navigation, route }) {
     navigation.goBack();
   };
 
-  const hideReply = () => {
-    //<CommentsScreen route={{params: { comments: reply, userId: comment.user.id, commendId: comment.id, postType: postType, swapId: swapId, fromReply:true }}}/>
-  };
   const handleAddComment = async () => {
     if (isReply) {
       if (postType === postTypes.SWAP) {
