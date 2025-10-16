@@ -13,7 +13,7 @@ import { ParamListBase } from '@react-navigation/native';
 import { TabView } from '../components/Reactions';
 import { Texts } from '../Materials/Text';
 
-enum contentTypeEnum {
+enum ContentTypeEnum {
   post = 'post',
   comment = 'comment',
   reply = 'reply',
@@ -21,17 +21,11 @@ enum contentTypeEnum {
 
 interface Props {
   navigation: NativeStackNavigationProp<ParamListBase>;
-  route: { params: { id: string; contentType?: keyof typeof contentTypeEnum } };
-  contentType: contentTypeEnum;
+  route: { params: { id: string; contentType?: keyof typeof ContentTypeEnum } };
 }
 
 const ListOfReactions: React.FC<Props> = (props) => {
-  const {
-    navigation,
-    route: {
-      params: { id: _id, contentType: _contentType = 'post' },
-    },
-  } = props;
+  const { navigation } = props;
 
   // Geçici stub veri ile reaksiyonları gösteriyoruz (postService bulunamadı)
   const [data, setData] = useState<Record<string, Reaction[]>>({});

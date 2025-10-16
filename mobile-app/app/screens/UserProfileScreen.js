@@ -24,7 +24,7 @@ const tabs = [
 
 export default function UserProfileScreen({ navigation, route }) {
   const [currentTab, setCurrentTab] = useState(POSTS);
-  const { userState } = useContext(authContext);
+  const { userState: _userState } = useContext(authContext);
   const [posts, setPosts] = useState([]);
   const [userData, setUserData] = useState([]);
   const [imagesAndVideos, setImagesAndVideos] = useState([]);

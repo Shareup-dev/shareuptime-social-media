@@ -30,7 +30,8 @@ const ApiTestScreen: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [results, setResults] = useState<TestResult[]>([]);
   const [summary, setSummary] = useState<TestSummary | null>(null);
-  const [lastRunTime, setLastRunTime] = useState<string | null>(null);
+  // Kullanılmayan setter uyarısını önlemek için prefiksliyoruz
+  const [lastRunTime, _setLastRunTime] = useState<string | null>(null);
 
   const handleRunTests = useCallback(async () => {
     setIsRunning(true);
@@ -43,7 +44,7 @@ const ApiTestScreen: React.FC = () => {
 
       if (testResult.backendConnected && testResult.integrationReady) {
         // Convert endpoints object to TestResult array
-        const results = Object.entries(testResult.endpoints).map(([endpoint, success]) => ({
+        const apiResults = Object.entries(testResult.endpoints).map(([endpoint, success]) => ({
           endpoint,
           method: 'GET',
           success,
@@ -51,17 +52,17 @@ const ApiTestScreen: React.FC = () => {
           responseTime: 0,
         }));
 
-        setResults(results);
+        setResults(apiResults);
         setSummary({
-          total: results.length,
-          passed: results.filter((r) => r.success).length,
-          failed: results.filter((r) => !r.success).length,
+          total: apiResults.length,
+          passed: apiResults.filter((r) => r.success).length,
+          failed: apiResults.filter((r) => !r.success).length,
           averageResponseTime: 0,
         });
 
         Alert.alert(
           'Test Completed',
-          `${results.filter((r) => r.success).length}/${results.length} endpoints passed`,
+          `${apiResults.filter((r) => r.success).length}/${apiResults.length} endpoints passed`,
         );
       } else {
         Alert.alert(
