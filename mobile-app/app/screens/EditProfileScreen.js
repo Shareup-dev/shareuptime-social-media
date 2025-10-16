@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Platform, View, TextInput } from 'react-native';
+import { StyleSheet, Platform, View, TextInput } from 'react-native';
 
 import Screen from '../components/Screen';
 import { Header, HeaderButton, HeaderTitle } from '../components/headers';
@@ -8,21 +8,18 @@ import colors from '../config/colors';
 import authContext from '../authContext';
 import LinkButton from '../components/buttons/LinkButton';
 import Section from '../components/Section';
-import UserProfilePicture from '../components/UserProfilePicture';
 import TextField from '../components/TextField';
 import { ScrollView } from 'react-native-gesture-handler';
 import UserService from '../services/user.service';
-import authApi from '../api/auth';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { loggedInUserActions } from '../redux/loggedInUser';
-import { ToastAndroid, Button, StatusBar, TouchableOpacity, Image } from 'react-native';
+import { ToastAndroid, TouchableOpacity, Image } from 'react-native';
 import useImagePicker from '../hooks/useImagePicker';
 import settings from '../config/settings';
 
 export default function EditProfileScreen({ navigation }) {
   const { user, setUser } = useContext(authContext);
   const { file, pickImage, clearFile } = useImagePicker();
-  const [displayImage, setDisplayImage] = useState(false);
+  // const [displayImage, setDisplayImage] = useState(false);
   const [enteredBio, setEnteredBio] = useState(user.aboutme);
   const [enteredCurrenttown, setEnteredCurrenttown] = useState(user.currenttown);
   const [enteredhometown, setEnteredhometown] = useState(user.hometown);
@@ -60,7 +57,7 @@ export default function EditProfileScreen({ navigation }) {
     });
   }
   async function EditUser() {
-    let storedUser2 = await UserService.editProfile(user.email, user).then(async (res) => {
+    await UserService.editProfile(user.email, user).then(async (res) => {
       if (res.data) {
         setUser(res.data);
         await EncryptedStorage.setItem('user', JSON.stringify(res.data));
@@ -217,7 +214,7 @@ export default function EditProfileScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+  const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -226,7 +223,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 25,
-    fontWeight: Platform.OS == 'ios' ? '500' : 'bold',
+    fontWeight: Platform.OS === 'ios' ? '500' : 'bold',
   },
   leftAndRight: {
     marginBottom: 2,

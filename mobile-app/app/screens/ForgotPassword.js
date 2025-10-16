@@ -29,7 +29,7 @@ export default function ForgotPassword({ navigation }) {
           setFieldError('email', 'Error while sending OTP');
         }
       })
-      .catch((e) => setFieldError('email', 'Error while sending OTP'))
+  .catch((_e) => setFieldError('email', 'Error while sending OTP'))
       .finally(() => setLoading(false));
   };
 

@@ -53,7 +53,7 @@ export default function UserProfileScreen({ navigation, route }) {
       FriendService.userStatus(user.id, loginUser.id)
         .then(({ data }) => setUserStatus((prev) => ({ ...prev, state: data })))
         .catch((e) => console.error(e.message))
-        .finally((_) => setUserStatus((prev) => ({ ...prev, loading: false })));
+        .finally(() => setUserStatus((prev) => ({ ...prev, loading: false })));
     };
     fetchUserProfile();
   }, []);
@@ -159,10 +159,10 @@ export default function UserProfileScreen({ navigation, route }) {
         }}
       />
 
-      {currentTab == POSTS && (
+  {currentTab === POSTS && (
         <FlatList
           data={posts}
-          ve={true}
+          // removed unknown prop 've'
           renderItem={({ item }) => {
             return <PostsItem item={item} />;
           }}
@@ -183,7 +183,7 @@ export default function UserProfileScreen({ navigation, route }) {
         />
       )}
 
-      {currentTab == IMAGE_VIDEOS && (
+  {currentTab === IMAGE_VIDEOS && (
         <FlatList
           data={media}
           numColumns={3}
@@ -196,7 +196,7 @@ export default function UserProfileScreen({ navigation, route }) {
         />
       )}
 
-      {currentTab == TAGS && (
+  {currentTab === TAGS && (
         <FlatList
           data={tags}
           showsVerticalScrollIndicator={false}
