@@ -74,13 +74,13 @@ const GroupFeedScreen = ({ navigation, route }) => {
 
   const handleJoinGroup = () => {
     GroupService.joinRequest(userData.id, groupData.id)
-      .then((res) => setRequested(true))
-      .catch((e) => e);
+  .then((_res) => setRequested(true))
+  .catch((_e) => _e);
   };
   const handleExitGroup = () => {
     GroupService.leavegroup(userData.id, groupData.id)
-      .then((res) => setIsMember(false))
-      .catch((e) => e);
+  .then((_res) => setIsMember(false))
+  .catch((_e) => _e);
   };
 
   const handleCloseModel = () => {

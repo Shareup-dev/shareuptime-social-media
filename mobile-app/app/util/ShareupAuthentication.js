@@ -61,7 +61,7 @@ export default function ShareupAuthentication() {
           userData: res.data,
         }),
       )
-      .catch((e) => {
+      .catch((_e) => {
         dispatch({
           type: actions.CLEAR_STATE,
         });
