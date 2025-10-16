@@ -7,8 +7,10 @@ import globals from 'globals';
 
 export default [
   {
+    ignores: ['dist/**', 'node_modules/**', '**/*.d.ts'],
+  },
+  {
     files: ['**/*.ts'],
-    ignores: ['dist/**', 'node_modules/**'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

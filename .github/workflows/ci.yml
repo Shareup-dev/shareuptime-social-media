@@ -30,9 +30,8 @@ jobs:
       - name: TypeScript build (no emit)
         run: npm run build --if-present
 
-      - name: Lint (non-blocking if not configured)
-        run: |
-          npm run lint || echo "Lint not configured or failing; skipping as non-blocking for now."
+      - name: Lint
+        run: npm run lint
 
   mobile:
     name: Mobile type-check
