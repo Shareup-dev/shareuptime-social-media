@@ -1,14 +1,36 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, Image, SafeAreaView, SectionList } from 'react-native';
+import { StyleSheet, View, SafeAreaView, SectionList, Platform } from 'react-native';
 import Screen from '../components/Screen';
 import { Text } from 'react-native-paper';
 import ListItem from '../components/lists/ListItem';
-import defaultStyles from '../config/GlobalStyles';
 import Icon from '../components/Icon';
 import { Header, HeaderTitle, HeaderCloseIcon } from '../components/headers';
 import colors from '../config/colors';
-import { Title } from 'react-native-paper';
 import routes from '../navigation/routes';
+
+// Item component hoisted to avoid defining components during render
+function Item({ item }) {
+  return (
+    <View style={styles.item}>
+      <ListItem
+        style={styles.listItem}
+        title={item.title}
+        titleStyle={styles.listItemTitle}
+        onPress={item.onPress}
+        isBottomSheet={true}
+        IconComponent={
+          <Icon
+            name={item.icon.name}
+            type={item.icon.type}
+            image={item.icon.image}
+            color={colors.dimGray}
+            backgroundSizeRatio={0.6}
+          />
+        }
+      />
+    </View>
+  );
+}
 
 export default function AccountSettingsScreen({ navigation }) {
   const Options = [
@@ -86,29 +108,6 @@ export default function AccountSettingsScreen({ navigation }) {
     },
   ];
 
-  const Item = ({ item }) => {
-    return (
-      <View style={styles.item}>
-        <ListItem
-          style={styles.listItem}
-          title={item.title}
-          titleStyle={{ color: colors.dimGray }}
-          onPress={item.onPress}
-          isBottomSheet={true}
-          IconComponent={
-            <Icon
-              name={item.icon.name}
-              type={item.icon.type}
-              image={item.icon.image}
-              color={colors.dimGray}
-              backgroundSizeRatio={0.6}
-            />
-          }
-        />
-      </View>
-    );
-  };
-
   return (
     <Screen style={styles.container}>
       <Header
@@ -124,9 +123,9 @@ export default function AccountSettingsScreen({ navigation }) {
             keyExtractor={(item, index) => item + index}
             renderItem={Item}
             renderSectionHeader={({ section: { header, subTitle } }) => (
-              <View style={{ paddingLeft: 30, paddingTop: 15 }}>
-                <Text style={{ fontWeight: '500', fontSize: 20 }}>{header}</Text>
-                <Text style={{ color: colors.dimGray, marginTop: 5 }}>{subTitle}</Text>
+              <View style={styles.sectionHeaderContainer}>
+                <Text style={styles.sectionHeaderTitle}>{header}</Text>
+                <Text style={styles.sectionHeaderSubtitle}>{subTitle}</Text>
               </View>
             )}
           />
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: Platform.OS == 'ios' ? '500' : 'bold',
+    fontWeight: Platform.OS === 'ios' ? '500' : 'bold',
   },
   leftAndRight: {
     marginBottom: 2,
@@ -169,12 +168,23 @@ const styles = StyleSheet.create({
     marginTop: 0,
     paddingLeft: 20,
   },
+  listItemTitle: {
+    color: colors.dimGray,
+  },
   item: {
     marginVertical: 5,
   },
-  header: {
-    fontSize: 32,
-    backgroundColor: '#fff',
+  sectionHeaderContainer: {
+    paddingLeft: 30,
+    paddingTop: 15,
+  },
+  sectionHeaderTitle: {
+    fontWeight: '500',
+    fontSize: 20,
+  },
+  sectionHeaderSubtitle: {
+    color: colors.dimGray,
+    marginTop: 5,
   },
   title: {
     fontSize: 20,
