@@ -1,7 +1,17 @@
 # ShareUpTime Backend API
 
 Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScript)
+# ShareUpTime Backend API
+
+Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScript)
 tabanlı backend API'sini içerir.
+
+Hızlı bağlantılar:
+
+- API Dokümanı: ./API_DOCUMENTATION.md
+- Veritabanı Şemaları: ./DATABASE_SCHEMA.md
+- Deployment Rehberi: ./DEPLOYMENT.md
+- Sağlık Kontrolleri: GET /health, GET /
 
 ## 🚀 Özellikler
 
@@ -164,7 +174,35 @@ Bu yaklaşım, değişiklikleri tersine çevirmeyi kolaylaştırır ve PR’lar�
 - Küçük lint/hijyen iyileştirmeleri (örn. kullanılmayan değişkenler)
 - Dokümantasyonun periyodik güncellenmesi (envanter/komutlar)
 
+### Hızlı Dene (cURL)
+
+```
+# Sağlık kontrolü
+curl -s http://localhost:4000/health | jq .
+
+# Ana sayfa JSON
+curl -s http://localhost:4000/ | jq .
+
+# Örnek kullanıcı arama
+curl -s "http://localhost:4000/api/users/search?q=john" | jq .
+```
+
+### WebSocket (Socket.IO) Hızlı Test
+
+Node REPL veya küçük bir script ile test edebilirsiniz:
+
+```
+node -e "(async()=>{const {io}=await import('socket.io-client'); const s=io('http://localhost:4000',{transports:['websocket']}); s.on('connect',()=>console.log('connected',s.id)); s.on('connect_error',e=>console.error('ws error',e.message)); setTimeout(()=>s.close(),2000);})();"
+```
+
 ## 📁 Proje Yapısı
+## 🛠️ Sorun Giderme (Troubleshooting)
+
+- 400/401 hataları: Authorization header veya body şemasını doğrulayın.
+- CORS hatası: `NODE_ENV` ve `allowedOrigins` listesini kontrol edin.
+- 429 Too Many Requests: Rate limiting devrede—bir süre bekleyin.
+- 500 hatası: Sunucu loglarını ve global error handler çıktısını inceleyin.
+
 
 ```
 src/
