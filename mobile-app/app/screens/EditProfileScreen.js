@@ -18,15 +18,16 @@ import settings from '../config/settings';
 
 export default function EditProfileScreen({ navigation }) {
   const { user, setUser } = useContext(authContext);
-  const { file: _file, pickImage: _pickImage, clearFile: _clearFile } = useImagePicker();
+  // Call hook but ignore returned values (unused)
+  useImagePicker();
   // const [displayImage, setDisplayImage] = useState(false);
   const [enteredBio, setEnteredBio] = useState(user.aboutme);
   const [enteredCurrenttown, setEnteredCurrenttown] = useState(user.currenttown);
   const [enteredhometown, setEnteredhometown] = useState(user.hometown);
   const [enteredRelation, setEnteredRelation] = useState(user.relationshipstatus);
   const [enteredinterests, setEnteredinterests] = useState(user.interests);
-  const [imageVal, _setImage] = useState(settings.apiUrl + user.profilePicturePath);
-  const [imageFile, _setSelectedImageFile] = useState(null);
+  const [imageVal] = useState(settings.apiUrl + user.profilePicturePath);
+  const [imageFile] = useState(null);
 
   // const addImage = async () => {
   //   const _image = await ImagePicker.launchImageLibraryAsync({

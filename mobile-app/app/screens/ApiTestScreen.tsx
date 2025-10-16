@@ -31,7 +31,7 @@ const ApiTestScreen: React.FC = () => {
   const [results, setResults] = useState<TestResult[]>([]);
   const [summary, setSummary] = useState<TestSummary | null>(null);
   // Kullanılmayan setter uyarısını önlemek için prefiksliyoruz
-  const [lastRunTime, _setLastRunTime] = useState<string | null>(null);
+  const [lastRunTime] = useState<string | null>(null);
 
   const handleRunTests = useCallback(async () => {
     setIsRunning(true);
