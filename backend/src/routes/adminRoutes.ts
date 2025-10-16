@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { Request, Response } from 'express';
+
 import { pgPool } from '../config/database';
 import { performanceMonitor, DbMonitor } from '../middleware/performanceMiddleware';
 import { CacheService } from '../services/cacheService';
@@ -10,12 +11,12 @@ const router = Router();
 // Admin middleware - simple password check
 const adminAuth = (req: Request, res: Response, next: any) => {
   const adminKey = req.headers['x-admin-key'] || req.query.key;
-  
+
   if (adminKey !== process.env.ADMIN_KEY && adminKey !== 'dev_admin_2025') {
     res.status(401).json(createResponse(false, 'Unauthorized'));
     return;
   }
-  
+
   next();
 };
 
@@ -27,20 +28,22 @@ router.get('/performance', adminAuth, (req: Request, res: Response) => {
     const dbStats = DbMonitor.getQueryStats();
     const cacheStats = CacheService.getStats();
 
-    res.status(200).json(createResponse(true, 'Performance metrics', {
-      performance: stats,
-      health,
-      database: dbStats,
-      cache: cacheStats,
-      systemInfo: {
-        nodeVersion: process.version,
-        platform: process.platform,
-        uptime: process.uptime(),
-        pid: process.pid,
-        memoryUsage: process.memoryUsage(),
-        cpuUsage: process.cpuUsage()
-      }
-    }));
+    res.status(200).json(
+      createResponse(true, 'Performance metrics', {
+        performance: stats,
+        health,
+        database: dbStats,
+        cache: cacheStats,
+        systemInfo: {
+          nodeVersion: process.version,
+          platform: process.platform,
+          uptime: process.uptime(),
+          pid: process.pid,
+          memoryUsage: process.memoryUsage(),
+          cpuUsage: process.cpuUsage(),
+        },
+      }),
+    );
   } catch (error) {
     console.error('Performance metrics error:', error);
     res.status(500).json(createResponse(false, 'Error fetching metrics'));
@@ -97,16 +100,18 @@ router.get('/database', adminAuth, async (req: Request, res: Response) => {
 
       const indexStatsResult = await client.query(indexStatsQuery);
 
-      res.status(200).json(createResponse(true, 'Database statistics', {
-        tables: tableStatsResult.rows,
-        connections: connectionsResult.rows,
-        indexes: indexStatsResult.rows,
-        poolInfo: {
-          totalCount: pgPool.totalCount,
-          idleCount: pgPool.idleCount,
-          waitingCount: pgPool.waitingCount
-        }
-      }));
+      res.status(200).json(
+        createResponse(true, 'Database statistics', {
+          tables: tableStatsResult.rows,
+          connections: connectionsResult.rows,
+          indexes: indexStatsResult.rows,
+          poolInfo: {
+            totalCount: pgPool.totalCount,
+            idleCount: pgPool.idleCount,
+            waitingCount: pgPool.waitingCount,
+          },
+        }),
+      );
     } finally {
       client.release();
     }
@@ -120,13 +125,15 @@ router.get('/database', adminAuth, async (req: Request, res: Response) => {
 router.get('/cache', adminAuth, async (req: Request, res: Response) => {
   try {
     const stats = CacheService.getStats();
-    
-    res.status(200).json(createResponse(true, 'Cache statistics', {
-      cache: stats,
-      operations: {
-        // Add cache operation counters if needed
-      }
-    }));
+
+    res.status(200).json(
+      createResponse(true, 'Cache statistics', {
+        cache: stats,
+        operations: {
+          // Add cache operation counters if needed
+        },
+      }),
+    );
   } catch (error) {
     console.error('Cache stats error:', error);
     res.status(500).json(createResponse(false, 'Error fetching cache stats'));
@@ -147,21 +154,24 @@ router.get('/health', adminAuth, (req: Request, res: Response) => {
       diskSpace: false, // Could add disk space check
     };
 
-    const overallStatus = health.status === 'critical' || Object.values(criticalChecks).some(Boolean) 
-      ? 'critical' 
-      : health.status;
+    const overallStatus =
+      health.status === 'critical' || Object.values(criticalChecks).some(Boolean)
+        ? 'critical'
+        : health.status;
 
-    res.status(200).json(createResponse(true, 'System health', {
-      status: overallStatus,
-      health,
-      criticalChecks,
-      timestamp: new Date().toISOString(),
-      services: {
-        database: 'healthy', // Could add actual DB ping
-        cache: 'healthy',
-        websocket: 'healthy'
-      }
-    }));
+    res.status(200).json(
+      createResponse(true, 'System health', {
+        status: overallStatus,
+        health,
+        criticalChecks,
+        timestamp: new Date().toISOString(),
+        services: {
+          database: 'healthy', // Could add actual DB ping
+          cache: 'healthy',
+          websocket: 'healthy',
+        },
+      }),
+    );
   } catch (error) {
     console.error('Health check error:', error);
     res.status(500).json(createResponse(false, 'Error checking system health'));
@@ -172,10 +182,17 @@ router.get('/health', adminAuth, (req: Request, res: Response) => {
 router.post('/cache/clear', adminAuth, async (req: Request, res: Response) => {
   try {
     const { pattern } = req.body;
-    
+
     if (pattern) {
       const deletedCount = await CacheService.deletePattern(pattern);
-      res.status(200).json(createResponse(true, `Cleared ${deletedCount} cache entries matching pattern: ${pattern}`));
+      res
+        .status(200)
+        .json(
+          createResponse(
+            true,
+            `Cleared ${deletedCount} cache entries matching pattern: ${pattern}`,
+          ),
+        );
     } else {
       // Clear all cache - could implement if needed
       res.status(400).json(createResponse(false, 'Pattern required for cache clearing'));
@@ -192,11 +209,13 @@ router.get('/logs', adminAuth, (req: Request, res: Response) => {
     const recentMetrics = performanceMonitor.getStats().recentMetrics;
     const recentQueries = DbMonitor.getQueryStats().recentQueries;
 
-    res.status(200).json(createResponse(true, 'Recent logs', {
-      recentRequests: recentMetrics,
-      recentQueries,
-      serverLogs: [] // Could add actual log file reading
-    }));
+    res.status(200).json(
+      createResponse(true, 'Recent logs', {
+        recentRequests: recentMetrics,
+        recentQueries,
+        serverLogs: [], // Could add actual log file reading
+      }),
+    );
   } catch (error) {
     console.error('Logs error:', error);
     res.status(500).json(createResponse(false, 'Error fetching logs'));

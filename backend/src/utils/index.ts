@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+
 import { ApiResponse, PaginatedResponse } from '../types';
 
 // Şifre hashleme
@@ -34,13 +35,13 @@ export const createResponse = <T>(
   success: boolean,
   message: string,
   data?: T | undefined,
-  error?: string | undefined
+  error?: string | undefined,
 ): ApiResponse<T> => {
   return {
     success,
     message,
     data: data as T | undefined,
-    error: error as string | undefined
+    error: error as string | undefined,
   };
 };
 
@@ -50,10 +51,10 @@ export const createPaginatedResponse = <T>(
   page: number,
   limit: number,
   total: number,
-  message: string = 'Veriler başarıyla getirildi'
+  message: string = 'Veriler başarıyla getirildi',
 ): PaginatedResponse<T> => {
   const totalPages = Math.ceil(total / limit);
-  
+
   return {
     success: true,
     message,
@@ -62,14 +63,15 @@ export const createPaginatedResponse = <T>(
       page,
       limit,
       total,
-      totalPages
-    }
+      totalPages,
+    },
   };
 };
 
 // Email doğrulama
 export const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$/;
+  const emailRegex =
+    /^[a-zA-Z0-9._%+-]+@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$/;
   // Check for consecutive dots
   if (email.includes('..')) {
     return false;

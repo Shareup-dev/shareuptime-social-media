@@ -1,6 +1,7 @@
-import multer from 'multer';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
+
+import multer from 'multer';
 import sharp from 'sharp';
 
 // Upload dizinlerini oluştur
@@ -12,7 +13,7 @@ const uploadDirs = {
   temp: 'uploads/temp',
 };
 
-Object.values(uploadDirs).forEach(dir => {
+Object.values(uploadDirs).forEach((dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
@@ -42,7 +43,7 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCa
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let uploadPath = uploadDirs.temp;
-    
+
     // Determine upload path based on field name
     switch (file.fieldname) {
       case 'profilePicture':
@@ -61,14 +62,14 @@ const storage = multer.diskStorage({
       default:
         uploadPath = uploadDirs.temp;
     }
-    
+
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-  }
+  },
 });
 
 // Multer instance
@@ -85,49 +86,49 @@ export const upload = multer({
 export class ImageProcessor {
   static async processProfilePicture(filePath: string): Promise<string> {
     const processedPath = filePath.replace(path.extname(filePath), '_processed.jpg');
-    
+
     await sharp(filePath)
       .resize(400, 400, {
         fit: 'cover',
-        position: 'center'
+        position: 'center',
       })
       .jpeg({ quality: 90 })
       .toFile(processedPath);
-    
+
     // Remove original file
     fs.unlinkSync(filePath);
-    
+
     return processedPath;
   }
 
   static async processPostImage(filePath: string): Promise<string> {
     const processedPath = filePath.replace(path.extname(filePath), '_processed.jpg');
-    
+
     await sharp(filePath)
       .resize(1080, 1080, {
         fit: 'inside',
-        withoutEnlargement: true
+        withoutEnlargement: true,
       })
       .jpeg({ quality: 85 })
       .toFile(processedPath);
-    
+
     // Remove original file
     fs.unlinkSync(filePath);
-    
+
     return processedPath;
   }
 
   static async createThumbnail(filePath: string): Promise<string> {
     const thumbnailPath = filePath.replace(path.extname(filePath), '_thumb.jpg');
-    
+
     await sharp(filePath)
       .resize(200, 200, {
         fit: 'cover',
-        position: 'center'
+        position: 'center',
       })
       .jpeg({ quality: 70 })
       .toFile(thumbnailPath);
-    
+
     return thumbnailPath;
   }
 }
@@ -172,13 +173,15 @@ export class FileManager {
 
 // Upload middleware variants
 export const uploadSingle = (fieldName: string) => upload.single(fieldName);
-export const uploadMultiple = (fieldName: string, maxCount: number = 10) => upload.array(fieldName, maxCount);
-export const uploadFields = (fields: Array<{ name: string; maxCount?: number }>) => upload.fields(fields);
+export const uploadMultiple = (fieldName: string, maxCount: number = 10) =>
+  upload.array(fieldName, maxCount);
+export const uploadFields = (fields: Array<{ name: string; maxCount?: number }>) =>
+  upload.fields(fields);
 
 // Profile upload
 export const uploadProfile = upload.fields([
   { name: 'profilePicture', maxCount: 1 },
-  { name: 'coverPhoto', maxCount: 1 }
+  { name: 'coverPhoto', maxCount: 1 },
 ]);
 
 // Post upload (multiple media files)
@@ -197,22 +200,22 @@ export const handleUploadError = (error: any, req: any, res: any, next: any) => 
       case 'LIMIT_FILE_SIZE':
         return res.status(400).json({
           success: false,
-          message: 'File too large. Maximum size is 50MB.'
+          message: 'File too large. Maximum size is 50MB.',
         });
       case 'LIMIT_FILE_COUNT':
         return res.status(400).json({
           success: false,
-          message: 'Too many files. Maximum is 10 files.'
+          message: 'Too many files. Maximum is 10 files.',
         });
       case 'LIMIT_UNEXPECTED_FILE':
         return res.status(400).json({
           success: false,
-          message: 'Unexpected field name in file upload.'
+          message: 'Unexpected field name in file upload.',
         });
       default:
         return res.status(400).json({
           success: false,
-          message: 'File upload error: ' + error.message
+          message: 'File upload error: ' + error.message,
         });
     }
   }
@@ -220,7 +223,7 @@ export const handleUploadError = (error: any, req: any, res: any, next: any) => 
   if (error.message === 'Invalid file type. Only images and videos are allowed.') {
     return res.status(400).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 

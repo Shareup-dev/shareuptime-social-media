@@ -1,16 +1,18 @@
-import express from 'express';
 import { createServer } from 'http';
-import dotenv from 'dotenv';
 import path from 'path';
-import userRoutes from './routes/userRoutes';
+
+import dotenv from 'dotenv';
+import express from 'express';
+
+import { requestLogger, rateLimiter } from './middleware';
+import { performanceMiddleware } from './middleware/performanceMiddleware';
+import adminRoutes from './routes/adminRoutes';
 import authRoutes from './routes/authRoutes';
-import postRoutes from './routes/postRoutes';
 import followRoutes from './routes/followRoutes';
 import messageRoutes from './routes/messageRoutes';
 import notificationRoutes from './routes/notificationRoutes';
-import adminRoutes from './routes/adminRoutes';
-import { requestLogger, rateLimiter } from './middleware';
-import { performanceMiddleware } from './middleware/performanceMiddleware';
+import postRoutes from './routes/postRoutes';
+import userRoutes from './routes/userRoutes';
 import ShareUpTimeWebSocket from './services/websocket';
 
 // Ortam değişkenlerini yükle
@@ -30,23 +32,27 @@ app.use((req, res, next) => {
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  
+
   // Remove Express powered by header
   res.removeHeader('X-Powered-By');
-  
+
   next();
 });
 
 // Body parsing middleware with size limits
-app.use(express.json({ 
-  limit: '10mb',
-  strict: true,
-  type: 'application/json'
-}));
-app.use(express.urlencoded({ 
-  extended: true, 
-  limit: '10mb' 
-}));
+app.use(
+  express.json({
+    limit: '10mb',
+    strict: true,
+    type: 'application/json',
+  }),
+);
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: '10mb',
+  }),
+);
 
 // Request logging
 app.use(requestLogger);
@@ -65,22 +71,26 @@ app.use('/api/auth/login', rateLimiter(5, 15 * 60 * 1000)); // 5 login attempts 
 app.use('/api/users/register', rateLimiter(3, 60 * 60 * 1000)); // 3 registrations per hour
 
 // CORS ayarları (production için güvenli)
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? ['https://shareuptime.com', 'https://www.shareuptime.com'] 
-  : ['http://localhost:3000', 'http://localhost:8081', 'exp://192.168.1.100:8081'];
+const allowedOrigins =
+  process.env.NODE_ENV === 'production'
+    ? ['https://shareuptime.com', 'https://www.shareuptime.com']
+    : ['http://localhost:3000', 'http://localhost:8081', 'exp://192.168.1.100:8081'];
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  
+
   if (process.env.NODE_ENV === 'development' || !origin || allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin || '*');
   }
-  
+
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control',
+  );
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Max-Age', '86400'); // 24 hours
-  
+
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
   } else {
@@ -106,7 +116,7 @@ app.use((req, res, next) => {
   if (req.body && typeof req.body === 'object') {
     req.body = sanitizeObject(req.body);
   }
-  
+
   next();
 });
 
@@ -125,8 +135,8 @@ app.get('/', (req, res) => {
           'POST /register - Kullanıcı kayıt (Rate Limited)',
           'GET /search - Kullanıcı arama',
           'GET /:userId - Kullanıcı profili görüntüleme',
-          'PUT /:userId - Kullanıcı profili güncelleme (korumalı)'
-        ]
+          'PUT /:userId - Kullanıcı profili güncelleme (korumalı)',
+        ],
       },
       auth: {
         base: '/api/auth',
@@ -134,8 +144,8 @@ app.get('/', (req, res) => {
           'POST /login - Kullanıcı girişi (Rate Limited)',
           'GET /verify - Token doğrulama (korumalı)',
           'POST /change-password - Şifre değiştirme (korumalı)',
-          'POST /request-password-reset - Şifre sıfırlama talebi'
-        ]
+          'POST /request-password-reset - Şifre sıfırlama talebi',
+        ],
       },
       posts: {
         base: '/api/posts',
@@ -145,8 +155,8 @@ app.get('/', (req, res) => {
           'GET /:postId - Belirli gönderiyi getir',
           'GET /user/:userId - Kullanıcının gönderilerini getir',
           'PUT /:postId - Gönderi güncelle (korumalı)',
-          'DELETE /:postId - Gönderi sil (korumalı)'
-        ]
+          'DELETE /:postId - Gönderi sil (korumalı)',
+        ],
       },
       follows: {
         base: '/api/follows',
@@ -156,8 +166,8 @@ app.get('/', (req, res) => {
           'GET /:userId/followers - Takipçileri listele',
           'GET /:userId/following - Takip edilenleri listele',
           'GET /:userId/status - Takip durumunu kontrol et (korumalı)',
-          'GET /:userId/mutual - Ortak takip edilenleri getir (korumalı)'
-        ]
+          'GET /:userId/mutual - Ortak takip edilenleri getir (korumalı)',
+        ],
       },
       messages: {
         base: '/api/messages',
@@ -166,8 +176,8 @@ app.get('/', (req, res) => {
           'GET /conversations - Kullanıcının konuşmaları (korumalı)',
           'POST /conversations/:conversationId/messages - Mesaj gönder (korumalı)',
           'GET /conversations/:conversationId/messages - Konuşma mesajları (korumalı)',
-          'PUT /messages/:messageId/read - Mesajı okundu işaretle (korumalı)'
-        ]
+          'PUT /messages/:messageId/read - Mesajı okundu işaretle (korumalı)',
+        ],
       },
       notifications: {
         base: '/api/notifications',
@@ -175,8 +185,8 @@ app.get('/', (req, res) => {
           'GET / - Kullanıcının bildirimleri (korumalı)',
           'GET /unread-count - Okunmamış bildirim sayısı (korumalı)',
           'PUT /:notificationId/read - Bildirimi okundu işaretle (korumalı)',
-          'PUT /mark-all-read - Tüm bildirimleri okundu işaretle (korumalı)'
-        ]
+          'PUT /mark-all-read - Tüm bildirimleri okundu işaretle (korumalı)',
+        ],
       },
       admin: {
         base: '/api/admin',
@@ -186,9 +196,9 @@ app.get('/', (req, res) => {
           'GET /cache - Cache istatistikleri (admin)',
           'GET /health - Sistem sağlık durumu (admin)',
           'POST /cache/clear - Cache temizleme (admin)',
-          'GET /logs - Son logları görüntüle (admin)'
-        ]
-      }
+          'GET /logs - Son logları görüntüle (admin)',
+        ],
+      },
     },
     security: [
       'JWT Authentication',
@@ -198,7 +208,7 @@ app.get('/', (req, res) => {
       'CORS Protection',
       'Security Headers',
       'Request Size Limits',
-      'SQL Injection Prevention'
+      'SQL Injection Prevention',
     ],
     features: [
       'PostgreSQL Database',
@@ -206,8 +216,8 @@ app.get('/', (req, res) => {
       'Redis Caching',
       'Request Logging',
       'Error Handling',
-      'Graceful Shutdown'
-    ]
+      'Graceful Shutdown',
+    ],
   });
 });
 
@@ -218,7 +228,7 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     memory: process.memoryUsage(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
   });
 });
 
@@ -237,8 +247,16 @@ app.use((req, res) => {
     success: false,
     message: 'Endpoint bulunamadı',
     requestedPath: req.originalUrl,
-    availableEndpoints: ['/api/users', '/api/auth', '/api/posts', '/api/follows', '/api/messages', '/api/notifications', '/api/admin'],
-    timestamp: new Date().toISOString()
+    availableEndpoints: [
+      '/api/users',
+      '/api/auth',
+      '/api/posts',
+      '/api/follows',
+      '/api/messages',
+      '/api/notifications',
+      '/api/admin',
+    ],
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -250,14 +268,14 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
     url: req.originalUrl,
     method: req.method,
     ip: req.ip,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
-  
+
   res.status(500).json({
     success: false,
     message: 'Sunucu hatası',
     error: process.env.NODE_ENV === 'development' ? err.message : 'Bir hata oluştu',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -267,7 +285,7 @@ const PORT = process.env.PORT || 4000;
 const startServer = async () => {
   // WebSocket servisini başlat
   const wsService = new ShareUpTimeWebSocket(server);
-  
+
   // Sunucuyu başlat
   const serverInstance = server.listen(PORT, () => {
     console.log(`🚀 ShareUpTime Backend API ${PORT} portunda çalışıyor.`);
@@ -282,7 +300,7 @@ const startServer = async () => {
   try {
     const { initializeDatabase } = await import('./config/database');
     await initializeDatabase();
-    
+
     // Cache service'i initialize et
     const { CacheService } = await import('./services/cacheService');
     await CacheService.initialize();
@@ -310,7 +328,7 @@ process.on('SIGINT', async () => {
     } catch {
       // Redis modülü yüklenemezse veya bağlantı yoksa görmezden gel
     }
-    
+
     console.log('✅ Sunucu başarıyla kapatıldı');
     process.exit(0);
   } catch (error) {

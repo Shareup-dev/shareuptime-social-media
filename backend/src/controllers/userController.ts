@@ -1,16 +1,17 @@
-import { Request, Response } from 'express';
-import { pgPool } from '../config/database';
-import { CreateUserRequest, UpdateUserRequest, User } from '../types';
-import { 
-  hashPassword, 
-  createResponse, 
-  isValidEmail, 
-  isValidUsername, 
-  sanitizeInput 
-} from '../utils';
 import bcrypt from 'bcrypt';
-import { ImageProcessor, FileManager } from '../middleware/uploadMiddleware';
+import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
+import { pgPool } from '../config/database';
+import { ImageProcessor, FileManager } from '../middleware/uploadMiddleware';
+import { CreateUserRequest, UpdateUserRequest, User } from '../types';
+import {
+  hashPassword,
+  createResponse,
+  isValidEmail,
+  isValidUsername,
+  sanitizeInput,
+} from '../utils';
 
 // Kullanıcı kayıt
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
@@ -29,7 +30,14 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     }
 
     if (!isValidUsername(username)) {
-      res.status(400).json(createResponse(false, 'Kullanıcı adı 3-20 karakter arası olmalı ve sadece harf, rakam ve _ içerebilir'));
+      res
+        .status(400)
+        .json(
+          createResponse(
+            false,
+            'Kullanıcı adı 3-20 karakter arası olmalı ve sadece harf, rakam ve _ içerebilir',
+          ),
+        );
       return;
     }
 
@@ -42,10 +50,15 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     try {
       // Mevcut kullanıcı kontrolü
       const existingUserQuery = 'SELECT id FROM users WHERE email = $1 OR username = $2';
-      const existingUserResult = await client.query(existingUserQuery, [email.toLowerCase(), username.toLowerCase()]);
+      const existingUserResult = await client.query(existingUserQuery, [
+        email.toLowerCase(),
+        username.toLowerCase(),
+      ]);
 
       if (existingUserResult.rows.length > 0) {
-        res.status(409).json(createResponse(false, 'Bu email veya kullanıcı adı zaten kullanılıyor'));
+        res
+          .status(409)
+          .json(createResponse(false, 'Bu email veya kullanıcı adı zaten kullanılıyor'));
         return;
       }
 
@@ -60,28 +73,44 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
         VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING id, username, email, first_name, last_name, created_at
       `;
-      
+
       const newUserResult = await client.query(insertUserQuery, [
         userId,
         sanitizeInput(username),
         email.toLowerCase(),
         hashedPassword,
         firstName ? sanitizeInput(firstName) : null,
-        lastName ? sanitizeInput(lastName) : null
+        lastName ? sanitizeInput(lastName) : null,
       ]);
 
       const newUser = newUserResult.rows[0];
 
       res.status(201).json(createResponse(true, 'Kullanıcı başarıyla oluşturuldu', newUser));
     } catch (error) {
-      console.error('Kullanıcı kayıt hatası: Veritabanı bağlantısı sırasında bir hata oluştu:', error);
-      res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı kaydı sırasında hata oluştu'));
+      console.error(
+        'Kullanıcı kayıt hatası: Veritabanı bağlantısı sırasında bir hata oluştu:',
+        error,
+      );
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            'Sunucu hatası',
+            undefined,
+            'Kullanıcı kaydı sırasında hata oluştu',
+          ),
+        );
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Kullanıcı kayıt hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı kaydı sırasında hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı kaydı sırasında hata oluştu'),
+      );
   }
 };
 
@@ -119,14 +148,35 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
 
       res.status(200).json(createResponse(true, 'Kullanıcı profili getirildi', userResult.rows[0]));
     } catch (error) {
-      console.error('Kullanıcı profili getirme hatası: Veritabanı sorgusu sırasında bir hata oluştu:', error);
-      res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı profili getirilirken hata oluştu'));
+      console.error(
+        'Kullanıcı profili getirme hatası: Veritabanı sorgusu sırasında bir hata oluştu:',
+        error,
+      );
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            'Sunucu hatası',
+            undefined,
+            'Kullanıcı profili getirilirken hata oluştu',
+          ),
+        );
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Kullanıcı profili getirme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı profili getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Kullanıcı profili getirilirken hata oluştu',
+        ),
+      );
   }
 };
 
@@ -209,13 +259,24 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
         return;
       }
 
-      res.status(200).json(createResponse(true, 'Kullanıcı profili güncellendi', updatedUserResult.rows[0]));
+      res
+        .status(200)
+        .json(createResponse(true, 'Kullanıcı profili güncellendi', updatedUserResult.rows[0]));
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Kullanıcı profili güncelleme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı profili güncellenirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Kullanıcı profili güncellenirken hata oluştu',
+        ),
+      );
   }
 };
 
@@ -236,7 +297,7 @@ export const searchUsers = async (req: Request, res: Response): Promise<void> =>
     const client = await pgPool.connect();
     try {
       const searchTerm = `%${sanitizeInput(query)}%`;
-      
+
       // Kullanıcı arama sorgusu
       const searchQuery = `
         SELECT id, username, email, first_name, last_name, 
@@ -270,15 +331,19 @@ export const searchUsers = async (req: Request, res: Response): Promise<void> =>
           page: pageNumber,
           limit: limitNumber,
           total,
-          totalPages: Math.ceil(total / limitNumber)
-        }
+          totalPages: Math.ceil(total / limitNumber),
+        },
       });
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Kullanıcı arama hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı arama sırasında hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Kullanıcı arama sırasında hata oluştu'),
+      );
   }
 };
 
@@ -313,9 +378,10 @@ export const uploadProfilePicture = async (req: Request, res: Response): Promise
         // Eski profil resmini al
         const oldImageQuery = 'SELECT profile_picture_url FROM users WHERE id = $1';
         const oldImageResult = await client.query(oldImageQuery, [userId]);
-        
+
         // Kullanıcının profil resmini güncelle
-        const updateQuery = 'UPDATE users SET profile_picture_url = $1 WHERE id = $2 RETURNING profile_picture_url';
+        const updateQuery =
+          'UPDATE users SET profile_picture_url = $1 WHERE id = $2 RETURNING profile_picture_url';
         const updateResult = await client.query(updateQuery, [profilePictureUrl, userId]);
 
         // Eski resmi sil (varsayılan resim değilse)
@@ -325,9 +391,11 @@ export const uploadProfilePicture = async (req: Request, res: Response): Promise
           FileManager.deleteFile(oldImagePath);
         }
 
-        res.status(200).json(createResponse(true, 'Profil resmi başarıyla güncellendi', {
-          profile_picture_url: updateResult.rows[0].profile_picture_url
-        }));
+        res.status(200).json(
+          createResponse(true, 'Profil resmi başarıyla güncellendi', {
+            profile_picture_url: updateResult.rows[0].profile_picture_url,
+          }),
+        );
       } finally {
         client.release();
       }
@@ -338,7 +406,11 @@ export const uploadProfilePicture = async (req: Request, res: Response): Promise
     }
   } catch (error) {
     console.error('Profil resmi yükleme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Profil resmi yüklenirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Profil resmi yüklenirken hata oluştu'),
+      );
   }
 };
 
@@ -373,9 +445,10 @@ export const uploadCoverPhoto = async (req: Request, res: Response): Promise<voi
         // Eski kapak fotoğrafını al
         const oldImageQuery = 'SELECT cover_photo_url FROM users WHERE id = $1';
         const oldImageResult = await client.query(oldImageQuery, [userId]);
-        
+
         // Kullanıcının kapak fotoğrafını güncelle
-        const updateQuery = 'UPDATE users SET cover_photo_url = $1 WHERE id = $2 RETURNING cover_photo_url';
+        const updateQuery =
+          'UPDATE users SET cover_photo_url = $1 WHERE id = $2 RETURNING cover_photo_url';
         const updateResult = await client.query(updateQuery, [coverPhotoUrl, userId]);
 
         // Eski kapak fotoğrafını sil
@@ -385,9 +458,11 @@ export const uploadCoverPhoto = async (req: Request, res: Response): Promise<voi
           FileManager.deleteFile(oldImagePath);
         }
 
-        res.status(200).json(createResponse(true, 'Kapak fotoğrafı başarıyla güncellendi', {
-          cover_photo_url: updateResult.rows[0].cover_photo_url
-        }));
+        res.status(200).json(
+          createResponse(true, 'Kapak fotoğrafı başarıyla güncellendi', {
+            cover_photo_url: updateResult.rows[0].cover_photo_url,
+          }),
+        );
       } finally {
         client.release();
       }
@@ -398,6 +473,15 @@ export const uploadCoverPhoto = async (req: Request, res: Response): Promise<voi
     }
   } catch (error) {
     console.error('Kapak fotoğrafı yükleme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Kapak fotoğrafı yüklenirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Kapak fotoğrafı yüklenirken hata oluştu',
+        ),
+      );
   }
 };

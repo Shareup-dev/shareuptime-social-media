@@ -18,72 +18,75 @@ interface UserDocument extends Document {
   updatedAt: Date;
 }
 
-const userSchema = new Schema<UserDocument>({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    minlength: 3,
-    maxlength: 20
+const userSchema = new Schema<UserDocument>(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      minlength: 3,
+      maxlength: 20,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    passwordHash: {
+      type: String,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      trim: true,
+      maxlength: 50,
+    },
+    lastName: {
+      type: String,
+      trim: true,
+      maxlength: 50,
+    },
+    profileImage: {
+      type: String,
+      default: null,
+    },
+    bio: {
+      type: String,
+      maxlength: 160,
+      default: '',
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isPrivate: {
+      type: Boolean,
+      default: false,
+    },
+    followersCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    followingCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    postsCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true
+  {
+    timestamps: true,
+    versionKey: false,
   },
-  passwordHash: {
-    type: String,
-    required: true
-  },
-  firstName: {
-    type: String,
-    trim: true,
-    maxlength: 50
-  },
-  lastName: {
-    type: String,
-    trim: true,
-    maxlength: 50
-  },
-  profileImage: {
-    type: String,
-    default: null
-  },
-  bio: {
-    type: String,
-    maxlength: 160,
-    default: ''
-  },
-  isVerified: {
-    type: Boolean,
-    default: false
-  },
-  isPrivate: {
-    type: Boolean,
-    default: false
-  },
-  followersCount: {
-    type: Number,
-    default: 0,
-    min: 0
-  },
-  followingCount: {
-    type: Number,
-    default: 0,
-    min: 0
-  },
-  postsCount: {
-    type: Number,
-    default: 0,
-    min: 0
-  }
-}, {
-  timestamps: true,
-  versionKey: false
-});
+);
 
 // Kullanıcı modeli
 export const UserModel = mongoose.model<UserDocument>('User', userSchema);
@@ -100,39 +103,44 @@ interface PostDocument extends Document {
   updatedAt: Date;
 }
 
-const postSchema = new Schema<PostDocument>({
-  authorId: {
-    type: String,
-    required: true,
-    ref: 'User'
+const postSchema = new Schema<PostDocument>(
+  {
+    authorId: {
+      type: String,
+      required: true,
+      ref: 'User',
+    },
+    content: {
+      type: String,
+      required: true,
+      maxlength: 2200,
+    },
+    mediaUrls: [
+      {
+        type: String,
+      },
+    ],
+    likesCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    commentsCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    sharesCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
-  content: {
-    type: String,
-    required: true,
-    maxlength: 2200
+  {
+    timestamps: true,
+    versionKey: false,
   },
-  mediaUrls: [{
-    type: String
-  }],
-  likesCount: {
-    type: Number,
-    default: 0,
-    min: 0
-  },
-  commentsCount: {
-    type: Number,
-    default: 0,
-    min: 0
-  },
-  sharesCount: {
-    type: Number,
-    default: 0,
-    min: 0
-  }
-}, {
-  timestamps: true,
-  versionKey: false
-});
+);
 
 // Gönderi modeli
 export const PostModel = mongoose.model<PostDocument>('Post', postSchema);
@@ -144,21 +152,24 @@ interface FollowDocument extends Document {
   createdAt: Date;
 }
 
-const followSchema = new Schema<FollowDocument>({
-  followerId: {
-    type: String,
-    required: true,
-    ref: 'User'
+const followSchema = new Schema<FollowDocument>(
+  {
+    followerId: {
+      type: String,
+      required: true,
+      ref: 'User',
+    },
+    followingId: {
+      type: String,
+      required: true,
+      ref: 'User',
+    },
   },
-  followingId: {
-    type: String,
-    required: true,
-    ref: 'User'
-  }
-}, {
-  timestamps: true,
-  versionKey: false
-});
+  {
+    timestamps: true,
+    versionKey: false,
+  },
+);
 
 // Benzersizlik: bir kullanıcı başka bir kullanıcıyı sadece bir kez takip edebilir
 followSchema.index({ followerId: 1, followingId: 1 }, { unique: true });

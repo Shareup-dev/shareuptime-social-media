@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
+import { v4 as uuidv4 } from 'uuid';
+
 import { pgPool } from '../config/database';
 import { createResponse, createPaginatedResponse } from '../utils';
-import { v4 as uuidv4 } from 'uuid';
 
 // Kullanıcının bildirimlerini getir
 export const getUserNotifications = async (req: Request, res: Response): Promise<void> => {
@@ -27,26 +28,38 @@ export const getUserNotifications = async (req: Request, res: Response): Promise
         LIMIT $2 OFFSET $3
       `;
 
-      const notificationsResult = await client.query(notificationsQuery, [userId, limitNumber, offset]);
+      const notificationsResult = await client.query(notificationsQuery, [
+        userId,
+        limitNumber,
+        offset,
+      ]);
 
       // Get total count
       const countQuery = 'SELECT COUNT(*) as total FROM notifications WHERE recipient_id = $1';
       const countResult = await client.query(countQuery, [userId]);
       const total = parseInt(countResult.rows[0].total);
 
-      res.status(200).json(createPaginatedResponse(
-        notificationsResult.rows,
-        pageNumber,
-        limitNumber,
-        total,
-        'Bildirimler getirildi'
-      ));
+      res
+        .status(200)
+        .json(
+          createPaginatedResponse(
+            notificationsResult.rows,
+            pageNumber,
+            limitNumber,
+            total,
+            'Bildirimler getirildi',
+          ),
+        );
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Bildirimleri getirme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Bildirimler getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Bildirimler getirilirken hata oluştu'),
+      );
   }
 };
 
@@ -77,7 +90,11 @@ export const markNotificationAsRead = async (req: Request, res: Response): Promi
     }
   } catch (error) {
     console.error('Bildirim okundu işaretleme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Bildirim işaretlenirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Bildirim işaretlenirken hata oluştu'),
+      );
   }
 };
 
@@ -88,16 +105,23 @@ export const markAllNotificationsAsRead = async (req: Request, res: Response): P
 
     const client = await pgPool.connect();
     try {
-      const updateQuery = 'UPDATE notifications SET is_read = true WHERE recipient_id = $1 AND is_read = false';
+      const updateQuery =
+        'UPDATE notifications SET is_read = true WHERE recipient_id = $1 AND is_read = false';
       const result = await client.query(updateQuery, [userId]);
 
-      res.status(200).json(createResponse(true, `${result.rowCount} bildirim okundu olarak işaretlendi`));
+      res
+        .status(200)
+        .json(createResponse(true, `${result.rowCount} bildirim okundu olarak işaretlendi`));
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Tüm bildirimleri okundu işaretleme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Bildirimler işaretlenirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Bildirimler işaretlenirken hata oluştu'),
+      );
   }
 };
 
@@ -108,7 +132,8 @@ export const getUnreadNotificationCount = async (req: Request, res: Response): P
 
     const client = await pgPool.connect();
     try {
-      const countQuery = 'SELECT COUNT(*) as count FROM notifications WHERE recipient_id = $1 AND is_read = false';
+      const countQuery =
+        'SELECT COUNT(*) as count FROM notifications WHERE recipient_id = $1 AND is_read = false';
       const countResult = await client.query(countQuery, [userId]);
       const count = parseInt(countResult.rows[0].count);
 
@@ -118,7 +143,16 @@ export const getUnreadNotificationCount = async (req: Request, res: Response): P
     }
   } catch (error) {
     console.error('Okunmamış bildirim sayısı hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Bildirim sayısı getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Bildirim sayısı getirilirken hata oluştu',
+        ),
+      );
   }
 };
 
@@ -128,7 +162,7 @@ export const createNotification = async (
   type: string,
   actorId?: string,
   postId?: string,
-  message?: string
+  message?: string,
 ): Promise<void> => {
   try {
     const client = await pgPool.connect();
@@ -146,7 +180,7 @@ export const createNotification = async (
         type,
         actorId,
         postId,
-        message
+        message,
       ]);
 
       // Send real-time notification

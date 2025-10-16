@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import { pgPool } from '../config/database';
-import { createResponse, createPaginatedResponse } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
+
+import { pgPool } from '../config/database';
 import { FileManager } from '../middleware/uploadMiddleware';
+import { createResponse, createPaginatedResponse } from '../utils';
 
 // Konuşma oluştur veya getir
 export const getOrCreateConversation = async (req: Request, res: Response): Promise<void> => {
@@ -36,8 +37,11 @@ export const getOrCreateConversation = async (req: Request, res: Response): Prom
         GROUP BY c.id, c.type, c.name, c.created_at
         LIMIT 1
       `;
-      
-      const existingConvResult = await client.query(existingConvQuery, [allParticipants, allParticipants.length]);
+
+      const existingConvResult = await client.query(existingConvQuery, [
+        allParticipants,
+        allParticipants.length,
+      ]);
 
       if (existingConvResult.rows.length > 0) {
         // Return existing conversation
@@ -48,21 +52,25 @@ export const getOrCreateConversation = async (req: Request, res: Response): Prom
       // Create new conversation
       const conversationId = uuidv4();
       const conversationType = allParticipants.length > 2 ? 'group' : 'direct';
-      
+
       const createConvQuery = `
         INSERT INTO conversations (id, type, creator_id)
         VALUES ($1, $2, $3)
         RETURNING *
       `;
-      
-      const newConvResult = await client.query(createConvQuery, [conversationId, conversationType, currentUserId]);
+
+      const newConvResult = await client.query(createConvQuery, [
+        conversationId,
+        conversationType,
+        currentUserId,
+      ]);
 
       // Add participants
       const addParticipantsQuery = `
         INSERT INTO conversation_participants (id, conversation_id, user_id, role)
         VALUES ${allParticipants.map((_, index) => `($${index * 3 + 4}, $1, $${index * 3 + 5}, $${index * 3 + 6})`).join(', ')}
       `;
-      
+
       const participantValues = [conversationId];
       allParticipants.forEach((participantId, index) => {
         participantValues.push(uuidv4()); // participant ID
@@ -78,7 +86,11 @@ export const getOrCreateConversation = async (req: Request, res: Response): Prom
     }
   } catch (error) {
     console.error('Konuşma oluşturma hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Konuşma oluşturulurken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Konuşma oluşturulurken hata oluştu'),
+      );
   }
 };
 
@@ -106,7 +118,11 @@ export const getUserConversations = async (req: Request, res: Response): Promise
         LIMIT $2 OFFSET $3
       `;
 
-      const conversationsResult = await client.query(conversationsQuery, [userId, limitNumber, offset]);
+      const conversationsResult = await client.query(conversationsQuery, [
+        userId,
+        limitNumber,
+        offset,
+      ]);
 
       // Get total count
       const countQuery = `
@@ -118,19 +134,27 @@ export const getUserConversations = async (req: Request, res: Response): Promise
       const countResult = await client.query(countQuery, [userId]);
       const total = parseInt(countResult.rows[0].total);
 
-      res.status(200).json(createPaginatedResponse(
-        conversationsResult.rows,
-        pageNumber,
-        limitNumber,
-        total,
-        'Konuşmalar getirildi'
-      ));
+      res
+        .status(200)
+        .json(
+          createPaginatedResponse(
+            conversationsResult.rows,
+            pageNumber,
+            limitNumber,
+            total,
+            'Konuşmalar getirildi',
+          ),
+        );
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Konuşmaları getirme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Konuşmalar getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Konuşmalar getirilirken hata oluştu'),
+      );
   }
 };
 
@@ -162,8 +186,11 @@ export const sendMessage = async (req: Request, res: Response): Promise<void> =>
         }
 
         mediaUrl = FileManager.getFileUrl(file.path);
-        messageType = file.mimetype.startsWith('image/') ? 'image' : 
-                     file.mimetype.startsWith('video/') ? 'video' : 'file';
+        messageType = file.mimetype.startsWith('image/')
+          ? 'image'
+          : file.mimetype.startsWith('video/')
+            ? 'video'
+            : 'file';
       } catch (mediaError) {
         console.error('Medya işleme hatası:', mediaError);
         if (file) FileManager.deleteFile(file.path);
@@ -201,11 +228,12 @@ export const sendMessage = async (req: Request, res: Response): Promise<void> =>
         content || '',
         mediaUrl,
         messageType,
-        replyToMessageId
+        replyToMessageId,
       ]);
 
       // Update conversation's updated_at
-      const updateConvQuery = 'UPDATE conversations SET updated_at = CURRENT_TIMESTAMP WHERE id = $1';
+      const updateConvQuery =
+        'UPDATE conversations SET updated_at = CURRENT_TIMESTAMP WHERE id = $1';
       await client.query(updateConvQuery, [conversationId]);
 
       // Get message with sender info
@@ -223,13 +251,17 @@ export const sendMessage = async (req: Request, res: Response): Promise<void> =>
         wsService.sendMessageToConversation(conversationId, messageWithSenderResult.rows[0]);
       }
 
-      res.status(201).json(createResponse(true, 'Mesaj gönderildi', messageWithSenderResult.rows[0]));
+      res
+        .status(201)
+        .json(createResponse(true, 'Mesaj gönderildi', messageWithSenderResult.rows[0]));
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Mesaj gönderme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Mesaj gönderilirken hata oluştu'));
+    res
+      .status(500)
+      .json(createResponse(false, 'Sunucu hatası', undefined, 'Mesaj gönderilirken hata oluştu'));
   }
 };
 
@@ -271,7 +303,11 @@ export const getConversationMessages = async (req: Request, res: Response): Prom
         LIMIT $2 OFFSET $3
       `;
 
-      const messagesResult = await client.query(messagesQuery, [conversationId, limitNumber, offset]);
+      const messagesResult = await client.query(messagesQuery, [
+        conversationId,
+        limitNumber,
+        offset,
+      ]);
 
       // Get total count
       const countQuery = `
@@ -282,19 +318,23 @@ export const getConversationMessages = async (req: Request, res: Response): Prom
       const countResult = await client.query(countQuery, [conversationId]);
       const total = parseInt(countResult.rows[0].total);
 
-      res.status(200).json(createPaginatedResponse(
-        messagesResult.rows.reverse(), // Reverse to show oldest first
-        pageNumber,
-        limitNumber,
-        total,
-        'Mesajlar getirildi'
-      ));
+      res.status(200).json(
+        createPaginatedResponse(
+          messagesResult.rows.reverse(), // Reverse to show oldest first
+          pageNumber,
+          limitNumber,
+          total,
+          'Mesajlar getirildi',
+        ),
+      );
     } finally {
       client.release();
     }
   } catch (error) {
     console.error('Mesajları getirme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Mesajlar getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(createResponse(false, 'Sunucu hatası', undefined, 'Mesajlar getirilirken hata oluştu'));
   }
 };
 
@@ -330,6 +370,8 @@ export const markMessageAsRead = async (req: Request, res: Response): Promise<vo
     }
   } catch (error) {
     console.error('Mesaj okundu işaretleme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Mesaj işaretlenirken hata oluştu'));
+    res
+      .status(500)
+      .json(createResponse(false, 'Sunucu hatası', undefined, 'Mesaj işaretlenirken hata oluştu'));
   }
 };

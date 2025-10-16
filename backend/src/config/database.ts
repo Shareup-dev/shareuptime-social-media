@@ -1,29 +1,28 @@
-
-import { Pool } from 'pg';
-import mongoose from 'mongoose';
-import { createClient as createRedisClient } from 'redis';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { Pool } from 'pg';
+import { createClient as createRedisClient } from 'redis';
 
 dotenv.config();
 
 // PostgreSQL - Ana veritabanı
 export const pgPool = new Pool({
-	host: process.env.POSTGRES_HOST || 'localhost',
-	port: Number(process.env.POSTGRES_PORT) || 5432,
-	database: process.env.POSTGRES_DB || 'shareuptime_db',
-	user: process.env.POSTGRES_USER || 'postgres',
-	password: process.env.POSTGRES_PASSWORD || 'password',
-	max: 20,
-	idleTimeoutMillis: 30000,
-	connectionTimeoutMillis: 2000,
+  host: process.env.POSTGRES_HOST || 'localhost',
+  port: Number(process.env.POSTGRES_PORT) || 5432,
+  database: process.env.POSTGRES_DB || 'shareuptime_db',
+  user: process.env.POSTGRES_USER || 'postgres',
+  password: process.env.POSTGRES_PASSWORD || 'password',
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 pgPool.on('error', (err) => {
-	console.error('PostgreSQL pool error:', err);
+  console.error('PostgreSQL pool error:', err);
 });
 
 pgPool.on('connect', () => {
-	console.log('PostgreSQL bağlantısı başarılı');
+  console.log('PostgreSQL bağlantısı başarılı');
 });
 
 // PostgreSQL bağlantısını test et
@@ -48,33 +47,40 @@ export const connectMongo = async () => {
       console.log('MongoDB bağlantısı başarılı');
     }
   } catch (err) {
-    console.warn('MongoDB bağlantısı başarısız, devam ediliyor:', err instanceof Error ? err.message : err);
+    console.warn(
+      'MongoDB bağlantısı başarısız, devam ediliyor:',
+      err instanceof Error ? err.message : err,
+    );
   }
 };
 
 // Redis - Cache (disabled for development)
 export const redisClient = {
   isOpen: false,
-  connect: async () => { console.log('Redis disabled for development'); },
+  connect: async () => {
+    console.log('Redis disabled for development');
+  },
   on: () => {},
   quit: async () => {},
-  ping: async () => { throw new Error('Redis disabled'); },
+  ping: async () => {
+    throw new Error('Redis disabled');
+  },
   get: async (key: string) => null,
   setEx: async (key: string, seconds: number, value: string) => {},
   del: async (key: string | string[]) => 0,
   exists: async (key: string) => 0,
   keys: async (pattern: string) => [],
   incr: async (key: string) => 1,
-  expire: async (key: string, seconds: number) => false
+  expire: async (key: string, seconds: number) => false,
 };
 
 // ShareUpTime için özel database initialization
 export const initializeDatabase = async () => {
   console.log('🔄 ShareUpTime Database başlatılıyor...');
-  
+
   // PostgreSQL öncelikli bağlantı
   const pgConnected = await testPostgreSQLConnection();
-  
+
   if (pgConnected) {
     console.log('✅ PostgreSQL aktif - Ana veritabanı olarak kullanılacak');
   } else {
@@ -91,6 +97,6 @@ export const initializeDatabase = async () => {
     console.warn('⚠️ Redis bağlantısı başarısız, cache özelliği kullanılamayacak');
     // Redis retry disabled to prevent spam
   }
-  
+
   console.log('🚀 Database initialization tamamlandı');
 };

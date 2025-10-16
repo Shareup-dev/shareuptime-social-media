@@ -1,6 +1,7 @@
-import { Server as SocketIOServer, Socket } from 'socket.io';
 import { Server as HttpServer } from 'http';
+
 import jwt from 'jsonwebtoken';
+import { Server as SocketIOServer, Socket } from 'socket.io';
 
 // Extend Socket interface to include userId
 interface AuthenticatedSocket extends Socket {
@@ -14,9 +15,9 @@ export class ShareUpTimeWebSocket {
   constructor(server: HttpServer) {
     this.io = new SocketIOServer(server, {
       cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-      }
+        origin: '*',
+        methods: ['GET', 'POST'],
+      },
     });
 
     this.setupMiddleware();
@@ -27,7 +28,7 @@ export class ShareUpTimeWebSocket {
     // Authentication middleware
     this.io.use((socket: Socket, next) => {
       const token = socket.handshake.auth.token;
-      
+
       if (!token) {
         return next(new Error('Authentication error'));
       }
@@ -46,7 +47,7 @@ export class ShareUpTimeWebSocket {
     this.io.on('connection', (socket: Socket) => {
       const authSocket = socket as AuthenticatedSocket;
       console.log(`User ${authSocket.userId} connected: ${socket.id}`);
-      
+
       // Store user connection
       this.connectedUsers.set(authSocket.userId, socket.id);
 
@@ -81,20 +82,23 @@ export class ShareUpTimeWebSocket {
     });
 
     // Send message
-    socket.on('send_message', (data: {
-      conversationId: string;
-      message: string;
-      messageType: 'text' | 'image' | 'file';
-    }) => {
-      // Emit to all users in the conversation
-      this.io.to(`conversation_${data.conversationId}`).emit('new_message', {
-        senderId: socket.userId,
-        conversationId: data.conversationId,
-        message: data.message,
-        messageType: data.messageType,
-        timestamp: new Date().toISOString(),
-      });
-    });
+    socket.on(
+      'send_message',
+      (data: {
+        conversationId: string;
+        message: string;
+        messageType: 'text' | 'image' | 'file';
+      }) => {
+        // Emit to all users in the conversation
+        this.io.to(`conversation_${data.conversationId}`).emit('new_message', {
+          senderId: socket.userId,
+          conversationId: data.conversationId,
+          message: data.message,
+          messageType: data.messageType,
+          timestamp: new Date().toISOString(),
+        });
+      },
+    );
 
     // Typing indicators
     socket.on('typing_start', (conversationId: string) => {
@@ -135,15 +139,18 @@ export class ShareUpTimeWebSocket {
     });
 
     // Comment notifications
-    socket.on('post_commented', (data: { postId: string; postOwnerId: string; comment: string }) => {
-      this.io.to(`user_${data.postOwnerId}`).emit('post_interaction', {
-        type: 'comment',
-        postId: data.postId,
-        userId: socket.userId,
-        comment: data.comment,
-        timestamp: new Date().toISOString(),
-      });
-    });
+    socket.on(
+      'post_commented',
+      (data: { postId: string; postOwnerId: string; comment: string }) => {
+        this.io.to(`user_${data.postOwnerId}`).emit('post_interaction', {
+          type: 'comment',
+          postId: data.postId,
+          userId: socket.userId,
+          comment: data.comment,
+          timestamp: new Date().toISOString(),
+        });
+      },
+    );
   }
 
   private handleUserActivity(socket: AuthenticatedSocket) {

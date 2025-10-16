@@ -52,7 +52,7 @@ export class CacheService {
       }
 
       // Always set in-memory as fallback
-      const expiry = Date.now() + (ttlSeconds * 1000);
+      const expiry = Date.now() + ttlSeconds * 1000;
       this.inMemoryCache.set(key, { value, expiry });
       return true;
     } catch (error) {
@@ -172,7 +172,11 @@ export class CacheService {
   }
 
   // Session caching
-  static async cacheSession(sessionId: string, sessionData: any, ttl: number = 3600): Promise<void> {
+  static async cacheSession(
+    sessionId: string,
+    sessionData: any,
+    ttl: number = 3600,
+  ): Promise<void> {
     await this.set(`session:${sessionId}`, JSON.stringify(sessionData), ttl);
   }
 
@@ -195,13 +199,13 @@ export class CacheService {
       // In-memory fallback for rate limiting
       const current = this.inMemoryCache.get(key);
       const newCount = current ? parseInt(current.value) + 1 : 1;
-      const expiry = current ? current.expiry : Date.now() + (ttl * 1000);
-      
-      this.inMemoryCache.set(key, { 
-        value: newCount.toString(), 
-        expiry 
+      const expiry = current ? current.expiry : Date.now() + ttl * 1000;
+
+      this.inMemoryCache.set(key, {
+        value: newCount.toString(),
+        expiry,
       });
-      
+
       return newCount;
     } catch (error) {
       console.warn('Counter increment error:', error);
@@ -222,7 +226,7 @@ export class CacheService {
   // Initialize cache service
   static async initialize(): Promise<void> {
     await this.checkRedisConnection();
-    
+
     // Setup periodic cleanup of in-memory cache
     setInterval(() => {
       this.cleanupExpiredEntries();
@@ -230,7 +234,7 @@ export class CacheService {
   }
 
   // Get cache statistics
-  static getStats(): { 
+  static getStats(): {
     redisAvailable: boolean;
     inMemorySize: number;
     redisConnected: boolean;
@@ -238,7 +242,7 @@ export class CacheService {
     return {
       redisAvailable: this.isRedisAvailable,
       inMemorySize: this.inMemoryCache.size,
-      redisConnected: redisClient ? redisClient.isOpen : false
+      redisConnected: redisClient ? redisClient.isOpen : false,
     };
   }
 }

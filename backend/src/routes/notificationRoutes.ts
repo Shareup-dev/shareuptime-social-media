@@ -1,9 +1,10 @@
 import express from 'express';
+
 import {
   getUserNotifications,
   markNotificationAsRead,
   markAllNotificationsAsRead,
-  getUnreadNotificationCount
+  getUnreadNotificationCount,
 } from '../controllers/notificationController';
 import { authenticateToken } from '../middleware';
 

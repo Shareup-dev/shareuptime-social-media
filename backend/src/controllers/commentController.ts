@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
+import { v4 as uuidv4 } from 'uuid';
+
 import { pgPool } from '../config/database';
 import { createResponse, createPaginatedResponse, sanitizeInput } from '../utils';
-import { v4 as uuidv4 } from 'uuid';
 
 // GET /api/posts/:postId/comments - List comments for a post
 export const getPostComments = async (req: Request, res: Response): Promise<void> => {
@@ -21,7 +22,10 @@ export const getPostComments = async (req: Request, res: Response): Promise<void
     const client = await pgPool.connect();
     try {
       // Ensure post exists
-      const postCheck = await client.query('SELECT id FROM posts WHERE id = $1 AND is_active = true', [postId]);
+      const postCheck = await client.query(
+        'SELECT id FROM posts WHERE id = $1 AND is_active = true',
+        [postId],
+      );
       if (postCheck.rows.length === 0) {
         res.status(404).json(createResponse(false, 'Gönderi bulunamadı'));
         return;
@@ -38,17 +42,22 @@ export const getPostComments = async (req: Request, res: Response): Promise<void
       `;
       const commentsResult = await client.query(commentsQuery, [postId, limitNumber, offset]);
 
-      const countQuery = 'SELECT COUNT(*) AS total FROM comments WHERE post_id = $1 AND is_active = true';
+      const countQuery =
+        'SELECT COUNT(*) AS total FROM comments WHERE post_id = $1 AND is_active = true';
       const countResult = await client.query(countQuery, [postId]);
       const total = parseInt(countResult.rows[0].total);
 
-      res.status(200).json(createPaginatedResponse(
-        commentsResult.rows,
-        pageNumber,
-        limitNumber,
-        total,
-        'Yorumlar başarıyla getirildi'
-      ));
+      res
+        .status(200)
+        .json(
+          createPaginatedResponse(
+            commentsResult.rows,
+            pageNumber,
+            limitNumber,
+            total,
+            'Yorumlar başarıyla getirildi',
+          ),
+        );
     } finally {
       client.release();
     }
@@ -81,7 +90,10 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
     const client = await pgPool.connect();
     try {
       // Ensure post exists
-      const postCheck = await client.query('SELECT id FROM posts WHERE id = $1 AND is_active = true', [postId]);
+      const postCheck = await client.query(
+        'SELECT id FROM posts WHERE id = $1 AND is_active = true',
+        [postId],
+      );
       if (postCheck.rows.length === 0) {
         res.status(404).json(createResponse(false, 'Gönderi bulunamadı'));
         return;
@@ -89,7 +101,10 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
 
       // Optional: Ensure parent comment exists
       if (parentId) {
-        const parentCheck = await client.query('SELECT id FROM comments WHERE id = $1 AND is_active = true', [parentId]);
+        const parentCheck = await client.query(
+          'SELECT id FROM comments WHERE id = $1 AND is_active = true',
+          [parentId],
+        );
         if (parentCheck.rows.length === 0) {
           res.status(400).json(createResponse(false, 'Geçersiz üst yorum ID'));
           return;
@@ -107,17 +122,19 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
         postId,
         userId,
         parentId || null,
-        sanitizeInput(content)
+        sanitizeInput(content),
       ]);
 
       // Update post comment count
-      await client.query('UPDATE posts SET comments_count = comments_count + 1 WHERE id = $1', [postId]);
+      await client.query('UPDATE posts SET comments_count = comments_count + 1 WHERE id = $1', [
+        postId,
+      ]);
 
       // Return with author fields
       const withAuthor = await client.query(
         `SELECT c.*, u.username, u.first_name, u.last_name, u.profile_picture_url 
          FROM comments c JOIN users u ON c.user_id = u.id WHERE c.id = $1`,
-        [commentId]
+        [commentId],
       );
 
       res.status(201).json(createResponse(true, 'Yorum oluşturuldu', withAuthor.rows[0]));

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { verifyToken, createResponse } from '../utils';
 
 // Kimlik doğrulama middleware'i
@@ -61,7 +62,7 @@ export const rateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 6
 
     const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
     const now = Date.now();
-    
+
     // Temizlik: eski kayıtları sil
     for (const [ip, data] of requestCounts.entries()) {
       if (now > data.resetTime) {
@@ -70,12 +71,12 @@ export const rateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 6
     }
 
     const clientData = requestCounts.get(clientIP);
-    
+
     if (!clientData) {
       // İlk istek
       requestCounts.set(clientIP, {
         count: 1,
-        resetTime: now + windowMs
+        resetTime: now + windowMs,
       });
       next();
       return;
@@ -85,7 +86,7 @@ export const rateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 6
       // Zaman penceresi sıfırlandı
       requestCounts.set(clientIP, {
         count: 1,
-        resetTime: now + windowMs
+        resetTime: now + windowMs,
       });
       next();
       return;
@@ -93,7 +94,9 @@ export const rateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 6
 
     if (clientData.count >= maxRequests) {
       // Limit aşıldı
-      res.status(429).json(createResponse(false, 'Çok fazla istek, lütfen daha sonra tekrar deneyin'));
+      res
+        .status(429)
+        .json(createResponse(false, 'Çok fazla istek, lütfen daha sonra tekrar deneyin'));
       return;
     }
 
@@ -106,13 +109,13 @@ export const rateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 6
 // Request logging middleware
 export const requestLogger = (req: Request, res: Response, next: NextFunction): void => {
   const start = Date.now();
-  
+
   res.on('finish', () => {
     const duration = Date.now() - start;
     const timestamp = new Date().toISOString();
-    
+
     console.log(
-      `[${timestamp}] ${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms - ${req.ip}`
+      `[${timestamp}] ${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms - ${req.ip}`,
     );
   });
 
@@ -123,7 +126,7 @@ export const requestLogger = (req: Request, res: Response, next: NextFunction): 
 export const validateRequired = (fields: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const missingFields: string[] = [];
-    
+
     for (const field of fields) {
       if (!req.body[field]) {
         missingFields.push(field);
@@ -131,10 +134,7 @@ export const validateRequired = (fields: string[]) => {
     }
 
     if (missingFields.length > 0) {
-      res.status(400).json(createResponse(
-        false, 
-        `Eksik alanlar: ${missingFields.join(', ')}`
-      ));
+      res.status(400).json(createResponse(false, `Eksik alanlar: ${missingFields.join(', ')}`));
       return;
     }
 

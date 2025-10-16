@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import { FollowModel, UserModel } from '../models';
 import { createResponse, createPaginatedResponse } from '../utils';
 
@@ -29,7 +30,7 @@ export const followUser = async (req: Request, res: Response): Promise<void> => 
     // Zaten takip edip etmediğini kontrol et
     const existingFollow = await FollowModel.findOne({
       followerId,
-      followingId: userId
+      followingId: userId,
     });
 
     if (existingFollow) {
@@ -40,7 +41,7 @@ export const followUser = async (req: Request, res: Response): Promise<void> => 
     // Yeni takip ilişkisi oluştur
     const newFollow = new FollowModel({
       followerId,
-      followingId: userId
+      followingId: userId,
     });
 
     await newFollow.save();
@@ -48,13 +49,17 @@ export const followUser = async (req: Request, res: Response): Promise<void> => 
     // Kullanıcı sayaçlarını güncelle
     await Promise.all([
       UserModel.findByIdAndUpdate(followerId, { $inc: { followingCount: 1 } }),
-      UserModel.findByIdAndUpdate(userId, { $inc: { followersCount: 1 } })
+      UserModel.findByIdAndUpdate(userId, { $inc: { followersCount: 1 } }),
     ]);
 
     res.status(201).json(createResponse(true, 'Kullanıcı takip edildi'));
   } catch (error) {
     console.error('Kullanıcı takip etme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Takip işlemi sırasında hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Takip işlemi sırasında hata oluştu'),
+      );
   }
 };
 
@@ -72,7 +77,7 @@ export const unfollowUser = async (req: Request, res: Response): Promise<void> =
     // Takip ilişkisini bul
     const followRelation = await FollowModel.findOne({
       followerId,
-      followingId: userId
+      followingId: userId,
     });
 
     if (!followRelation) {
@@ -86,13 +91,22 @@ export const unfollowUser = async (req: Request, res: Response): Promise<void> =
     // Kullanıcı sayaçlarını güncelle
     await Promise.all([
       UserModel.findByIdAndUpdate(followerId, { $inc: { followingCount: -1 } }),
-      UserModel.findByIdAndUpdate(userId, { $inc: { followersCount: -1 } })
+      UserModel.findByIdAndUpdate(userId, { $inc: { followersCount: -1 } }),
     ]);
 
     res.status(200).json(createResponse(true, 'Kullanıcı takipten çıkarıldı'));
   } catch (error) {
     console.error('Takipten çıkma hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Takipten çıkma işlemi sırasında hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Takipten çıkma işlemi sırasında hata oluştu',
+        ),
+      );
   }
 };
 
@@ -128,18 +142,26 @@ export const getFollowers = async (req: Request, res: Response): Promise<void> =
     const total = await FollowModel.countDocuments({ followingId: userId });
 
     // Sadece takipçi bilgilerini döndür
-    const followerUsers = followers.map(follow => follow.followerId);
+    const followerUsers = followers.map((follow) => follow.followerId);
 
-    res.status(200).json(createPaginatedResponse(
-      followerUsers,
-      pageNumber,
-      limitNumber,
-      total,
-      'Takipçiler getirildi'
-    ));
+    res
+      .status(200)
+      .json(
+        createPaginatedResponse(
+          followerUsers,
+          pageNumber,
+          limitNumber,
+          total,
+          'Takipçiler getirildi',
+        ),
+      );
   } catch (error) {
     console.error('Takipçileri getirme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Takipçiler getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(false, 'Sunucu hatası', undefined, 'Takipçiler getirilirken hata oluştu'),
+      );
   }
 };
 
@@ -175,18 +197,31 @@ export const getFollowing = async (req: Request, res: Response): Promise<void> =
     const total = await FollowModel.countDocuments({ followerId: userId });
 
     // Sadece takip edilen kullanıcı bilgilerini döndür
-    const followingUsers = following.map(follow => follow.followingId);
+    const followingUsers = following.map((follow) => follow.followingId);
 
-    res.status(200).json(createPaginatedResponse(
-      followingUsers,
-      pageNumber,
-      limitNumber,
-      total,
-      'Takip edilenler getirildi'
-    ));
+    res
+      .status(200)
+      .json(
+        createPaginatedResponse(
+          followingUsers,
+          pageNumber,
+          limitNumber,
+          total,
+          'Takip edilenler getirildi',
+        ),
+      );
   } catch (error) {
     console.error('Takip edilenleri getirme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Takip edilenler getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Takip edilenler getirilirken hata oluştu',
+        ),
+      );
   }
 };
 
@@ -209,19 +244,30 @@ export const checkFollowStatus = async (req: Request, res: Response): Promise<vo
     // Takip durumunu kontrol et
     const followRelation = await FollowModel.findOne({
       followerId,
-      followingId: userId
+      followingId: userId,
     });
 
     const isFollowing = !!followRelation;
 
-    res.status(200).json(createResponse(true, 'Takip durumu getirildi', {
-      isFollowing,
-      userId,
-      followerId
-    }));
+    res.status(200).json(
+      createResponse(true, 'Takip durumu getirildi', {
+        isFollowing,
+        userId,
+        followerId,
+      }),
+    );
   } catch (error) {
     console.error('Takip durumu kontrol hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Takip durumu kontrol edilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Takip durumu kontrol edilirken hata oluştu',
+        ),
+      );
   }
 };
 
@@ -247,15 +293,19 @@ export const getMutualFollowers = async (req: Request, res: Response): Promise<v
     const skip = (pageNumber - 1) * limitNumber;
 
     // Her iki kullanıcının da takip ettiği kişileri bul
-    const currentUserFollowing = await FollowModel.find({ followerId: currentUserId }).select('followingId');
-    const targetUserFollowing = await FollowModel.find({ followerId: userId }).select('followingId');
+    const currentUserFollowing = await FollowModel.find({ followerId: currentUserId }).select(
+      'followingId',
+    );
+    const targetUserFollowing = await FollowModel.find({ followerId: userId }).select(
+      'followingId',
+    );
 
-    const currentUserFollowingIds = currentUserFollowing.map(f => f.followingId.toString());
-    const targetUserFollowingIds = targetUserFollowing.map(f => f.followingId.toString());
+    const currentUserFollowingIds = currentUserFollowing.map((f) => f.followingId.toString());
+    const targetUserFollowingIds = targetUserFollowing.map((f) => f.followingId.toString());
 
     // Ortak takip edilenleri bul
-    const mutualFollowingIds = currentUserFollowingIds.filter(id => 
-      targetUserFollowingIds.includes(id)
+    const mutualFollowingIds = currentUserFollowingIds.filter((id) =>
+      targetUserFollowingIds.includes(id),
     );
 
     const total = mutualFollowingIds.length;
@@ -263,18 +313,31 @@ export const getMutualFollowers = async (req: Request, res: Response): Promise<v
 
     // Kullanıcı bilgilerini getir
     const mutualUsers = await UserModel.find({
-      _id: { $in: paginatedIds }
+      _id: { $in: paginatedIds },
     }).select('username firstName lastName profileImage isVerified');
 
-    res.status(200).json(createPaginatedResponse(
-      mutualUsers,
-      pageNumber,
-      limitNumber,
-      total,
-      'Ortak takip edilenler getirildi'
-    ));
+    res
+      .status(200)
+      .json(
+        createPaginatedResponse(
+          mutualUsers,
+          pageNumber,
+          limitNumber,
+          total,
+          'Ortak takip edilenler getirildi',
+        ),
+      );
   } catch (error) {
     console.error('Ortak takip edilenleri getirme hatası:', error);
-    res.status(500).json(createResponse(false, 'Sunucu hatası', undefined, 'Ortak takip edilenler getirilirken hata oluştu'));
+    res
+      .status(500)
+      .json(
+        createResponse(
+          false,
+          'Sunucu hatası',
+          undefined,
+          'Ortak takip edilenler getirilirken hata oluştu',
+        ),
+      );
   }
 };

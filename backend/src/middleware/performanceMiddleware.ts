@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
 import { performance } from 'perf_hooks';
+
+import { Request, Response, NextFunction } from 'express';
 
 // Performance monitoring middleware
 export interface PerformanceMetrics {
@@ -23,7 +24,7 @@ class PerformanceMonitor {
   // Add performance metric
   addMetric(metric: PerformanceMetrics): void {
     this.metrics.push(metric);
-    
+
     // Keep only last N metrics
     if (this.metrics.length > this.maxMetrics) {
       this.metrics.shift();
@@ -36,7 +37,9 @@ class PerformanceMonitor {
 
     // Memory usage alert
     if (metric.memoryUsage.heapUsed > this.memoryAlertThreshold) {
-      console.warn(`🚨 High memory usage: ${Math.round(metric.memoryUsage.heapUsed / 1024 / 1024)}MB`);
+      console.warn(
+        `🚨 High memory usage: ${Math.round(metric.memoryUsage.heapUsed / 1024 / 1024)}MB`,
+      );
     }
   }
 
@@ -58,25 +61,28 @@ class PerformanceMonitor {
         errorRate: 0,
         memoryUsage: process.memoryUsage(),
         topEndpoints: [],
-        recentMetrics: []
+        recentMetrics: [],
       };
     }
 
     const totalRequests = this.metrics.length;
-    const averageResponseTime = this.metrics.reduce((sum, m) => sum + m.responseTime, 0) / totalRequests;
-    const slowRequests = this.metrics.filter(m => m.responseTime > this.slowRequestThreshold).length;
-    const errorRequests = this.metrics.filter(m => m.statusCode >= 400).length;
+    const averageResponseTime =
+      this.metrics.reduce((sum, m) => sum + m.responseTime, 0) / totalRequests;
+    const slowRequests = this.metrics.filter(
+      (m) => m.responseTime > this.slowRequestThreshold,
+    ).length;
+    const errorRequests = this.metrics.filter((m) => m.statusCode >= 400).length;
     const errorRate = (errorRequests / totalRequests) * 100;
 
     // Calculate top endpoints
     const endpointStats = new Map<string, { count: number; totalTime: number }>();
-    
-    this.metrics.forEach(metric => {
+
+    this.metrics.forEach((metric) => {
       const endpoint = `${metric.method} ${metric.url.split('?')[0]}`;
       const current = endpointStats.get(endpoint) || { count: 0, totalTime: 0 };
       endpointStats.set(endpoint, {
         count: current.count + 1,
-        totalTime: current.totalTime + metric.responseTime
+        totalTime: current.totalTime + metric.responseTime,
       });
     });
 
@@ -84,7 +90,7 @@ class PerformanceMonitor {
       .map(([endpoint, stats]) => ({
         endpoint,
         count: stats.count,
-        avgTime: Math.round(stats.totalTime / stats.count)
+        avgTime: Math.round(stats.totalTime / stats.count),
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
@@ -96,20 +102,20 @@ class PerformanceMonitor {
       errorRate: Math.round(errorRate * 100) / 100,
       memoryUsage: process.memoryUsage(),
       topEndpoints,
-      recentMetrics: this.metrics.slice(-20) // Last 20 requests
+      recentMetrics: this.metrics.slice(-20), // Last 20 requests
     };
   }
 
   // Get metrics for specific time window
   getMetricsInWindow(minutes: number): PerformanceMetrics[] {
     const cutoff = new Date(Date.now() - minutes * 60 * 1000);
-    return this.metrics.filter(m => new Date(m.timestamp) > cutoff);
+    return this.metrics.filter((m) => new Date(m.timestamp) > cutoff);
   }
 
   // Clear old metrics
   clearOldMetrics(): void {
     const cutoffTime = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 hours ago
-    this.metrics = this.metrics.filter(m => new Date(m.timestamp) > cutoffTime);
+    this.metrics = this.metrics.filter((m) => new Date(m.timestamp) > cutoffTime);
   }
 
   // Health check
@@ -157,7 +163,7 @@ class PerformanceMonitor {
       issues,
       uptime: process.uptime(),
       memoryUsage: memoryUsageMB,
-      averageResponseTime: stats.averageResponseTime
+      averageResponseTime: stats.averageResponseTime,
     };
   }
 }
@@ -173,17 +179,18 @@ export const performanceMiddleware = (req: Request, res: Response, next: NextFun
     const end = performance.now();
     const responseTime = Math.round(end - start);
 
-        const metric: PerformanceMetrics = {
-          timestamp: new Date().toISOString(),
-          method: req.method,
-          url: req.originalUrl,
-          responseTime,
-          statusCode: res.statusCode,
-          userAgent: req.get('User-Agent') || '',
-          ip: req.ip || req.connection.remoteAddress || '',
-          memoryUsage: process.memoryUsage(),
-          activeConnections: 0 // Simplified for now
-        };    performanceMonitor.addMetric(metric);
+    const metric: PerformanceMetrics = {
+      timestamp: new Date().toISOString(),
+      method: req.method,
+      url: req.originalUrl,
+      responseTime,
+      statusCode: res.statusCode,
+      userAgent: req.get('User-Agent') || '',
+      ip: req.ip || req.connection.remoteAddress || '',
+      memoryUsage: process.memoryUsage(),
+      activeConnections: 0, // Simplified for now
+    };
+    performanceMonitor.addMetric(metric);
   });
 
   next();
@@ -203,7 +210,7 @@ export class DbMonitor {
       query: query.substring(0, 200), // Truncate long queries
       duration,
       timestamp: new Date().toISOString(),
-      success
+      success,
     });
 
     // Keep only last 100 queries
@@ -230,21 +237,22 @@ export class DbMonitor {
         averageQueryTime: 0,
         slowQueries: 0,
         failedQueries: 0,
-        recentQueries: []
+        recentQueries: [],
       };
     }
 
     const totalQueries = this.queryMetrics.length;
-    const averageQueryTime = this.queryMetrics.reduce((sum, q) => sum + q.duration, 0) / totalQueries;
-    const slowQueries = this.queryMetrics.filter(q => q.duration > 1000).length;
-    const failedQueries = this.queryMetrics.filter(q => !q.success).length;
+    const averageQueryTime =
+      this.queryMetrics.reduce((sum, q) => sum + q.duration, 0) / totalQueries;
+    const slowQueries = this.queryMetrics.filter((q) => q.duration > 1000).length;
+    const failedQueries = this.queryMetrics.filter((q) => !q.success).length;
 
     return {
       totalQueries,
       averageQueryTime: Math.round(averageQueryTime),
       slowQueries,
       failedQueries,
-      recentQueries: this.queryMetrics.slice(-10)
+      recentQueries: this.queryMetrics.slice(-10),
     };
   }
 }
@@ -253,6 +261,9 @@ export class DbMonitor {
 export { performanceMonitor };
 
 // Cleanup function for old metrics
-setInterval(() => {
-  performanceMonitor.clearOldMetrics();
-}, 60 * 60 * 1000); // Run every hour
+setInterval(
+  () => {
+    performanceMonitor.clearOldMetrics();
+  },
+  60 * 60 * 1000,
+); // Run every hour
