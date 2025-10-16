@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, Platform } from 'react-native';
-import { GiftedChat, Bubble, Send, InputToolbar, Composer } from 'react-native-gifted-chat';
+import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
 import useKeyboardHeight from 'react-native-use-keyboard-height';
 
 import { ChatRoomHeader } from '../components/headers';
-import MessageItem from '../components/messages/MessageItem';
+// import MessageItem from '../components/messages/MessageItem';
 import Screen from '../components/Screen';
 import colors from '../config/colors';
 import Icon from '../components/Icon';
-import MessageTextField from '../components/messages/MessageTextField';
+// import MessageTextField from '../components/messages/MessageTextField';
 
 export default function ChatTestScreen({ navigation, route }) {
   const [messages, setMessages] = useState([]);
 
   const keyboardHight = useKeyboardHeight();
 
-  const messagesListRef = useRef();
+  // const messagesListRef = useRef();
 
   const contact = route.params;
 
@@ -54,8 +54,8 @@ export default function ChatTestScreen({ navigation, route }) {
     ]);
   }, [keyboardHight]);
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) => GiftedChat.append(previousMessages, messages));
+  const onSend = useCallback((newMessages = []) => {
+    setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
   }, []);
 
   const renderBubble = (props) => (
@@ -83,11 +83,11 @@ export default function ChatTestScreen({ navigation, route }) {
     </Send>
   );
 
-  const renderInputToolBar = (props) => (
-    <MessageTextField style={styles.messageTextFieldContainer} forwardRef={messagesListRef} />
-  );
+  // const renderInputToolBar = (_props) => (
+  //   <MessageTextField style={styles.messageTextFieldContainer} forwardRef={messagesListRef} />
+  // );
 
-  const renderComposer = (props) => <Composer />;
+  // const renderComposer = (_props) => <Composer />;
 
   return (
     <Screen>
@@ -100,24 +100,12 @@ export default function ChatTestScreen({ navigation, route }) {
       <View style={styles.separator} />
       <GiftedChat
         messages={messages}
-        onSend={(messages) => onSend(messages)}
-        user={{
-          _id: 1,
-        }}
+        onSend={(newMessages) => onSend(newMessages)}
+        user={{ _id: 1 }}
         renderBubble={renderBubble}
         renderSend={renderSend}
-        //   renderInputToolbar={renderInputToolBar}
-        // renderComposer={renderComposer}
-        // isKeyboardInternallyHandle={false}
-        bottomOffset={Platform.OS == 'ios' ? Dimensions.get('window').height / 2.67 : 0}
-        messagesContainerStyle={
-          {
-            //   paddingBottom: 10,
-            // backgroundColor: "red",
-          }
-        }
-
-        // forceGetKeyboardHeight={true}
+        bottomOffset={Platform.OS === 'ios' ? Dimensions.get('window').height / 2.67 : 0}
+        messagesContainerStyle={{}}
       />
     </Screen>
   );

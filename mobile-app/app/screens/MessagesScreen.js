@@ -26,7 +26,7 @@ const tabes = [{ name: CHATS }, { name: FRIENDS }, { name: GROUPS }, { name: FAV
 export default function MessagesScreen({ navigation }) {
   const { userData: user } = useContext(authContext).userState;
 
-  const { addConversationListener, removeConversationListener } = useConversationListener();
+  const { addConversationListener } = useConversationListener();
 
   const [friends, setFriends] = useState([]);
 
@@ -38,11 +38,11 @@ export default function MessagesScreen({ navigation }) {
   useEffect(() => {
     loadData();
     addConversationListener(user.id);
-
     return () => {
       // removeConversationListener();
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.id]);
 
   const loadData = async () => {
     setLoading(true);
@@ -58,7 +58,7 @@ export default function MessagesScreen({ navigation }) {
   };
 
   const getChats = async () => {
-    const result = await conversation.getConversations(user.id);
+    await conversation.getConversations(user.id);
   };
 
   const handleTabbed = (name) => {
@@ -92,7 +92,7 @@ export default function MessagesScreen({ navigation }) {
 
       <View style={styles.separator} />
 
-      {currentTab == CHATS && (
+      {currentTab === CHATS && (
         <ChatsList
           navigation={navigation}
           chats={chats}
@@ -100,7 +100,7 @@ export default function MessagesScreen({ navigation }) {
           refreshChats={getChats}
         />
       )}
-      {currentTab == FRIENDS && (
+      {currentTab === FRIENDS && (
         <FriendsList
           navigation={navigation}
           friends={friends}
@@ -108,8 +108,6 @@ export default function MessagesScreen({ navigation }) {
           refresh={getFriends}
         />
       )}
-
-      {currentTab == ''}
     </Screen>
   );
 }

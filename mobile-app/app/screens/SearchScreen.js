@@ -1,15 +1,13 @@
-import React, { useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { StyleSheet, FlatList, Dimensions, ActivityIndicator, View, Text } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, FlatList, View } from 'react-native';
 import Screen from '../components/Screen';
 import TextField from '../components/TextField';
-import Tab from '../components/buttons/Tab';
 import Separator from '../components/Separator';
 import ListItem from '../components/lists/ListItem';
 import defaultStyles from '../config/GlobalStyles';
 import RecentSearchList from '../components/lists/recentSearchList';
 import colors from '../config/colors';
 import { HeaderWithBackArrow } from '../components/headers';
-import UserProfilePicture from '../components/UserProfilePicture';
 import routes from '../navigation/routes';
 import UserService from '../services/user.service';
 //import { recentSearchActions } from '../redux/recentSearch';
@@ -17,7 +15,7 @@ import UserService from '../services/user.service';
 export default function SearchScreen({ navigation }) {
   const [searchResult, setSearchResult] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-  const [recentList, setRecentList] = useState([]);
+  const [recentList] = useState([]);
   const searchTextFieldRef = useRef();
 
   // useEffect(() => {
@@ -26,7 +24,7 @@ export default function SearchScreen({ navigation }) {
   //     return;
   //   },[])
   const onSearch = (searchKey) => {
-    if (searchKey == '') {
+    if (searchKey === '') {
       setIsSearch(false);
     } else {
       UserService.search(searchKey).then((resp) => {

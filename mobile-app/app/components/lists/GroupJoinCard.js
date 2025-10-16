@@ -10,7 +10,7 @@ import AuthContext from '../../authContext';
 
 const resizeRatio = 0.7;
 export default function GroupJoinCard({ item, navigation }) {
-  const { image, name, description, privacySetting, id } = item;
+  const { image, name, description, privacySetting: _privacySetting, id } = item;
 
   const [joinBackGroundColor, setJoinBackGroundColor] = useState(colors.iondigoDye);
   const { userData: loggedInUser } = useContext(AuthContext).userState;
@@ -20,12 +20,12 @@ export default function GroupJoinCard({ item, navigation }) {
 
   const handleJoin = () => {
     GroupService.joinGroup(loggedInUser.id, id).then((resp) => resp.data);
-    if (joinTitle == 'Join') {
+    if (joinTitle === 'Join') {
       setJoinBackGroundColor(colors.lighterGray);
       setJoinTitle('Leave');
       setJoinTitleColor('#DD482E');
     }
-    if (joinTitle == 'Leave') {
+    if (joinTitle === 'Leave') {
       setJoinBackGroundColor(colors.iondigoDye);
       setJoinTitle('Join');
       setJoinTitleColor(colors.white);

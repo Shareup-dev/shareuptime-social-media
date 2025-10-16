@@ -71,7 +71,7 @@ export default function MessageItem({ item, profilePicture }) {
     </View>
   );
 
-  return user.id == item.publisher ? renderSentMessage() : renderReceivedMessage();
+  return user.id === item.publisher ? renderSentMessage() : renderReceivedMessage();
 }
 
 const styles = StyleSheet.create({

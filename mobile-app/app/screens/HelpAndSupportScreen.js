@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import Screen from '../components/Screen';
 import ListItem from '../components/lists/ListItem';
 import defaultStyles from '../config/GlobalStyles';
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: Platform.OS == 'ios' ? '500' : 'bold',
+    fontWeight: Platform.OS === 'ios' ? '500' : 'bold',
   },
   leftAndRight: {
     marginBottom: 2,

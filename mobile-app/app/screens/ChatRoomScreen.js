@@ -41,6 +41,7 @@ export default function ChatRoomScreen({ navigation, route }) {
       unsubscribeToChannel();
       store.dispatch(messagesAction.setMessages([]));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
 
   const renderListEmpty = () => (
@@ -65,7 +66,7 @@ export default function ChatRoomScreen({ navigation, route }) {
       />
       <View style={styles.separator} />
 
-      {loading && messages.length == 0 && (
+      {loading && messages.length === 0 && (
         <ActivityIndicator
           size="large"
           color={colors.iondigoDye}

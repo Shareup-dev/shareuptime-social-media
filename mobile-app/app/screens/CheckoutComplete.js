@@ -9,9 +9,9 @@ import constants from '../config/constants';
 import authContext from '../Contexts/authContext';
 
 const CheckoutComplete = ({ navigation, route }) => {
-  const { postType, swapedPostId, item } = route.params;
+  const { postType, swapedPostId, item: _item } = route.params;
   const { postTypes } = constants;
-  const { userData: user } = useContext(authContext)?.userState;
+  const { userData: _user } = useContext(authContext)?.userState;
 
   const createPostFormData = (content) => {
     const formData = new FormData();
@@ -58,7 +58,7 @@ const CheckoutComplete = ({ navigation, route }) => {
     <Screen>
       <View style={styles.mainContainer}>
         <Image
-          style={{ marginTop: 100, height: '50%' }}
+          style={styles.checkoutImage}
           resizeMode={'center'}
           width={'100%'}
           source={require('../assets/icons/CheckoutComplete.png')}
@@ -70,14 +70,14 @@ const CheckoutComplete = ({ navigation, route }) => {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              postType == postTypes.HANG_SHARE
+              postType === postTypes.HANG_SHARE
                 ? createHang()
                 : store.dispatch(swapedImagesAction.removeImages(swapedPostId));
             }}
           >
             <View style={styles.goBackButton}>
               <Text style={styles.goBackLabel}>
-                {postType == postTypes.HANG_SHARE ? 'Hang In' : 'Track Order'}
+                {postType === postTypes.HANG_SHARE ? 'Hang In' : 'Track Order'}
               </Text>
             </View>
           </TouchableOpacity>
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     // position:'absolute'
   },
+  checkoutImage: { marginTop: 100, height: '50%' },
 });
 
 export default CheckoutComplete;
