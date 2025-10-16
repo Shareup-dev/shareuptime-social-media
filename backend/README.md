@@ -1,6 +1,7 @@
 # ShareUpTime Backend API
 
-Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScript) tabanlı backend API'sini içerir.
+Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScript)
+tabanlı backend API'sini içerir.
 
 ## 🚀 Özellikler
 
