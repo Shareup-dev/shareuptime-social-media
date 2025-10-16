@@ -1,10 +1,7 @@
 # ShareUpTime Backend API
 
-Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScript)
-# ShareUpTime Backend API
-
-Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js, TypeScript)
-tabanlı backend API'sini içerir.
+Bu klasör, ShareUpTime sosyal medya platformunun Node.js (Express.js,
+TypeScript) tabanlı backend API'sini içerir.
 
 Hızlı bağlantılar:
 
@@ -61,9 +58,10 @@ Hızlı bağlantılar:
    npm start
    ```
 
-  ## 🧰 Geliştirme Komutları (Hızlı Rehber)
+## 🧰 Geliştirme Komutları (Hızlı Rehber)
 
-  Aşağıdaki komutlar; hem backend hem de mobile-app için tip/format/lint kontrollerini hızlıca çalıştırmanıza yardımcı olur.
+  Aşağıdaki komutlar; hem backend hem de mobile-app için tip/format/lint
+  kontrollerini hızlıca çalıştırmanıza yardımcı olur.
 
   Backend (bu klasör):
 
@@ -89,7 +87,9 @@ Hızlı bağlantılar:
   # (isteğe bağlı) npm run lint:fix
   ```
 
-  Not: Mobile lint kuralları bilerek katıdır ve çok sayıda uyarı raporlayabilir; UI/UX’e dokunmayan küçük ve güvenli partiler halinde ele alıyoruz.
+  Not: Mobile lint kuralları bilerek katıdır ve çok sayıda uyarı
+  raporlayabilir; UI/UX’e dokunmayan küçük ve güvenli partiler halinde ele
+  alıyoruz.
 
 ## ⚡ Hızlı Başlangıç (Quick Start)
 
@@ -156,7 +156,8 @@ Son tarama sonuçları:
 - Bileşen (Components): 143
 - Varlık (Assets): 452
 
-Bu sayıların amacı, kapsama ve temizlik çalışmalarını küçük partilerde planlamaktır. Değerler düzenli aralıklarla güncellenecektir.
+Bu sayıların amacı, kapsama ve temizlik çalışmalarını küçük partilerde
+planlamaktır. Değerler düzenli aralıklarla güncellenecektir.
 
 ## 🗄️ Arşiv Politikası
 
@@ -165,7 +166,12 @@ Eski/legacy dosyalar silinmek yerine arşivlenir:
 - Arşiv yolu: `docs/archive/`
 - Örnek: `mobile-app/app/services/old/*` → `docs/archive/mobile-app/app/services/old/*`
 
-Bu yaklaşım, değişiklikleri tersine çevirmeyi kolaylaştırır ve PR’ları daha okunur kılar.
+Son hareket:
+- `DEPLOYMENT.md.backup` dosyası `docs/archive/DEPLOYMENT.md.backup`
+  konumuna taşındı (içerik korunarak). Runtime davranışı etkilenmedi.
+
+Bu yaklaşım, değişiklikleri tersine çevirmeyi kolaylaştırır ve PR’ları daha
+okunur kılar.
 
 ## 🧭 Sonraki Adımlar (Kısa Plan)
 
@@ -191,30 +197,68 @@ curl -s "http://localhost:4000/api/users/search?q=john" | jq .
 
 Node REPL veya küçük bir script ile test edebilirsiniz:
 
+<!-- markdownlint-disable MD013 -->
 ```
 node -e "(async()=>{const {io}=await import('socket.io-client'); const s=io('http://localhost:4000',{transports:['websocket']}); s.on('connect',()=>console.log('connected',s.id)); s.on('connect_error',e=>console.error('ws error',e.message)); setTimeout(()=>s.close(),2000);})();"
 ```
+<!-- markdownlint-enable MD013 -->
 
-## 📁 Proje Yapısı
+## 🧭 Mimari ve Dosya Haritası (Backend)
+
+Uygulamanın backend tarafında temel katmanlar ve dosya konumları:
+
+```
+src/
+├── index.ts              # Uygulama giriş noktası (Express + Socket.IO bootstrap)
+├── config/               # Konfigürasyon ve şemalar
+│   ├── database.ts       # DB bağlantıları (MongoDB/PostgreSQL/Redis/Neo4J opsiyonları)
+│   ├── shareuptime_schema.sql  # PostgreSQL canonical şema
+│   ├── schema.sql        # Minimal örnek şema
+│   └── performance_indexes.sql # Ek indeksler ve görünümler
+├── controllers/          # İş mantığı (request -> response)
+│   ├── authController.ts
+│   ├── postController.ts
+│   ├── userController.ts
+│   ├── commentController.ts
+│   ├── followController.ts
+│   ├── messageController.ts
+│   └── notificationController.ts
+├── routes/               # API rotaları (Express Router)
+│   ├── authRoutes.ts
+│   ├── postRoutes.ts
+│   ├── userRoutes.ts
+│   ├── commentRoutes.ts      # (varsa)
+│   ├── followRoutes.ts
+│   ├── messageRoutes.ts
+│   ├── notificationRoutes.ts
+│   └── adminRoutes.ts
+├── middleware/           # Ortak middleware'ler
+│   ├── index.ts
+│   ├── performanceMiddleware.ts
+│   └── uploadMiddleware.ts
+├── services/             # Servis ve yardımcı katman
+│   ├── cacheService.ts   # Redis/Cache yardımcıları
+│   ├── emailService.ts   # E-posta gönderimi
+│   └── websocket.ts      # Socket.IO sunucusu
+├── models/               # (Gerekirse) veri modeli yardımcıları
+│   └── index.ts
+├── types/                # Tip tanımları ve Express genişletmeleri
+│   ├── index.ts
+│   └── express.d.ts
+└── utils/                # Genel yardımcı fonksiyonlar
+    └── index.ts
+```
+
+İlgili referans dokümanlar:
+- API son-noktaları: `API_DOCUMENTATION.md`
+- Veritabanı şemaları: `DATABASE_SCHEMA.md`
+- Dağıtım notları: `DEPLOYMENT.md` (yedek kopya: `docs/archive/DEPLOYMENT.md.backup`)
 ## 🛠️ Sorun Giderme (Troubleshooting)
 
 - 400/401 hataları: Authorization header veya body şemasını doğrulayın.
 - CORS hatası: `NODE_ENV` ve `allowedOrigins` listesini kontrol edin.
 - 429 Too Many Requests: Rate limiting devrede—bir süre bekleyin.
 - 500 hatası: Sunucu loglarını ve global error handler çıktısını inceleyin.
-
-
-```
-src/
-├── config/          # Veritabanı ve konfigürasyon dosyaları
-├── controllers/     # API endpoint logic
-├── middleware/      # Kimlik doğrulama, rate limiting vs.
-├── models/         # Mongoose modelleri
-├── routes/         # API rotaları
-├── types/          # TypeScript tip tanımları
-├── utils/          # Yardımcı fonksiyonlar
-└── index.ts        # Ana uygulama dosyası
-```
 
 ## 🔗 API Endpoints
 
