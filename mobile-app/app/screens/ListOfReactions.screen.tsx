@@ -45,12 +45,17 @@ const ListOfReactions: React.FC<Props> = (props) => {
 
   const [data, loading] = useFetch(() => findContentType());
 
-    const [reactions, setReactions] = useState<Array<[string, unknown]>>([]);
+  // TabView expects [string, any[]] per TabTuple type
+  const [reactions, setReactions] = useState<Array<[string, any[]]>>([]);
 
-    useEffect(() => {
-      const entries = Object.entries(data as Record<string, unknown>) as Array<[string, unknown]>;
-      setReactions(entries.filter(([_, value]) => Array.isArray(value) && value.length > 0));
-    }, [data]);
+  useEffect(() => {
+    const entries = Object.entries(data as Record<string, unknown>) as Array<[string, unknown]>;
+    setReactions(
+      entries
+        .filter(([_, value]) => Array.isArray(value) && (value as unknown[]).length > 0)
+        .map(([k, v]) => [k, v as any[]]),
+    );
+  }, [data]);
 
   const goBack = () => navigation.goBack();
 
