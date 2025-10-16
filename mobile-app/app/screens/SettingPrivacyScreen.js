@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: Platform.OS == 'ios' ? '500' : 'bold',
+    fontWeight: Platform.OS === 'ios' ? '500' : 'bold',
   },
   leftAndRight: {
     marginBottom: 2,

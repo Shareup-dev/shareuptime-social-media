@@ -1,10 +1,9 @@
 import React, { useContext, useState, useCallback } from 'react';
-import { StyleSheet, Text, TouchableWithoutFeedback, FlatList, View } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 
 import Screen from '../components/Screen';
-import { Header, HeaderTitle, HeaderWithBackArrow } from '../components/headers';
+import { HeaderTitle, HeaderWithBackArrow } from '../components/headers';
 import colors from '../config/colors';
-import Icon from '../components/Icon';
 import routes from '../navigation/routes';
 import SavedListItem from '../components/lists/SavedListItem';
 import { useFocusEffect } from '@react-navigation/native';

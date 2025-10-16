@@ -114,7 +114,7 @@ export default function UserProfileScreen({ navigation, route }) {
         }
       />
 
-      {currentTab == POSTS && (
+      {currentTab === POSTS && (
         <FlatList
           data={posts}
           renderItem={PostsItem}
@@ -127,7 +127,7 @@ export default function UserProfileScreen({ navigation, route }) {
         />
       )}
 
-      {currentTab == IMAGE_VIDEOS && (
+      {currentTab === IMAGE_VIDEOS && (
         <FlatList
           data={imagesAndVideos}
           renderItem={ImagesAndVideosItem}
@@ -138,7 +138,7 @@ export default function UserProfileScreen({ navigation, route }) {
         />
       )}
 
-      {currentTab == TAGS && (
+      {currentTab === TAGS && (
         <FlatList
           data={tags}
           renderItem={TagsItems}
