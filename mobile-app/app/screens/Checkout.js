@@ -17,7 +17,7 @@ import Icon from '../components/Icon';
 
 const Checkout = ({ navigation, route }) => {
   const { postType, item } = route.params;
-  const { postTypes } = constants;
+  // const { postTypes } = constants; // unused
 
   return (
     <ScrollView style={{ backgroundColor: colors.white }}>

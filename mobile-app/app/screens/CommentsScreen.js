@@ -86,7 +86,7 @@ export default function CommentsScreen({ navigation, route }) {
         const comment = { content: commentContent };
         postService
           .addSwapComment(userState?.userData?.id, swapId, comment.content)
-          .then((resp) => {
+          .then((_resp) => {
             refreshComments();
             setCommentContent('');
             commentTextFieldRef.current.clear();
@@ -177,7 +177,7 @@ export default function CommentsScreen({ navigation, route }) {
       if (!isHide) {
         postService
           .deleteComment(itemId)
-          .then((res) => {
+          .then((_res) => {
             refreshComments();
             Keyboard.dismiss();
           })

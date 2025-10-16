@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import moment from 'moment';
 import colors from '../config/colors';
 import Text from '../components/Text';
 import Tab from '../components/buttons/Tab';
@@ -28,10 +27,7 @@ const PostActions = ({
 }) => {
   const fromReply = false;
   const actionsTabSizeRatio = 0.5;
-  const [date, setDate] = useState(
-    // moment(postData.published, "DD MMMM YYYY hh:mm:ss").fromNow()
-    null,
-  );
+  // date display removed: unused state cleanup
 
   return (
     <View style={styles.content}>

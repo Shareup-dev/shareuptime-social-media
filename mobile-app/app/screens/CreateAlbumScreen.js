@@ -1,20 +1,18 @@
-import React, { useMemo, useState, useContext, useEffect } from 'react';
-import { FlatList, Image, View, StyleSheet } from 'react-native';
+import React, { useMemo, useState, useContext } from 'react';
+import { View, StyleSheet } from 'react-native';
 import Screen from '../components/Screen';
 import { Header, HeaderTitle } from '../components/headers';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from '../components/Icon';
 import { Texts } from '../Materials/Text';
-import Separator from '../components/Separator';
 import colors from '../config/colors';
-import routes from '../navigation/routes';
 import TextField from '../components/TextField';
 import common from '../config/common';
 import RadioOptionDrawer from '../components/drawers/RadioOptionDrawer';
 import postService from '../services/post.service';
 import authContext from '../Contexts/authContext';
 import { postDataSliceAction } from '../redux/postDataSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 export default function CreateAlbumScreen({ navigation, route }) {
   const { userData: user } = useContext(authContext)?.userState;
