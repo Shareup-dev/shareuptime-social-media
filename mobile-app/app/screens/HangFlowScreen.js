@@ -30,7 +30,7 @@ export default function HangFlowScreen({ navigation, route }) {
         default:
           break;
       }
-    }, []),
+    }, [postType, userState.userData.email]),
   );
   const getAllHang = (userEmail) => {
     hangShareService.getAllHangData().then((res) => {

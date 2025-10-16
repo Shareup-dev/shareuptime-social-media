@@ -159,7 +159,7 @@ export default function UserProfileScreen({ navigation, route }) {
         }}
       />
 
-  {currentTab === POSTS && (
+      {currentTab === POSTS && (
         <FlatList
           data={posts}
           // removed unknown prop 've'
@@ -183,7 +183,7 @@ export default function UserProfileScreen({ navigation, route }) {
         />
       )}
 
-  {currentTab === IMAGE_VIDEOS && (
+      {currentTab === IMAGE_VIDEOS && (
         <FlatList
           data={media}
           numColumns={3}
@@ -196,7 +196,7 @@ export default function UserProfileScreen({ navigation, route }) {
         />
       )}
 
-  {currentTab === TAGS && (
+      {currentTab === TAGS && (
         <FlatList
           data={tags}
           showsVerticalScrollIndicator={false}

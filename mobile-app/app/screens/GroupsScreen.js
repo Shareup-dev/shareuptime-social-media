@@ -32,7 +32,7 @@ export default function GroupsScreen({ navigation }) {
   const [search, setSearch] = useState(initSearchVal);
 
   useEffect(() => {
-    navigation.addListener('focus', async (_) => {
+    navigation.addListener('focus', async (_e) => {
       // setSearch(initSearchVal);
       await groupService
         .getGroupsOfOwner(userData.id)
@@ -55,14 +55,14 @@ export default function GroupsScreen({ navigation }) {
       },
     ]);
   };
-  const searchGroups = (_) => {
+  const searchGroups = (_e) => {
     if (search.keyword) {
       setSearch((prev) => ({ ...prev, loading: 1 }));
       groupService
         .search(search.keyword)
         .then((res) => setSearch((prev) => ({ ...prev, result: res.data })))
         .catch((e) => console.error(e.message))
-        .finally((_) => setSearch((prev) => ({ ...prev, loading: 2 })));
+        .finally(() => setSearch((prev) => ({ ...prev, loading: 2 })));
     } else {
       setSearch((prev) => ({ ...prev, loading: 0, result: [] }));
     }

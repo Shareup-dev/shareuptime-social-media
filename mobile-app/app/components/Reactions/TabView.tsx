@@ -6,7 +6,7 @@ import colors from '../../config/colors';
 import BetterImage from '../betterImage/BetterImage';
 import { findEmoji } from '../../Constants/reactions';
 
-type TabTuple = [string, any[]];
+type TabTuple = [string, Array<any>];
 interface Props {
   tabs: TabTuple[];
 }
@@ -32,7 +32,7 @@ const TabView: React.FC<Props> = (props) => {
     <View>
       <View style={styles.container}>
         <ScrollView horizontal style={styles.tabs}>
-          {tabs.map(([tabName]: any, index) => (
+          {tabs.map(([tabName], index) => (
             <TouchableOpacity
               onPress={() => setactiveIndex(index)}
               key={index}

@@ -49,7 +49,6 @@ function CustomImageSlider({ media = [], height, postType }) {
         <ImageView
           visible={imageSlider.state}
           images={media.map((media) => ({ uri: media.mediaPath }))}
-          keyExtractor={(item, index) => index.toString()}
           imageIndex={imageSlider.index}
           onRequestClose={() => {
             setImageSlider((prev) => ({ ...prev, state: false }));
@@ -93,7 +92,6 @@ function CustomImageSlider({ media = [], height, postType }) {
               image.mediaPath.split('.').pop() === 'mov') ? (
               <VideoPlayer
                 source={{ uri: image.mediaPath }}
-                navigator={navigator}
                 tapAnywhereToPause={false}
                 toggleResizeModeOnFullscreen={false}
                 isFullScreen={false}

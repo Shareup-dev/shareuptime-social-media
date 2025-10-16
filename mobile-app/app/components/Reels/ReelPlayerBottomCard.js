@@ -1,11 +1,13 @@
-import moment from 'moment';
-import React, { useContext, useState } from 'react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import React, { useContext, useState, useMemo } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import AuthContext from '../../Contexts/authContext';
 import routes from '../../navigation/routes';
 import ReelsService from '../../services/Reels.service';
 import Icon from '../Icon';
 import UserProfilePicture from '../UserProfilePicture';
+dayjs.extend(relativeTime);
 
 const BottomCard = React.memo(
   ({
@@ -24,10 +26,7 @@ const BottomCard = React.memo(
     } = useContext(AuthContext);
     const { firstName, lastName, id: userID } = user;
 
-    const [date, setDate] = useState(
-      moment(publishedDate, 'DD MMMM YYYY hh:mm:ss').fromNow(),
-      // null
-    );
+    const date = useMemo(() => dayjs(publishedDate).fromNow(), [publishedDate]);
     const [like, setLike] = useState(Boolean(reelLiked));
     const [totalLikes, setTotalLikes] = useState(numberOfReaction ? numberOfReaction : 0);
     const [totalComments, setTotalComments] = useState(numberOfComments ? numberOfComments : 0);
