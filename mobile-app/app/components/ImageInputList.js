@@ -6,6 +6,7 @@ import ImageInput from './ImageInput';
 export default function ImageInputList({ imageUris, onAddImage, onRemoveImage, isSwap }) {
   //const imageUrisSet = imageUris.map((imageUris) => imageUris.replace('file:', ''));
   const { width, height } = Dimensions.get('screen');
+  const imageSizeStyle = { width: width, height: height / 2 };
   return (
     <View style={styles.container}>
       <FlatList
@@ -16,7 +17,7 @@ export default function ImageInputList({ imageUris, onAddImage, onRemoveImage, i
         data={imageUris}
         keyExtractor={(item, i) => i.toString()}
         renderItem={({ item, index: _index }) => {
-          return <Image source={{ uri: item }} style={{ width: width, height: height / 2 }} />;
+          return <Image source={{ uri: item }} style={imageSizeStyle} />;
         }}
       >
         {imageUris.map((uri) => (

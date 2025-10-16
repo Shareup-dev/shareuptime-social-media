@@ -16,10 +16,7 @@ export function GradientColorsIcon({ ...rest }) {
           </View>
         }
       >
-        {/* <LinearGradient
-          colors={[colors.linearGradientIndex0, colors.linearGradientIndex1]}
-          style={{flex: 1, width: size, height: size}}
-        /> */}
+        {/* Gradient placeholder: LinearGradient removed; add back with styles.gradient if re-enabled */}
       </MaskedView>
     </View>
   );
