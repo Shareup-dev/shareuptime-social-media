@@ -1,10 +1,46 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Text, Image, TouchableOpacity } from 'react-native';
 import { HeaderWithBackArrow } from '../components/headers';
 import colors from '../config/colors';
 import fileStorage from '../config/fileStorage';
 // import routes from '../navigation/routes';
 import groupService from '../services/group.service';
+
+// Hoisted item to avoid nested components during render
+const RequestItem = ({ item, acceptMemberRequest, rejectMemberRequest }) => (
+  <View style={styles.itemRowBetween}>
+    <View style={styles.rowCenter}>
+      <Image
+        source={
+          item?.group?.image
+            ? { uri: fileStorage.baseUrl + item?.group?.image }
+            : require('../assets/images/group-texture.png')
+        }
+        style={styles.img}
+      />
+      <View style={styles.item}>
+        <Text style={styles.title}>@{item.user.firstName}</Text>
+        <Text>requesting to join </Text>
+      </View>
+    </View>
+    <View style={styles.rowCenter}>
+      <TouchableOpacity
+        onPress={() => acceptMemberRequest(item.id)}
+        activeOpacity={0.6}
+        style={[styles.btn, styles.btnPrimary]}
+      >
+        <Text style={styles.whiteTxt}>Accept</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => rejectMemberRequest(item.id)}
+        activeOpacity={0.6}
+        style={styles.btn}
+      >
+        <Text>Reject</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 
 export default function MemberRequest({ navigation, route }) {
   const { params: groupData } = route;
@@ -41,55 +77,7 @@ export default function MemberRequest({ navigation, route }) {
       .catch((e) => console.error(e.message));
   };
 
-  const Item = ({ item }) => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignContent: 'center',
-          borderBottomColor: '#cacaca60',
-          borderBottomWidth: 1,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <Image
-            source={
-              item?.group?.image
-                ? { uri: fileStorage.baseUrl + item?.group?.image }
-                : require('../assets/images/group-texture.png')
-            }
-            style={styles.img}
-          />
-          <View style={styles.item}>
-            <Text style={styles.title}>@{item.user.firstName}</Text>
-            <Text>requesting to join </Text>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity
-            onPress={() => acceptMemberRequest(item.id)}
-            activeOpacity={0.6}
-            style={[styles.btn, { backgroundColor: colors.iondigoDye }]}
-          >
-            <Text style={{ color: '#fff' }}>Accept</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => rejectMemberRequest(item.id)}
-            activeOpacity={0.6}
-            style={styles.btn}
-          >
-            <Text>Reject</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
+  // Use hoisted RequestItem
 
   return (
     <>
@@ -102,34 +90,22 @@ export default function MemberRequest({ navigation, route }) {
         />
       </View>
       {loading === 2 && !requests.length ? (
-        <Text
-          style={{
-            marginVertical: 10,
-            marginHorizontal: 5,
-            fontSize: 16,
-            textAlign: 'center',
-          }}
-        >
-          There is no requests to display
-        </Text>
+        <Text style={styles.centerInfoTxt}>There is no requests to display</Text>
       ) : (
         <View style={styles.listContainer}>
-          <Text
-            style={{
-              marginVertical: 10,
-              marginHorizontal: 5,
-              fontSize: 16,
-              textAlign: 'center',
-            }}
-          >
-            New requests
-          </Text>
+          <Text style={styles.centerInfoTxt}>New requests</Text>
 
           <FlatList
             showsVerticalScrollIndicator={false}
             data={requests}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => <Item item={item} />}
+            renderItem={({ item }) => (
+              <RequestItem
+                item={item}
+                acceptMemberRequest={acceptMemberRequest}
+                rejectMemberRequest={rejectMemberRequest}
+              />
+            )}
           />
         </View>
       )}
@@ -138,6 +114,14 @@ export default function MemberRequest({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  rowCenter: { flexDirection: 'row', alignItems: 'center' },
+  itemRowBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    borderBottomColor: '#cacaca60',
+    borderBottomWidth: 1,
+  },
   btn: {
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -145,6 +129,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 4,
   },
+  btnPrimary: { backgroundColor: colors.iondigoDye },
+  whiteTxt: { color: '#fff' },
   btnTxt: {
     color: '#333',
   },
@@ -163,6 +149,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: 10,
     marginBottom: 60,
+  },
+  centerInfoTxt: {
+    marginVertical: 10,
+    marginHorizontal: 5,
+    fontSize: 16,
+    textAlign: 'center',
   },
   item: {
     paddingHorizontal: 10,
