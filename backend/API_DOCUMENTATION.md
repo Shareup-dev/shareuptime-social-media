@@ -19,7 +19,8 @@
 
 ### Rate Limiting
 - **Genel:** 100 istek/15 dakika
-- **Auth Endpoint'leri:** 10 istek/15 dakika
+- **Auth Giriş:** 5 istek/15 dakika
+- **Kayıt:** 3 istek/saat
 
 ## 🔐 Kimlik Doğrulama
 
@@ -43,7 +44,8 @@ Yeni kullanıcı kaydı oluşturur.
   "username": "johndoe",
   "email": "john@example.com",
   "password": "123456",
-  "fullName": "John Doe"
+  "firstName": "John",
+  "lastName": "Doe"
 }
 ```
 
@@ -51,14 +53,15 @@ Yeni kullanıcı kaydı oluşturur.
 ```json
 {
   "success": true,
+  "message": "Kullanıcı başarıyla oluşturuldu",
   "data": {
-    "userId": "user123",
+    "id": "<uuid>",
     "username": "johndoe",
     "email": "john@example.com",
-    "fullName": "John Doe",
-    "createdAt": "2025-10-12T10:30:00Z"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    "first_name": "John",
+    "last_name": "Doe",
+    "created_at": "2025-10-12T10:30:00Z"
+  }
 }
 ```
 
@@ -80,10 +83,13 @@ Kullanıcı araması yapar.
   "success": true,
   "data": [
     {
-      "userId": "user123",
+      "id": "<uuid>",
       "username": "johndoe",
-      "fullName": "John Doe",
-      "profilePicture": "https://example.com/avatar.jpg"
+      "email": "john@example.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "profile_picture_url": "https://example.com/avatar.jpg",
+      "is_verified": false
     }
   ]
 }
@@ -99,15 +105,18 @@ Kullanıcı profilini getirir.
 {
   "success": true,
   "data": {
-    "userId": "user123",
+    "id": "<uuid>",
     "username": "johndoe",
-    "fullName": "John Doe",
+    "email": "john@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
     "bio": "Software Developer",
-    "profilePicture": "https://example.com/avatar.jpg",
-    "followerCount": 150,
-    "followingCount": 89,
-    "postCount": 25,
-    "createdAt": "2025-10-12T10:30:00Z"
+    "profile_picture_url": "https://example.com/avatar.jpg",
+    "is_verified": false,
+    "is_private": false,
+    "location": null,
+    "website": null,
+    "created_at": "2025-10-12T10:30:00Z"
   }
 }
 ```
@@ -120,9 +129,11 @@ Kullanıcı profilini günceller.
 **Request Body:**
 ```json
 {
-  "fullName": "John Doe Updated",
+  "firstName": "John",
+  "lastName": "Doe",
   "bio": "Senior Software Developer",
-  "profilePicture": "https://example.com/new-avatar.jpg"
+  "profileImage": "https://example.com/new-avatar.jpg",
+  "isPrivate": false
 }
 ```
 
@@ -131,11 +142,15 @@ Kullanıcı profilini günceller.
 {
   "success": true,
   "data": {
-    "userId": "user123",
+    "id": "<uuid>",
     "username": "johndoe",
-    "fullName": "John Doe Updated",
+    "email": "john@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
     "bio": "Senior Software Developer",
-    "profilePicture": "https://example.com/new-avatar.jpg"
+    "profile_picture_url": "https://example.com/new-avatar.jpg",
+    "is_private": false,
+    "updated_at": "2025-10-12T11:00:00Z"
   }
 }
 ```
@@ -158,10 +173,13 @@ Kullanıcı girişi yapar.
 {
   "success": true,
   "data": {
-    "userId": "user123",
+    "id": "<uuid>",
     "username": "johndoe",
     "email": "john@example.com",
-    "fullName": "John Doe"
+    "first_name": "John",
+    "last_name": "Doe",
+    "profile_picture_url": null,
+    "is_verified": false
   },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
@@ -180,9 +198,15 @@ Token doğrulaması yapar.
 {
   "success": true,
   "data": {
-    "userId": "user123",
+    "id": "<uuid>",
     "username": "johndoe",
-    "email": "john@example.com"
+    "email": "john@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "bio": null,
+    "profile_picture_url": null,
+    "is_verified": false,
+    "created_at": "2025-10-12T10:30:00Z"
   }
 }
 ```
@@ -237,13 +261,10 @@ Yeni gönderi oluşturur.
 ```json
 {
   "content": "Bu benim ilk gönderim!",
-  "media": [
-    {
-      "type": "image",
-      "url": "https://example.com/image.jpg"
-    }
-  ],
-  "tags": ["#ilkgönderi", "#merhaba"]
+  "content": "Bu benim ilk gönderim!",
+  "privacy": "public",
+  "feeling": "happy",
+  "location": "İstanbul"
 }
 ```
 
@@ -252,23 +273,20 @@ Yeni gönderi oluşturur.
 {
   "success": true,
   "data": {
-    "postId": "post123",
+    "id": "<uuid>",
+    "user_id": "<uuid>",
     "content": "Bu benim ilk gönderim!",
-    "author": {
-      "userId": "user123",
-      "username": "johndoe",
-      "fullName": "John Doe"
-    },
-    "media": [
-      {
-        "type": "image",
-        "url": "https://example.com/image.jpg"
-      }
-    ],
-    "tags": ["#ilkgönderi", "#merhaba"],
-    "likeCount": 0,
-    "commentCount": 0,
-    "createdAt": "2025-10-12T10:30:00Z"
+    "media_urls": [],
+    "media_types": [],
+    "privacy_level": "public",
+    "location": "İstanbul",
+    "feeling": "happy",
+    "created_at": "2025-10-12T10:30:00Z",
+    "username": "johndoe",
+    "first_name": "John",
+    "last_name": "Doe",
+    "profile_picture_url": null,
+    "is_verified": false
   }
 }
 ```
@@ -279,40 +297,30 @@ Yeni gönderi oluşturur.
 Gönderileri listeler (sayfalama ile).
 
 **Query Parameters:**
-- `page` (number, default: 1): Sayfa numarası
-- `limit` (number, default: 10): Sayfa başına gönderi sayısı
-- `sortBy` (string, default: "createdAt"): Sıralama kriteri
+- `page` (number, default: 1)
+- `limit` (number, default: 20, max: 50)
 
 **Response (200):**
 ```json
 {
   "success": true,
-  "data": {
-    "posts": [
-      {
-        "postId": "post123",
-        "content": "Bu benim ilk gönderim!",
-        "author": {
-          "userId": "user123",
-          "username": "johndoe",
-          "fullName": "John Doe",
-          "profilePicture": "https://example.com/avatar.jpg"
-        },
-        "media": [],
-        "tags": ["#ilkgönderi"],
-        "likeCount": 5,
-        "commentCount": 2,
-        "createdAt": "2025-10-12T10:30:00Z"
-      }
-    ],
-    "pagination": {
-      "currentPage": 1,
-      "totalPages": 5,
-      "totalPosts": 50,
-      "hasNext": true,
-      "hasPrev": false
+  "data": [
+    {
+      "id": "<uuid>",
+      "user_id": "<uuid>",
+      "content": "...",
+      "media_urls": [],
+      "media_types": [],
+      "privacy_level": "public",
+      "created_at": "...",
+      "username": "...",
+      "first_name": "...",
+      "last_name": "...",
+      "profile_picture_url": null,
+      "is_verified": false
     }
-  }
+  ],
+  "pagination": { "page": 1, "limit": 20, "total": 50, "totalPages": 3 }
 }
 ```
 
@@ -326,25 +334,19 @@ Belirli bir gönderiyi getirir.
 {
   "success": true,
   "data": {
-    "postId": "post123",
-    "content": "Bu benim ilk gönderim!",
-    "author": {
-      "userId": "user123",
-      "username": "johndoe",
-      "fullName": "John Doe",
-      "profilePicture": "https://example.com/avatar.jpg"
-    },
-    "media": [
-      {
-        "type": "image",
-        "url": "https://example.com/image.jpg"
-      }
-    ],
-    "tags": ["#ilkgönderi", "#merhaba"],
-    "likeCount": 10,
-    "commentCount": 5,
-    "createdAt": "2025-10-12T10:30:00Z",
-    "updatedAt": "2025-10-12T11:00:00Z"
+    "id": "<uuid>",
+    "user_id": "<uuid>",
+    "content": "...",
+    "media_urls": [],
+    "media_types": [],
+    "privacy_level": "public",
+    "created_at": "...",
+    "updated_at": "...",
+    "username": "...",
+    "first_name": "...",
+    "last_name": "...",
+    "profile_picture_url": null,
+    "is_verified": false
   }
 }
 ```
@@ -369,7 +371,11 @@ Gönderiyi günceller (sadece gönderi sahibi).
 ```json
 {
   "content": "Güncellenmiş içerik",
-  "tags": ["#güncellendi"]
+  "content": "Güncellenmiş içerik",
+  "privacy": "friends",
+  "feeling": "excited",
+  "location": "Ankara",
+  "mediaUrls": ["https://cdn/.../a.jpg"]
 }
 ```
 
@@ -378,10 +384,13 @@ Gönderiyi günceller (sadece gönderi sahibi).
 {
   "success": true,
   "data": {
-    "postId": "post123",
+    "id": "<uuid>",
     "content": "Güncellenmiş içerik",
-    "tags": ["#güncellendi"],
-    "updatedAt": "2025-10-12T11:00:00Z"
+    "privacy_level": "friends",
+    "feeling": "excited",
+    "location": "Ankara",
+    "media_urls": ["https://cdn/.../a.jpg"],
+    "updated_at": "2025-10-12T11:00:00Z"
   }
 }
 ```
@@ -410,8 +419,8 @@ Kullanıcıyı takip eder.
   "success": true,
   "message": "Kullanıcı başarıyla takip edildi",
   "data": {
-    "followerId": "user123",
-    "followingId": "user456",
+    "followerId": "<uuid>",
+    "followingId": "<uuid>",
     "createdAt": "2025-10-12T10:30:00Z"
   }
 }
@@ -690,5 +699,5 @@ Herhangi bir sorun veya soru için:
 
 ---
 
-**Son Güncelleme:** 12 Ekim 2025
+**Son Güncelleme:** 16 Ekim 2025
 **API Versiyonu:** 1.0.0
