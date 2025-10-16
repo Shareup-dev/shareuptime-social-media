@@ -8,6 +8,7 @@ import {
   Text,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 //import Text from "../components/Text";
 import Tab from '../components/buttons/Tab';
@@ -80,7 +81,7 @@ export default function PostDetailScreen({ navigation, route }) {
         type: 'MaterialCommunityIcons',
       },
       onPress: () => {
-        alert('Share friends');
+        Alert.alert('Share friends');
       },
     },
     {
@@ -90,7 +91,7 @@ export default function PostDetailScreen({ navigation, route }) {
         type: 'MaterialCommunityIcons',
       },
       onPress: () => {
-        alert('Share friends');
+        Alert.alert('Share friends');
       },
     },
   ];
@@ -125,9 +126,9 @@ export default function PostDetailScreen({ navigation, route }) {
       <Header
         backgroundColor={colors.white}
         left={
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={styles.rowCenter}>
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-              <View style={{ marginRight: 15 }}>
+              <View style={styles.mr15}>
                 <Icon name="chevron-back" type="Ionicons" size={25} backgroundSizeRatio={1} />
               </View>
             </TouchableWithoutFeedback>
@@ -144,17 +145,7 @@ export default function PostDetailScreen({ navigation, route }) {
                     source={{
                       uri: postData.group?.groupImagePath,
                     }}
-                    style={{
-                      borderRadius: 15,
-                      width: 25,
-                      height: 25,
-                      zIndex: 1,
-                      position: 'absolute',
-                      marginBottom: 10,
-                      marginLeft: 1,
-                      top: -16,
-                      left: 25,
-                    }}
+                    style={styles.groupOverlayIcon}
                   />
                 </TouchableOpacity>
               </View>
@@ -162,20 +153,10 @@ export default function PostDetailScreen({ navigation, route }) {
                 onPress={() => navigation.navigate(routes.USER_PROFILE, postData.userdata.email)}
               >
                 <Text style={styles.userName}>{postData.userdata.firstName}</Text>
-                {postData.group ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'flex-start',
-                    }}
-                  />
-                ) : (
-                  <></>
-                )}
+                {postData.group && <View style={styles.rowStart} />}
                 <View style={styles.postDateContainer}>
                   <Text style={styles.postDate}>{postData.published}</Text>
-                  <Text style={{ fontWeight: 'bold' }}> .</Text>
+                  <Text style={styles.boldDot}> .</Text>
                   <Icon
                     image={require('../assets/post-privacy-options-icons/public-icon.png')}
                     type="FontAwesome5"
@@ -185,13 +166,7 @@ export default function PostDetailScreen({ navigation, route }) {
                     style={styles.privacy}
                   />
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-start',
-                  }}
-                >
+                <View style={styles.rowStart}>
                   <TouchableOpacity
                     onPress={(_) => navigation.navigate(routes.GROUP_FEED, postData.group)}
                   >
@@ -321,6 +296,21 @@ export default function PostDetailScreen({ navigation, route }) {
   );
 }
 const styles = StyleSheet.create({
+  rowCenter: { flexDirection: 'row', alignItems: 'center' },
+  rowStart: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' },
+  mr15: { marginRight: 15 },
+  boldDot: { fontWeight: 'bold' },
+  groupOverlayIcon: {
+    borderRadius: 15,
+    width: 25,
+    height: 25,
+    zIndex: 1,
+    position: 'absolute',
+    marginBottom: 10,
+    marginLeft: 1,
+    top: -16,
+    left: 25,
+  },
   shadowBox: {
     backgroundColor: 'coral',
     height: 50,
@@ -346,6 +336,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     marginVertical: 10,
+    width: '100%',
   },
   postText: {
     fontSize: 12,
@@ -384,7 +375,7 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     flexDirection: 'row',
-    marginTop: 10,
+    // marginTop: 10,
     backgroundColor: colors.white,
     marginHorizontal: 15,
     marginTop: 15,
@@ -398,10 +389,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     marginTop: 20,
   },
-  separator: {
-    marginTop: 10,
-    width: '100%',
-  },
+  // removed duplicate separator key; merged above
   listFooter: {
     marginBottom: 10,
     width: '100%',

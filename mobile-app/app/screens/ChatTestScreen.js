@@ -10,6 +10,9 @@ import colors from '../config/colors';
 import Icon from '../components/Icon';
 // import MessageTextField from '../components/messages/MessageTextField';
 
+// Extracted styles to avoid inline style warnings
+const bubbleWrapperStyle = { right: { backgroundColor: colors.iondigoDye } };
+
 export default function ChatTestScreen({ navigation, route }) {
   const [messages, setMessages] = useState([]);
 
@@ -58,16 +61,7 @@ export default function ChatTestScreen({ navigation, route }) {
     setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
   }, []);
 
-  const renderBubble = (props) => (
-    <Bubble
-      {...props}
-      wrapperStyle={{
-        right: {
-          backgroundColor: colors.iondigoDye,
-        },
-      }}
-    />
-  );
+  const renderBubble = (props) => <Bubble {...props} wrapperStyle={bubbleWrapperStyle} />;
 
   const renderSend = (props) => (
     <Send {...props}>
@@ -105,7 +99,6 @@ export default function ChatTestScreen({ navigation, route }) {
         renderBubble={renderBubble}
         renderSend={renderSend}
         bottomOffset={Platform.OS === 'ios' ? Dimensions.get('window').height / 2.67 : 0}
-        messagesContainerStyle={{}}
       />
     </Screen>
   );
