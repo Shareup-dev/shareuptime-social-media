@@ -12,4 +12,4 @@ export default function TestScreen() {
   );
 }
 
-const styles = StyleSheet.create({});
+// styles not used; removing to satisfy lint

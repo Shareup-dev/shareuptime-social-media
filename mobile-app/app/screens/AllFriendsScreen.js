@@ -22,7 +22,8 @@ import routes from '../navigation/routes';
 
 export default function AllFriendsScreen({ navigation }) {
   const [friends, setFriends] = useState([]);
-  const [_removed, _setRemoved] = useState([]);
+  // removed state unused
+  useState([]);
   const { userData: loggedInUser } = useContext(authContext).userState;
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function AllFriendsScreen({ navigation }) {
           // setremoved((previousState) => {
           //   return [...previousState, friend];
           // })
-          UserService.deleteFriend(loggedInUser.id, friend.id).then((removeResp) => {
+          UserService.deleteFriend(loggedInUser.id, friend.id).then(() => {
             setFriends((previousFriends) => {
               return previousFriends.filter((dost) => dost.email !== friend.email);
             });
