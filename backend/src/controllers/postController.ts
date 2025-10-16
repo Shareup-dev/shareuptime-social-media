@@ -10,7 +10,7 @@ import { createResponse, createPaginatedResponse, sanitizeInput } from '../utils
 export const createPost = async (req: Request, res: Response): Promise<void> => {
   try {
     const { content, feeling, location, privacy }: CreatePostRequest = req.body;
-    const authorId = (req as any).userId;
+    const authorId = req.userId as string;
     const files = req.files as Express.Multer.File[];
 
     // Girdi doğrulaması
@@ -122,7 +122,7 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
 export const getPosts = async (req: Request, res: Response): Promise<void> => {
   try {
     const { page = 1, limit = 20 } = req.query;
-    const _userId = (req as any).userId; // Opsiyonel, giriş yapmış kullanıcı
+    const _userId = req.userId; // Opsiyonel, giriş yapmış kullanıcı
 
     const pageNumber = parseInt(page as string) || 1;
     const limitNumber = Math.min(parseInt(limit as string) || 20, 50); // Maksimum 50
@@ -286,7 +286,7 @@ export const updatePost = async (req: Request, res: Response): Promise<void> => 
   try {
     const { postId } = req.params;
     const { content, mediaUrls, feeling, location, privacy } = req.body;
-    const userId = (req as any).userId;
+    const userId = req.userId as string;
 
     if (!postId) {
       res.status(400).json(createResponse(false, 'Gönderi ID gereklidir'));
@@ -412,7 +412,7 @@ export const updatePost = async (req: Request, res: Response): Promise<void> => 
 export const deletePost = async (req: Request, res: Response): Promise<void> => {
   try {
     const { postId } = req.params;
-    const userId = (req as any).userId;
+    const userId = req.userId as string;
 
     if (!postId) {
       res.status(400).json(createResponse(false, 'Gönderi ID gereklidir'));

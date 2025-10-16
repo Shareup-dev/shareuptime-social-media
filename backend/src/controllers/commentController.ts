@@ -72,7 +72,7 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
   try {
     const { postId } = req.params;
     const { content, parentId } = req.body as { content?: string; parentId?: string };
-    const userId = (req as any).userId as string;
+    const userId = req.userId as string;
 
     if (!postId) {
       res.status(400).json(createResponse(false, 'Gönderi ID gereklidir'));

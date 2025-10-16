@@ -9,7 +9,7 @@ import { createResponse, createPaginatedResponse } from '../utils';
 export const getOrCreateConversation = async (req: Request, res: Response): Promise<void> => {
   try {
     const { participantIds } = req.body; // Array of user IDs
-    const currentUserId = (req as any).userId;
+    const currentUserId = req.userId as string;
 
     if (!participantIds || !Array.isArray(participantIds) || participantIds.length === 0) {
       res.status(400).json(createResponse(false, 'Participant IDs gereklidir'));
@@ -97,7 +97,7 @@ export const getOrCreateConversation = async (req: Request, res: Response): Prom
 // Kullanıcının konuşmalarını listele
 export const getUserConversations = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).userId;
+    const userId = req.userId as string;
     const { page = 1, limit = 20 } = req.query;
 
     const pageNumber = parseInt(page as string) || 1;
@@ -163,7 +163,7 @@ export const sendMessage = async (req: Request, res: Response): Promise<void> =>
   try {
     const { conversationId } = req.params;
     const { content, replyToMessageId } = req.body;
-    const senderId = (req as any).userId;
+    const senderId = req.userId as string;
     const file = req.file;
 
     if (!content && !file) {
@@ -270,7 +270,7 @@ export const getConversationMessages = async (req: Request, res: Response): Prom
   try {
     const { conversationId } = req.params;
     const { page = 1, limit = 50 } = req.query;
-    const userId = (req as any).userId;
+    const userId = req.userId as string;
 
     const pageNumber = parseInt(page as string) || 1;
     const limitNumber = Math.min(parseInt(limit as string) || 50, 100);
@@ -342,7 +342,7 @@ export const getConversationMessages = async (req: Request, res: Response): Prom
 export const markMessageAsRead = async (req: Request, res: Response): Promise<void> => {
   try {
     const { messageId } = req.params;
-    const userId = (req as any).userId;
+    const userId = req.userId as string;
 
     const client = await pgPool.connect();
     try {

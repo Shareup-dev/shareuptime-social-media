@@ -20,7 +20,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     }
 
     // Request objesine userId ekle
-    (req as any).userId = decoded.userId;
+    req.userId = decoded.userId;
     next();
   } catch (_error) {
     console.error('Token doğrulama middleware hatası:', _error);
@@ -37,7 +37,7 @@ export const optionalAuthentication = (req: Request, res: Response, next: NextFu
     if (token) {
       const decoded = verifyToken(token);
       if (decoded) {
-        (req as any).userId = decoded.userId;
+        req.userId = decoded.userId;
       }
     }
 

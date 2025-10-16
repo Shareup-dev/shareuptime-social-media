@@ -179,7 +179,7 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
   try {
     const { userId } = req.params;
     const updateData: UpdateUserRequest = req.body;
-    const authenticatedUserId = (req as any).userId;
+    const authenticatedUserId = req.userId as string;
 
     if (!userId) {
       res.status(400).json(createResponse(false, 'Kullanıcı ID gereklidir'));
@@ -344,7 +344,7 @@ export const searchUsers = async (req: Request, res: Response): Promise<void> =>
 // Profil resmi yükleme
 export const uploadProfilePicture = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).userId;
+    const userId = req.userId as string;
     const file = req.file;
 
     if (!file) {
@@ -411,7 +411,7 @@ export const uploadProfilePicture = async (req: Request, res: Response): Promise
 // Kapak fotoğrafı yükleme
 export const uploadCoverPhoto = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).userId;
+    const userId = req.userId as string;
     const file = req.file;
 
     if (!file) {

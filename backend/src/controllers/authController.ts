@@ -68,7 +68,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 // Token doğrulama
 export const verifyTokenEndpoint = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).userId;
+    const userId = req.userId;
 
     if (!userId) {
       res.status(401).json(createResponse(false, 'Geçersiz token'));
@@ -105,7 +105,7 @@ export const verifyTokenEndpoint = async (req: Request, res: Response): Promise<
 export const changePassword = async (req: Request, res: Response): Promise<void> => {
   try {
     const { currentPassword, newPassword } = req.body;
-    const userId = (req as any).userId;
+    const userId = req.userId;
 
     // Girdi doğrulaması
     if (!currentPassword || !newPassword) {
