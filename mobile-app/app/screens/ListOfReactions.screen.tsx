@@ -4,7 +4,6 @@ interface Reaction {
   profilePicture: string;
   firstName: string;
   lastName: string;
-  [key: string]: any;
 }
 import { Dimensions, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -30,7 +29,7 @@ const ListOfReactions: React.FC<Props> = (props) => {
   const {
     navigation,
     route: {
-      params: { id, contentType = 'post' },
+      params: { id: _id, contentType: _contentType = 'post' },
     },
   } = props;
 
