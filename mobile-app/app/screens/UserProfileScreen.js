@@ -95,8 +95,8 @@ export default function UserProfileScreen({ navigation, route }) {
       />
     );
 
-  const ImagesAndVideosItem = ({ item }) => <View />;
-  const TagsItems = ({ item }) => <View />;
+  const ImagesAndVideosItem = ({ item: _item }) => <View />;
+  const TagsItems = ({ item: _item }) => <View />;
 
   return (
     <Screen style={styles.container}>
