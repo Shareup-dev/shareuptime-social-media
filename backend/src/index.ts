@@ -4,6 +4,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import express from 'express';
 
+import requestId from './middleware/requestId';
 import { requestLogger, rateLimiter } from './middleware';
 import { performanceMiddleware } from './middleware/performanceMiddleware';
 import adminRoutes from './routes/adminRoutes';
@@ -55,6 +56,8 @@ app.use(
 );
 
 // Request logging
+// Attach request id for correlation
+app.use(requestId);
 app.use(requestLogger);
 
 // Performance monitoring
