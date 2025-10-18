@@ -67,7 +67,7 @@ const SignupStepTwo = ({ navigation, route }) => {
           username,
         });
       })
-      .catch((e) =>
+      .catch((_e) =>
         Toast.show({
           position: 'bottom',
           visibilityTime: 5000,

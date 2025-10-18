@@ -12,8 +12,6 @@ import colors from '../config/colors';
 import authService from '../services/auth.service';
 import authContext from '../authContext';
 import Loading from '../components/Loading';
-import defaultStyles from '../config/styles';
-import colors from '../config/colors';
 
 const validationSchema = Yup.object().shape({
   otp: Yup.string('Invalid Code').required().label('Verification code').length(6),
@@ -64,7 +62,7 @@ export default function SignupVerification({ navigation, route }) {
             })
           : null,
       )
-      .catch((e) =>
+      .catch((_e) =>
         setMessage({
           isSending: false,
           text: 'Verification code not send',
