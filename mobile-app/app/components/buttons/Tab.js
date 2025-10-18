@@ -16,7 +16,7 @@ export default function AppButton({
   user,
   iconType,
   iconImage,
-  iconColor = '',
+  iconColor: _iconColor = '',
   textFontSize = 14,
   iconSize = 22 * sizeRatio,
   fontColor = colors.dark,

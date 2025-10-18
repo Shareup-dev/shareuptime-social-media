@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View, StyleSheet, StatusBar } from 'react-native';
+import Constants from 'expo-constants';
 
 import Modal from 'react-native-modal';
 
@@ -7,20 +8,6 @@ import { Header, HeaderButton, HeaderTitle } from './headers';
 import colors from '../config/colors';
 
 export default function MultiImagePicker({ isVisible, setIsVisible }) {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [hasCameraRollPermission, setHasCameraRollPermission] = useState(null);
-
-  const imagesCallback = (callback) => {
-    callback.then((photos) => photos).catch((e) => console.error(e));
-  };
-
-  const updateHandler = (count, onSubmit) => {
-    // this.props.navigation.setParams({
-    //   headerTitle: "{{count}} selected",
-    //   headerRight: onSubmit,
-    // });
-  };
-
   const renderSelectedComponent = (number) => (
     <View style={styles.countBadge}>
       <Text style={styles.countBadgeText}>{number}</Text>

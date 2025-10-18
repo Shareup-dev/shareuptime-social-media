@@ -1,6 +1,5 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import { Dimensions } from 'react-native';
 import { Texts } from '../../Materials/Text';
 import colors from '../../config/colors';
 import BetterImage from '../betterImage/BetterImage';
@@ -17,7 +16,7 @@ interface Props {
   tabs: TabTuple[];
 }
 
-const { width } = Dimensions.get('window');
+// width is unused; removed to satisfy linter
 
 const TabView: React.FC<Props> = (props) => {
   const { tabs } = props;

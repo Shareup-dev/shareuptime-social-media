@@ -19,7 +19,6 @@ import userService from '../../services/user.service';
 import Icon from '../../components/Icon';
 import profileService from '../../services/profile.service';
 import routes from '../../navigation/routes';
-
 export default function UpdateEmail({ navigation }) {
   const {
     userState: { userData, username },
