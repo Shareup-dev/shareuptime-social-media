@@ -250,6 +250,7 @@ app.use((req, res) => {
     success: false,
     message: 'Endpoint bulunamadı',
     requestedPath: req.originalUrl,
+    requestId: req.requestId,
     availableEndpoints: [
       '/api/users',
       '/api/auth',

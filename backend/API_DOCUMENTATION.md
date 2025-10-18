@@ -16,8 +16,33 @@
 **Base URL:** `http://localhost:4000/api`
 **Content-Type:** `application/json`
 **Kimlik Doğrulama:** Bearer Token (JWT)
+**Korelasyon:** İstek-yanıt korelasyonu için `X-Request-Id` kullanılır. İstemciler kendi `X-Request-Id` değerlerini gönderebilir; gönderilmezse sunucu bir UUID üretir. Hata ve 404 cevaplarında `requestId` alanı döndürülür.
 
 ### Rate Limiting
+### Korelasyon Başlığı (X-Request-Id)
+
+- İsteğe opsiyonel olarak `X-Request-Id` header'ı ekleyebilirsiniz.
+- Sunucu bu değeri kullanır ve yanıt header'ında `X-Request-Id` olarak geri iletir.
+- 404 ve 500 gibi hata cevap gövdelerinde `requestId` alanı bulunur; loglarda da `rid=<id>` olarak yer alır.
+
+Örnek:
+
+```http
+GET /api/posts HTTP/1.1
+Host: localhost:4000
+X-Request-Id: 123e4567-e89b-12d3-a456-426614174000
+```
+
+Başarısız bir istekte örnek hata gövdesi:
+
+```json
+{
+  "success": false,
+  "message": "Sunucu hatası",
+  "requestId": "123e4567-e89b-12d3-a456-426614174000",
+  "timestamp": "2025-10-18T10:00:00.000Z"
+}
+```
 - **Genel:** 100 istek/15 dakika
 - **Auth Giriş:** 5 istek/15 dakika
 - **Kayıt:** 3 istek/saat
