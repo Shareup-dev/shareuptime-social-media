@@ -48,9 +48,7 @@ export default function AllFriendsScreen({ navigation }) {
       { text: 'No', onPress: () => {} },
     ]);
   };
-  const _onClickAddFriends = () => {
-    navigation.navigate(routes.Add_NEW_FRIEND);
-  };
+  // _onClickAddFriends is not used; keep navigation inline where needed
 
   const renderFriendsList = () => {
     if (friends.length === 0) {

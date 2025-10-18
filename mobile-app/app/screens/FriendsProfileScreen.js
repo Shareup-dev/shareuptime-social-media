@@ -67,7 +67,7 @@ export default function UserProfileScreen({ navigation, route }) {
     index: 0,
   });
 
-  const [tags, setTags] = useState([]);
+  const [tags, _setTags] = useState([]);
 
   const handleTapped = (name) => {
     setCurrentTab(name);
@@ -118,7 +118,7 @@ export default function UserProfileScreen({ navigation, route }) {
 
   const { width } = Dimensions.get('window');
   const ImagesAndVideosItem = ({ item, index }) => (
-    <TouchableOpacity onPress={(_) => setImageSlider({ state: true, index: index })}>
+    <TouchableOpacity onPress={(_e) => setImageSlider({ state: true, index: index })}>
       <Image
         source={{ uri: item.mediaPath }}
         style={{

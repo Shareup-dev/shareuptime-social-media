@@ -4,14 +4,13 @@ import Toast from 'react-native-toast-message';
 import * as Yup from 'yup';
 
 import { Form, FormField, SubmitButton } from '../components/forms';
-import routes from '../navigation/routes';
 
 import defaultStyles from '../config/styles';
 import RegistrationContainer from '../components/forms/RegistrationContainer';
 import colors from '../config/colors';
 import authService from '../services/auth.service';
 import authContext from '../authContext';
-import Loading from '../components/Loading';
+// Loading component not used here
 
 const validationSchema = Yup.object().shape({
   otp: Yup.string('Invalid Code').required().label('Verification code').length(6),
@@ -27,7 +26,7 @@ export default function SignupVerification({ navigation, route }) {
     isSending: false,
   });
 
-  const [timeOver, setTimeOver] = React.useState(false);
+  const [timeOver, _setTimeOver] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(

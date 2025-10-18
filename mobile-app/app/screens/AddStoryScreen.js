@@ -52,7 +52,7 @@ export default function AddStoryScreen({ navigation }) {
   //   },
   // };
 
-  let startTime;
+  let _startTime;
   // let pauseTime;
 
   async function StopRecording() {
@@ -62,7 +62,7 @@ export default function AddStoryScreen({ navigation }) {
   }
 
   const startProgress = () => {
-    startTime = new Date().valueOf();
+    _startTime = new Date().valueOf();
     Animated.timing(scale, {
       toValue: windowWidth,
       useNativeDriver: true,
