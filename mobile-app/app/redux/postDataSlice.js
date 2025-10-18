@@ -21,8 +21,9 @@ const postDataSlice = createSlice({
       previousState.postImages = [];
       return previousState;
     },
-    removeImage: (previousState, key) => {
-      previousState.postImages = previousState.postImages.filter((item) => item !== key.payload);
+    removeImage: (previousState, _key) => {
+      // keep param underscore-named to satisfy unused var rule while preserving signature
+      previousState.postImages = previousState.postImages.filter((item) => item !== _key.payload);
       return previousState;
     },
     addNewImage: (previousState, newState) => {
@@ -75,7 +76,7 @@ const postDataSlice = createSlice({
     addAlbum: (previousState, newState) => {
       previousState.Album = newState.payload;
     },
-    removeAlbum: (previousState, key) => {
+    removeAlbum: (previousState, _key) => {
       previousState.Album = {};
       return previousState;
     },
