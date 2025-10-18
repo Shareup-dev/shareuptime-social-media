@@ -113,10 +113,6 @@ export default function ResetPassword({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingHorizontal: 20,
-    paddingTop: 50,
-  },
   submitButton: {
     alignSelf: 'center',
     width: '60%',

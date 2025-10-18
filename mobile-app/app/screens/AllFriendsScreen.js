@@ -22,13 +22,10 @@ import routes from '../navigation/routes';
 
 export default function AllFriendsScreen({ navigation }) {
   const [friends, setFriends] = useState([]);
-  // removed state unused
-  useState([]);
   const { userData: loggedInUser } = useContext(authContext).userState;
 
   useEffect(() => {
     UserService.getFriends(loggedInUser.email).then((resp) => {
-      resp.data.forEach((dost) => dost.email);
       setFriends(resp.data);
     });
   }, []);

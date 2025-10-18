@@ -26,22 +26,26 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
 
       - name: Install dependencies
+        working-directory: backend
         run: npm ci
 
       - name: Lint
+        working-directory: backend
         run: npm run lint
 
       - name: Type-check (build)
+        working-directory: backend
         run: npm run build --silent
 
       - name: Prettier (check)
+        working-directory: backend
         run: npm run format
 
   mobile:
     name: Mobile lint and type-check
-    if: ${{ hashFiles('mobile-app/package.json') != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,14 +61,15 @@ jobs:
 
       - name: Install dependencies
         working-directory: mobile-app
-        run: npm ci
+        run: |
+          if [ -f package.json ]; then npm ci; else echo "mobile-app missing, skipping"; fi
 
       - name: Lint
         working-directory: mobile-app
         run: |
-          if npm run | grep -q "lint"; then npm run lint; else echo "No lint script"; fi
+          if [ -f package.json ] && npm run | grep -q "lint"; then npm run lint; else echo "Skipping lint"; fi
 
       - name: Type-check
         working-directory: mobile-app
         run: |
-          if npm run | grep -q "type-check"; then npm run type-check; else echo "No type-check script"; fi
+          if [ -f package.json ] && npm run | grep -q "type-check"; then npm run type-check; else echo "Skipping type-check"; fi
