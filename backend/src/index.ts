@@ -265,12 +265,14 @@ app.use((req, res) => {
 
 // Global error handler
 app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  const requestId = req.requestId;
   console.error('Sunucu hatası:', {
     error: err.message,
     stack: err.stack,
     url: req.originalUrl,
     method: req.method,
     ip: req.ip,
+    requestId,
     timestamp: new Date().toISOString(),
   });
 
@@ -278,6 +280,7 @@ app.use((err: Error, req: express.Request, res: express.Response, _next: express
     success: false,
     message: 'Sunucu hatası',
     error: process.env.NODE_ENV === 'development' ? err.message : 'Bir hata oluştu',
+    requestId,
     timestamp: new Date().toISOString(),
   });
 });
