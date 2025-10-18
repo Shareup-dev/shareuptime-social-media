@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import routes from './routes';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CommentsScreen from '../screens/CommentsScreen';
 import { AppNavigator } from '.';
@@ -14,13 +12,9 @@ import ReelPlayer from '../screens/ReelPlayer';
 import AddPostScreen from '../screens/AddPostScreen';
 import TagPeople from '../screens/tagPeople';
 import FeelingAndActivity from '../screens/feelingAndActivity';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { useHeaderHeight } from '@react-navigation/stack';
-import GroupFeedScreen from '../screens/GroupFeedScreen';
 import AddCommentsOnReels from '../screens/addCommentsOnReels';
 const Stack = createNativeStackNavigator();
-const headerHeight = useHeaderHeight;
-export default function HomeNavigator(props) {
+export default function HomeNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -48,11 +42,3 @@ export default function HomeNavigator(props) {
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-  header: {
-    paddingTop: 0,
-    height: 10,
-  },
-});

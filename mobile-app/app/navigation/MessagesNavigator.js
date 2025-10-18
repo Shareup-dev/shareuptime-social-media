@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import routes from './routes';
 import ChatRoomScreen from '../screens/ChatRoomScreen';
 import MessagesScreen from '../screens/MessagesScreen';
-import ChatTestScreen from '../screens/ChatTestScreen';
 import AddNewFriendScreen from '../screens/AddNewFriendScreen';
 
 export default function MessagesNavigator() {
