@@ -1,11 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 
 import HeaderWithBackArrow from '../components/headers/HeaderWithBackArrow';
 import Icon from '../components/Icon';
 import Screen from '../components/Screen';
 import colors from '../config/colors';
-import authContext from '../authContext';
 import UserService from '../services/user.service';
 import Card from '../components/lists/Card';
 
@@ -24,11 +23,10 @@ const tabs = [
 
 export default function UserProfileScreen({ navigation, route }) {
   const [currentTab, setCurrentTab] = useState(POSTS);
-  const { userState: _userState } = useContext(authContext);
-  const [posts, setPosts] = useState([]);
+  const [posts] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [imagesAndVideos, setImagesAndVideos] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [imagesAndVideos] = useState([]);
+  const [tags] = useState([]);
 
   const userEmail = route.params;
 

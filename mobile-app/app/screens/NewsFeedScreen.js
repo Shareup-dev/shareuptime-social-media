@@ -27,7 +27,7 @@ export default function NewsFeedScreen({ navigation, route }) {
     postService
       .getNewsFeed(userState?.userData?.email)
       .then((res) => {
-        const postArray = res.data.reverse();
+        const _postArray = res.data.reverse();
         // setPosts(postArray); // unused for now
         setActivityIndicator(false);
       })
