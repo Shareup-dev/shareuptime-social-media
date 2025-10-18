@@ -1,15 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   View,
   Dimensions,
-  Image,
-  Animated,
   TouchableOpacity,
   TextInput,
   StatusBar,
   Alert,
-  Text,
 } from 'react-native';
 
 import colors from '../config/colors';
@@ -29,7 +26,7 @@ export default function AddReelScreen({ navigation }) {
   // playerRef is not used
   // let playerRef = useRef();
 
-  const windowWidth = Dimensions.get('screen').width;
+  // const windowWidth = Dimensions.get('screen').width;
 
   const { userData } = useContext(AuthContext)?.userState;
 
@@ -135,11 +132,11 @@ export default function AddReelScreen({ navigation }) {
       });
   };
 
-  function timeConvert(num) {
-    var hours = Math.floor(num / 60);
-    var minutes = num % 60 < 10 ? '0' + (num % 60) : num % 60;
-    return hours + ' : ' + minutes;
-  }
+  // function timeConvert(num) {
+  //   var hours = Math.floor(num / 60);
+  //   var minutes = num % 60 < 10 ? '0' + (num % 60) : num % 60;
+  //   return hours + ' : ' + minutes;
+  // }
 
   return (
     <View style={styles.container}>

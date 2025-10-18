@@ -45,11 +45,11 @@ export default function ReceivedRequests({ navigation }) {
   };
 
   const getTabTitle = (friend) => {
-    if (acceptedFrom.filter((user) => friend.email === user.email)[0]) {
+    if (acceptedFrom.filter((u) => friend.email === u.email)[0]) {
       return 'unfriend';
     }
 
-    if (rejectedFrom.filter((user) => friend.email === user.email)[0]) {
+    if (rejectedFrom.filter((u) => friend.email === u.email)[0]) {
       return 'Rejected';
     }
     return 'Reject';

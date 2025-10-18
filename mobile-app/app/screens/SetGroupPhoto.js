@@ -73,7 +73,7 @@ const SetGroupPhoto = ({ navigation, route }) => {
 
         navigation.navigate(routes.INVITE_GROUP_MEMBERS, groupData);
       })
-      .catch((e) =>
+      .catch((_e) =>
         Toast.show({
           position: 'bottom',
           visibilityTime: 5000,
