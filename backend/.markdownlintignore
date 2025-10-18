@@ -1,0 +1,6 @@
+# Exclude large/generated and archived content
+node_modules/
+dist/
+uploads/
+ssl/
+docs/archive/

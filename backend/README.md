@@ -8,6 +8,7 @@ Hızlı bağlantılar:
 - API Dokümanı: ./API_DOCUMENTATION.md
 - Veritabanı Şemaları: ./DATABASE_SCHEMA.md
 - Deployment Rehberi: ./DEPLOYMENT.md
+- Değişiklik Günlüğü: ./CHANGELOG.md
 - Sağlık Kontrolleri: GET /health, GET /
 
 ## 🚀 Özellikler
@@ -169,6 +170,11 @@ Eski/legacy dosyalar silinmek yerine arşivlenir:
 Son hareket:
 - `DEPLOYMENT.md.backup` dosyası `docs/archive/DEPLOYMENT.md.backup`
   konumuna taşındı (içerik korunarak). Runtime davranışı etkilenmedi.
+
+Ek not: `docs/archive/` ve diğer büyük klasörler markdownlint kapsamı dışında
+tutulmuştur (bkz. `.markdownlintignore`). Bu yalnızca dokümantasyon lint
+gürültüsünü azaltmak içindir; kod kalitesi denetimleri ve build akışı
+değişmemiştir.
 
 Bu yaklaşım, değişiklikleri tersine çevirmeyi kolaylaştırır ve PR’ları daha
 okunur kılar.
