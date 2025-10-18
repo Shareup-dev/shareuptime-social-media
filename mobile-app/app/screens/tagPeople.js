@@ -17,7 +17,7 @@ export default function TagPeople({ navigation }) {
   const [tagPeople, setTagPeople] = useState([]);
 
   const TagUserCard = (props) => {
-    const { name, img } = props.data;
+    const { name } = props.data;
 
     const CheckIfChecked = (name) => {
       return tagPeople.find((item) => item === name);
@@ -27,7 +27,7 @@ export default function TagPeople({ navigation }) {
       <TouchableOpacity
         activeOpacity={0.8}
         style={styles.card}
-        onPress={(e) => {
+        onPress={(_e) => {
           CheckIfChecked(name)
             ? setTagPeople((prev) => prev.filter((item) => item !== name))
             : setTagPeople((prev) => [...prev, name]);

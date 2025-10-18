@@ -23,11 +23,11 @@ export default function AddNewFriendScreen({ navigation }) {
   let alreadySentTo = useSelector((state) => state.sentRequests);
 
   useEffect(() => {
-    UserService.getUsers().then((resp) => {
-      let allUsers = resp.data.filter((person) => person.id !== loggedInUser.id);
+    UserService.getUsers().then((_resp) => {
+      let allUsers = _resp.data.filter((person) => person.id !== loggedInUser.id);
 
-      UserService.getFriendRequestSent(loggedInUser.email).then((resp) => {
-        let sentRequests = resp.data;
+      UserService.getFriendRequestSent(loggedInUser.email).then((_resp2) => {
+        let sentRequests = _resp2.data;
 
         let differedReqs = allUsers.filter(
           ({ id: id1 }) => !sentRequests.some(({ id: id2 }) => id2 === id1),
@@ -48,7 +48,7 @@ export default function AddNewFriendScreen({ navigation }) {
       return [...previousState, recievedUser];
     });
     store.dispatch(sentRequestsActions.setList([...alreadySentTo, recievedUser]));
-    FriendService.sendRequest(loggedInUser.id, recievedUser.id).then((resp) => {});
+    FriendService.sendRequest(loggedInUser.id, recievedUser.id).then((_resp) => {});
   };
 
   return (

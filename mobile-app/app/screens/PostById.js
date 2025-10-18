@@ -1,5 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import { HeaderWithBackArrow } from '../components/headers';
 import Card from '../components/lists/Card';

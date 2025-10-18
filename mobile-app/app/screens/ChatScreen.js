@@ -24,7 +24,7 @@ import Screen from '../components/Screen';
 
 // import  PushNotification from 'react-native-push-notification';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 function ChatScreen({ navigation, route }) {
   const sockJsRef = useRef();
@@ -81,14 +81,14 @@ function ChatScreen({ navigation, route }) {
     setMessages((prev) => ({ ...prev, state: [mess, ...prev.state] }));
   };
 
-  const onSendMessage = async (message) => {
-    if (message) {
+  const onSendMessage = async (text) => {
+    if (text) {
       await sockJsRef.current.sendMessage(
         `/app/chat`,
         JSON.stringify({
           fromWho: username,
           toWhom: user.email,
-          message: message,
+          message: text,
           creationTime: new Date(),
           replyMessage: 'test',
         }),
