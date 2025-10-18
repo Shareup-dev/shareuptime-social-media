@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+// no local styles used
 import { createStackNavigator } from '@react-navigation/stack';
 
 import GroupsScreen from '../screens/GroupsScreen';
@@ -95,4 +95,4 @@ export default function GroupNavigator(_props) {
   );
 }
 
-const styles = StyleSheet.create({});
+// styles removed (unused)

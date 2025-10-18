@@ -16,7 +16,6 @@ import defaultStyles from '../config/styles';
 import DrawerButtons from './DrawerButtons';
 import LinkButton from '../components/buttons/LinkButton';
 
-import routes from './routes';
 import { useNavigation } from '@react-navigation/native';
 
 const listItems = [
