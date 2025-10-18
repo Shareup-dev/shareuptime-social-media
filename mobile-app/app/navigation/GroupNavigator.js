@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import GroupsScreen from '../screens/GroupsScreen';
@@ -14,7 +14,7 @@ import ListOfMembers from '../screens/ListOfMembers';
 import EditGroup from '../screens/EditGroupScreen';
 import UpdateGroupPhoto from '../screens/UpdateGroupImage';
 
-export default function GroupNavigator(props) {
+export default function GroupNavigator(_props) {
   const Stack = createStackNavigator();
 
   return (
@@ -95,6 +95,4 @@ export default function GroupNavigator(props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {},
-});
+const styles = StyleSheet.create({});

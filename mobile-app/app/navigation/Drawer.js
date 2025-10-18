@@ -5,7 +5,6 @@ import {
   Text,
   FlatList,
   TouchableWithoutFeedback,
-  Platform,
   PixelRatio,
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -19,7 +18,6 @@ import LinkButton from '../components/buttons/LinkButton';
 
 import routes from './routes';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const listItems = [
   {
