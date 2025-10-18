@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import AppCamera from '../components/Camera';
 import Screen from '../components/Screen';
 
@@ -12,4 +11,4 @@ export default function TestScreen() {
   );
 }
 
-// styles not used; removing to satisfy lint
+// styles not used; kept intentionally minimal to avoid UI changes
