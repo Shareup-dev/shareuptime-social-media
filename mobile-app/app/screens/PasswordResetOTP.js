@@ -78,7 +78,7 @@ export default function PasswordResetOTP({ navigation, route }) {
             })
           : null,
       )
-      .catch((e) =>
+      .catch((_e) =>
         setMessage({
           isSending: false,
           text: 'Verification code not send',
