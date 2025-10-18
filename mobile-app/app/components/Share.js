@@ -1,5 +1,4 @@
-import React from 'react';
-import { Share, View, Button } from 'react-native';
+import { Share } from 'react-native';
 
 const onShare = async () => {
   try {
@@ -16,7 +15,8 @@ const onShare = async () => {
       // dismissed
     }
   } catch (error) {
-    alert(error.message);
+    // Using safe optional chaining to avoid potential undefined access
+    alert(error?.message);
   }
 };
 

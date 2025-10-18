@@ -164,29 +164,6 @@ export default function AddReelScreen({ navigation }) {
             mode={'video'}
             capturing={capturing}
           />
-          {/* <Animated.View
-            style={{
-              backgroundColor: 'crimson',
-              position: 'absolute',
-              bottom: 0,
-             
-              width: 1,
-              height: 6,
-            }}
-          /> */}
-          {/* <View style={{alignItems: 'flex-start', margin: 10}}>
-            <View
-              style={{
-                backgroundColor: 'crimson',
-                paddingHorizontal: 10,
-                paddingVertical: 5,
-                borderRadius: 10,
-              }}>
-              <Text style={{color: '#fff', fontWeight: '700'}}>
-                {timeConvert(timer)}
-              </Text>
-            </View>
-          </View> */}
         </RNCamera>
       ) : (
         <View style={styles.storyImgViewer}>

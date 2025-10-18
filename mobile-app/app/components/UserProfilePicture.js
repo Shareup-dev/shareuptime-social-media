@@ -15,7 +15,7 @@ export default function UserProfilePicture({
   rightOffsite = -5,
 }) {
   const { userState } = useContext(AuthContext);
-  const [picture, setPicture] = useState(
+  const [picture, _setPicture] = useState(
     profilePicture ? profilePicture : userState?.userData?.profilePicturePath,
   );
   return (

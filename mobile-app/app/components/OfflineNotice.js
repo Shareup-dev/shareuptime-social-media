@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 
 import { useNetInfo } from '@react-native-community/netinfo';
