@@ -19,12 +19,11 @@ const SignupStepTwo = ({ navigation, route }) => {
   const prevStepValues = route?.params;
 
   const [agreed, setagreed] = useState(false);
-  const [_verified, _setVerified] = useState(false);
   const [registerFailed, setRegisterFailed] = useState(false);
   const [registerError, setRegisterError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { isReachable, checkIfReachable } = useIsReachable();
+  const { checkIfReachable } = useIsReachable();
 
   const validationSchema = Yup.object().shape({
     gender: Yup.string().required(),

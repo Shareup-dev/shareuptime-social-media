@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
+import Toast from 'react-native-toast-message';
 import * as Yup from 'yup';
 
 import { Form, FormField, SubmitButton } from '../components/forms';
@@ -10,6 +11,9 @@ import RegistrationContainer from '../components/forms/RegistrationContainer';
 import colors from '../config/colors';
 import authService from '../services/auth.service';
 import authContext from '../authContext';
+import Loading from '../components/Loading';
+import defaultStyles from '../config/styles';
+import colors from '../config/colors';
 
 const validationSchema = Yup.object().shape({
   otp: Yup.string('Invalid Code').required().label('Verification code').length(6),
