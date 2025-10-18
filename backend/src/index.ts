@@ -4,9 +4,9 @@ import path from 'path';
 import dotenv from 'dotenv';
 import express from 'express';
 
-import requestId from './middleware/requestId';
 import { requestLogger, rateLimiter } from './middleware';
 import { performanceMiddleware } from './middleware/performanceMiddleware';
+import requestId from './middleware/requestId';
 import adminRoutes from './routes/adminRoutes';
 import authRoutes from './routes/authRoutes';
 import followRoutes from './routes/followRoutes';
