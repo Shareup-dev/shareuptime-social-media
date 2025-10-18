@@ -4,11 +4,13 @@ const groupScreenDetector = createSlice({
   name: 'groupScreenDetector',
   initialState: false,
   reducers: {
-    setGroupScreen: (state) => {
-      return (state = true);
+    setGroupScreen: (_state) => {
+      // return new state explicitly to avoid assigning to the param
+      return true;
     },
-    unSetGroupScreen: (state) => {
-      return (state = false);
+    unSetGroupScreen: (_state) => {
+      // return new state explicitly to avoid assigning to the param
+      return false;
     },
   },
 });

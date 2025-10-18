@@ -5,11 +5,8 @@ import type { AuthStackParamList } from './types';
 // Screens
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
-import SignupStepTwo from '../screens/SignupStepTwo';
 import ForgotPassword from '../screens/ForgotPassword';
-import PasswordResetOTP from '../screens/PasswordResetOTP';
 import ResetPassword from '../screens/ResetPassword';
-import SignupVerification from '../screens/SignupVerification';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import IconButton from '../components/buttons/IconButton';
 import Icon from '../components/Icon';
 import colors from '../config/colors';

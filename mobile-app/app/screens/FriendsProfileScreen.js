@@ -67,7 +67,7 @@ export default function UserProfileScreen({ navigation, route }) {
     index: 0,
   });
 
-  const [tags, _setTags] = useState([]);
+  const [tags] = useState([]);
 
   const handleTapped = (name) => {
     setCurrentTab(name);
@@ -131,7 +131,7 @@ export default function UserProfileScreen({ navigation, route }) {
       />
     </TouchableOpacity>
   );
-  const TagsItems = ({ item }) => <View />;
+  const TagsItems = ({ item: _item }) => <View />;
 
   return (
     <Screen style={styles.container}>
@@ -151,7 +151,7 @@ export default function UserProfileScreen({ navigation, route }) {
 
       <ImageView
         visible={imageSlider.state}
-        images={media.map(({ media }) => ({ uri: media.mediaPath }))}
+        images={media.map(({ media: mediaItem }) => ({ uri: mediaItem.mediaPath }))}
         keyExtractor={(item, index) => index.toString()}
         imageIndex={imageSlider.index}
         onRequestClose={() => {

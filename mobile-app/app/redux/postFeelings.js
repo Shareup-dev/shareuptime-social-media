@@ -15,8 +15,8 @@ const postFeelingsSlice = createSlice({
     setFeel: (oldValue, newValue) => {
       return (oldValue = newValue.payload);
     },
-    setDefault: (currentValue) => {
-      return (currentValue = initialState);
+    setDefault: (_currentValue) => {
+      return initialState;
     },
     getPosts: (state) => {
       return state.value;

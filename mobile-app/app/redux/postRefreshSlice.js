@@ -4,11 +4,11 @@ const postRefreshSlice = createSlice({
   name: 'postRefresh',
   initialState: false,
   reducers: {
-    setPostRefresh: (previousState, newState) => {
-      return (previousState = newState.payload);
+    setPostRefresh: (_previousState, newState) => {
+      return newState.payload;
     },
-    clearPostRefresh: (previousState) => {
-      return (previousState = false);
+    clearPostRefresh: (_previousState) => {
+      return false;
     },
   },
 });

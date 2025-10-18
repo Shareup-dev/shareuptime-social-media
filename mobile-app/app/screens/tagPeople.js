@@ -17,10 +17,10 @@ export default function TagPeople({ navigation }) {
   const [tagPeople, setTagPeople] = useState([]);
 
   const TagUserCard = (props) => {
-    const { name } = props.data;
+    const { name: userName } = props.data;
 
-    const CheckIfChecked = (name) => {
-      return tagPeople.find((item) => item === name);
+    const CheckIfChecked = (candidate) => {
+      return tagPeople.find((item) => item === candidate);
     };
 
     return (
@@ -28,16 +28,16 @@ export default function TagPeople({ navigation }) {
         activeOpacity={0.8}
         style={styles.card}
         onPress={(_e) => {
-          CheckIfChecked(name)
-            ? setTagPeople((prev) => prev.filter((item) => item !== name))
-            : setTagPeople((prev) => [...prev, name]);
+          CheckIfChecked(userName)
+            ? setTagPeople((prev) => prev.filter((item) => item !== userName))
+            : setTagPeople((prev) => [...prev, userName]);
         }}
       >
         <View style={styles.usersInfo}>
           <Image style={styles.img} source={require('../assets/images/reel2.png')} />
-          <Text style={{ marginLeft: 15 }}>{name}</Text>
+          <Text style={{ marginLeft: 15 }}>{userName}</Text>
         </View>
-        <Checkbox status={CheckIfChecked(name) ? 'checked' : 'unchecked'} />
+        <Checkbox status={CheckIfChecked(userName) ? 'checked' : 'unchecked'} />
       </TouchableOpacity>
     );
   };

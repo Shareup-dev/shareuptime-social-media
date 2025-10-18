@@ -4,11 +4,11 @@ const reelScreenDetector = createSlice({
   name: 'reelScreenDetector',
   initialState: false,
   reducers: {
-    setReelScreen: (state) => {
-      return (state = true);
+    setReelScreen: (_state) => {
+      return true;
     },
-    unSetReelScreen: (state) => {
-      return (state = false);
+    unSetReelScreen: (_state) => {
+      return false;
     },
   },
 });
