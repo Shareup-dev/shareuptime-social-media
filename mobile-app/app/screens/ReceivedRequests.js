@@ -72,37 +72,37 @@ export default function ReceivedRequests({ navigation }) {
             )}
             data={requests}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
+            renderItem={({ item: friend }) => (
               <ListItem
-                user={item}
-                image={item.profilePicturePath}
-                title={item.firstName}
+                user={friend}
+                image={friend.profilePicturePath}
+                title={friend.firstName}
                 secondBtnTitle={'Accept'}
                 secondBtn={
-                  acceptedFrom.filter((user) => user.email === item.email)[0] ||
-                  rejectedFrom.filter((user) => user.email === item.email)[0]
+                  acceptedFrom.filter((u) => u.email === friend.email)[0] ||
+                  rejectedFrom.filter((u) => u.email === friend.email)[0]
                     ? false
                     : true
                 }
                 secondBtnAction={acceptFriendRequest}
-                tabTitle={getTabTitle(item)}
+                tabTitle={getTabTitle(friend)}
                 color={
-                  acceptedFrom.filter((user) => user.email === item.email)[0]
+                  acceptedFrom.filter((u) => u.email === friend.email)[0]
                     ? colors.iondigoDye
                     : colors.lighterGray
                 }
                 fontColor={
-                  acceptedFrom.filter((user) => user.email === item.email)[0]
+                  acceptedFrom.filter((u) => u.email === friend.email)[0]
                     ? colors.white
                     : colors.dark
                 }
                 onPress={rejectFriendRequest}
                 style={[defaultStyles.listItemStyle, defaultStyles.lightShadow]}
                 fullWidth={
-                  acceptedFrom.filter((user) => user.email === item.email)[0] ||
-                  rejectedFrom.filter((user) => user.email === item.email)[0]
-                    ? true
-                    : false
+                  !!(
+                    acceptedFrom.filter((u) => u.email === friend.email)[0] ||
+                    rejectedFrom.filter((u) => u.email === friend.email)[0]
+                  )
                 }
                 displayLeft={true}
                 showCloseButton={false}

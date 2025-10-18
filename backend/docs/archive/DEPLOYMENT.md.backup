@@ -1,8 +1,8 @@
 # ShareUpTime Backend - Deployment ve Environment Setup
 
-## � Deployment Rehberi
+## Deployment Rehberi
 
-Bu doküman ShareUpTime backend API'sinin farklı ortamlarda 
+Bu doküman ShareUpTime backend API'sinin farklı ortamlarda
 nasıl deploy edileceğini açıklar.
 
 ## 📋 Ön Gereksinimler

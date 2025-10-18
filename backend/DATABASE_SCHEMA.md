@@ -2,7 +2,8 @@
 
 ## 📊 Veritabanı Şemaları
 
-Bu belge, ShareUpTime backend projesinde kullanılan veri modellerini ve veritabanı şemalarını özetler.
+Bu belge, ShareUpTime backend projesinde kullanılan veri modellerini ve
+veritabanı şemalarını özetler.
 
 - Birincil veritabanı: PostgreSQL (UUID birincil anahtarlar)
 - Alternatif (opsiyonel): MongoDB (PostgreSQL kullanılamazsa dev/fallback)
@@ -12,7 +13,8 @@ Bu belge, ShareUpTime backend projesinde kullanılan veri modellerini ve veritab
 Kaynak şema dosyaları:
 - `src/config/shareuptime_schema.sql` (Güncel ve kapsamlı)
 - `src/config/schema.sql` (Daha minimal/örnek şema)
-- `src/config/performance_indexes.sql` (Performans odaklı ek indeksler ve yardımcı görünümler)
+- `src/config/performance_indexes.sql` (Performans odaklı ek indeksler ve
+  yardımcı görünümler)
 
 Not: Aşağıdaki PostgreSQL şeması, kod ve `shareuptime_schema.sql` ile bire bir uyumludur.
 
@@ -61,7 +63,10 @@ CREATE TABLE IF NOT EXISTS posts (
   content TEXT NOT NULL,
   media_urls TEXT[],                -- Medya URL dizisi
   media_types VARCHAR(20)[],        -- Medya türleri (image, video, ...)
-  privacy_level VARCHAR(20) DEFAULT 'public' CHECK (privacy_level IN ('public', 'friends', 'private')),
+  privacy_level VARCHAR(20) DEFAULT 'public'
+    CHECK (
+      privacy_level IN ('public', 'friends', 'private')
+    ),
   location VARCHAR(200),
   feeling VARCHAR(100),
   activity VARCHAR(100),
@@ -123,7 +128,10 @@ CREATE TABLE IF NOT EXISTS follows (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   follower_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   following_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  status VARCHAR(20) DEFAULT 'accepted' CHECK (status IN ('pending', 'accepted', 'blocked')),
+  status VARCHAR(20) DEFAULT 'accepted'
+    CHECK (
+      status IN ('pending', 'accepted', 'blocked')
+    ),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(follower_id, following_id)
 );
@@ -190,7 +198,10 @@ CREATE TABLE IF NOT EXISTS messages (
   content TEXT,
   media_url VARCHAR(500),
   media_type VARCHAR(20),
-  message_type VARCHAR(20) DEFAULT 'text' CHECK (message_type IN ('text', 'image', 'video', 'file', 'location')),
+  message_type VARCHAR(20) DEFAULT 'text'
+    CHECK (
+      message_type IN ('text', 'image', 'video', 'file', 'location')
+    ),
   reply_to_message_id UUID REFERENCES messages(id) ON DELETE SET NULL,
   is_read BOOLEAN DEFAULT FALSE,
   is_deleted BOOLEAN DEFAULT FALSE,
@@ -209,7 +220,10 @@ CREATE TABLE IF NOT EXISTS groups (
   profile_picture_url VARCHAR(500),
   cover_photo_url VARCHAR(500),
   creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  privacy_level VARCHAR(20) DEFAULT 'public' CHECK (privacy_level IN ('public', 'private', 'secret')),
+  privacy_level VARCHAR(20) DEFAULT 'public'
+    CHECK (
+      privacy_level IN ('public', 'private', 'secret')
+    ),
   is_active BOOLEAN DEFAULT TRUE,
   members_count INTEGER DEFAULT 0,
   posts_count INTEGER DEFAULT 0,
@@ -222,7 +236,10 @@ CREATE TABLE IF NOT EXISTS group_members (
   group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   role VARCHAR(20) DEFAULT 'member' CHECK (role IN ('admin', 'moderator', 'member')),
-  status VARCHAR(20) DEFAULT 'accepted' CHECK (status IN ('pending', 'accepted', 'blocked')),
+  status VARCHAR(20) DEFAULT 'accepted'
+    CHECK (
+      status IN ('pending', 'accepted', 'blocked')
+    ),
   joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(group_id, user_id)
 );
@@ -258,21 +275,50 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_posts_updated_at BEFORE UPDATE ON posts FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_comments_updated_at BEFORE UPDATE ON comments FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_conversations_updated_at BEFORE UPDATE ON conversations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_messages_updated_at BEFORE UPDATE ON messages FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_groups_updated_at BEFORE UPDATE ON groups FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_users_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_posts_updated_at
+BEFORE UPDATE ON posts
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_comments_updated_at
+BEFORE UPDATE ON comments
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_conversations_updated_at
+BEFORE UPDATE ON conversations
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_messages_updated_at
+BEFORE UPDATE ON messages
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_groups_updated_at
+BEFORE UPDATE ON groups
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
 ```
 
 ## 📈 Performans İndeksleri (Ek)
 
-Ek performans indeksleri ve görünümler için `src/config/performance_indexes.sql` dosyasına bakın. Bu dosya, sık kullanılan sorgular için GIN/BTREE indeksler ve bazı yardımcı görünümler içerir. Uygulama koduyla uyum için sütun adlarının güncel şema ile eşleştiğinden emin olun (ör. `posts.is_active` ve `notifications.user_id`).
+Ek performans indeksleri ve görünümler için `src/config/performance_indexes.sql`
+dosyasına bakın. Bu dosya, sık kullanılan sorgular için GIN/BTREE indeksler ve
+bazı yardımcı görünümler içerir. Uygulama koduyla uyum için sütun adlarının
+güncel şema ile eşleştiğinden emin olun (ör. `posts.is_active` ve
+`notifications.user_id`).
 
 ## 🗃️ MongoDB (Opsiyonel/Fallback)
 
-PostgreSQL bağlantısı sağlanamadığında, `.env` içinde `MONGO_URI` tanımlıysa MongoDB bağlantısı denenir. Aşağıdaki örnek arayüzler konsept amaçlıdır ve canlı şemanın yerine geçmez.
+PostgreSQL bağlantısı sağlanamadığında, `.env` içinde `MONGO_URI`
+tanımlıysa MongoDB bağlantısı denenir. Aşağıdaki örnek arayüzler konsept
+amaçlıdır ve canlı şemanın yerine geçmez.
 
 ```typescript
 interface IUser {
