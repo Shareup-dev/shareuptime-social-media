@@ -4,7 +4,7 @@ import Button from '../components/buttons/LinkButton';
 import Screen from '../components/Screen';
 import authContext from '../authContext';
 
-export default function AccountScreen(props) {
+export default function AccountScreen(_props) {
   const { user, setUser } = useContext(authContext);
 
   const handelLogout = () => {

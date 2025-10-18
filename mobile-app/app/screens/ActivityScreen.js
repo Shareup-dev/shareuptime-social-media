@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, Alert } from 'react-native';
+import React, { useContext, useState, useCallback } from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
 
 import Screen from '../components/Screen';
 import TextField from '../components/TextField';
@@ -14,12 +14,12 @@ import UserProfilePicture from '../components/UserProfilePicture';
 import routes from '../navigation/routes';
 import authContext from '../authContext';
 import UserService from '../services/user.service';
-import FriendService from '../services/FriendService';
+// import FriendService from '../services/FriendService';
 import store from '../redux/store';
 import { sentRequestsActions } from '../redux/sentRequests';
-import { receivedRequestsAction } from '../redux/receivedRequest';
+// import { receivedRequestsAction } from '../redux/receivedRequest';
 import { useSelector } from 'react-redux';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 import userService from '../services/user.service';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -29,33 +29,31 @@ export default function ActivityScreen({ navigation }) {
   const { userState } = useContext(authContext);
   const [searchResult, setSearchResult] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-  const { user: loggedInUser } = useContext(authContext).userState;
   let alreadySentTo = useSelector((state) => state.sentRequests);
-  let receivedReq = useSelector((state) => state.receivedRequests);
 
   useFocusEffect(
     useCallback(() => {
       UserService.getUsers()
         .then((resp) => {
-          let allUsers = resp.data.filter((person) => person.id !== userState?.userData?.id);
+          const allUsers = resp.data.filter((person) => person.id !== userState?.userData?.id);
           UserService.getFriendRequestSent(userState?.userData?.email)
-            .then((resp) => {
-              let sentRequests = resp.data;
+            .then((resp2) => {
+              const sentRequests = resp2.data;
               store.dispatch(sentRequestsActions.setList(sentRequests));
-              let sendFiltered = allUsers.filter(
+              const sendFiltered = allUsers.filter(
                 ({ id: id1 }) => !sentRequests.some(({ id: id2 }) => id2 === id1),
               );
               UserService.getFriendRequestRecieved(userState?.userData?.email)
-                .then((resp) => {
-                  let receivedReq = resp.data;
+                .then((resp3) => {
+                  const receivedReq = resp3.data;
                   //store.dispatch(receivedRequestsAction.setList(receivedReq));
-                  let receiveFiltered = sendFiltered.filter(
+                  const receiveFiltered = sendFiltered.filter(
                     ({ id: id1 }) => !receivedReq.some(({ id: id2 }) => id2 === id1),
                   );
                   UserService.getFriends(userState?.userData?.email)
                     .then((res) => {
-                      let friends = res.data;
-                      let notFriends = receiveFiltered.filter(
+                      const friends = res.data;
+                      const notFriends = receiveFiltered.filter(
                         ({ id: id1 }) => !friends.some(({ id: id2 }) => id2 === id1),
                       );
                       setusers(notFriends);
@@ -64,7 +62,7 @@ export default function ActivityScreen({ navigation }) {
                 })
                 .catch((e) => console.error('error', e));
               // differedReqs.forEach(user => {});
-              setSentto(resp.data);
+              setSentto(resp2.data);
             })
             .catch((e) => console.error('error', e));
         })
@@ -78,11 +76,11 @@ export default function ActivityScreen({ navigation }) {
   //   navigation.navigate(routes.USER_PROFILE, {userEmail:userEmail} )
   // }
   const onSearchFriend = (searchKey) => {
-    if (searchKey == '') {
+    if (searchKey === '') {
       setIsSearch(false);
     } else {
       UserService.search(searchKey).then((resp) => {
-        let filteredResult = resp.data.filter((person) => person.id !== userState?.userData?.id);
+        const filteredResult = resp.data.filter((person) => person.id !== userState?.userData?.id);
         setSearchResult(filteredResult);
         setIsSearch(true);
       });
@@ -107,10 +105,10 @@ export default function ActivityScreen({ navigation }) {
       store.dispatch(sentRequestsActions.setList(alreadySentTo));
       userService
         .declineFriendRequest(userState?.userData?.id, recievedUser.id)
-        .then((resp) => resp.data);
+        .then((_resp) => _resp.data);
       return;
     } else {
-      UserService.sendFriendRequest(userState?.userData?.id, recievedUser.id).then((resp) => {});
+      UserService.sendFriendRequest(userState?.userData?.id, recievedUser.id).then((_resp) => {});
 
       setSentto((previousState) => {
         return [...previousState, recievedUser];
