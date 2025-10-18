@@ -3,8 +3,10 @@ import { Form, FormField, SubmitButton } from '../components/forms';
 import { StyleSheet, View, Text } from 'react-native';
 import Screen from '../components/Screen';
 import defaultStyles from '../config/styles';
+// Removed unused header components import
 import * as Yup from 'yup';
 import colors from '../config/colors';
+// Removed unused routes import
 import ForgotPasswordHeader from '../components/ForgotPassword/Header';
 
 export default function ChangePassword({ navigation }) {

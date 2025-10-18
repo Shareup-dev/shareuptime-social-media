@@ -25,6 +25,8 @@ import { ProgressBar } from 'react-native-paper';
 
 export default function AddStoryScreen({ navigation }) {
   let cameraRef;
+  // playerRef was unused
+  // let playerRef = useRef();
 
   const windowWidth = Dimensions.get('screen').width;
 
@@ -50,6 +52,7 @@ export default function AddStoryScreen({ navigation }) {
   //   },
   // };
 
+  let startTime;
   // let pauseTime;
 
   async function StopRecording() {
@@ -59,6 +62,7 @@ export default function AddStoryScreen({ navigation }) {
   }
 
   const startProgress = () => {
+    startTime = new Date().valueOf();
     Animated.timing(scale, {
       toValue: windowWidth,
       useNativeDriver: true,

@@ -10,7 +10,6 @@ import RegistrationContainer from '../components/forms/RegistrationContainer';
 import colors from '../config/colors';
 import authService from '../services/auth.service';
 import authContext from '../authContext';
-import Loading from '../components/Loading';
 
 const validationSchema = Yup.object().shape({
   otp: Yup.string('Invalid Code').required().label('Verification code').length(6),

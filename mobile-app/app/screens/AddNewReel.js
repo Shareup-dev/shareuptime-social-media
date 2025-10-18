@@ -26,7 +26,8 @@ import { ProgressBar } from 'react-native-paper';
 
 export default function AddReelScreen({ navigation }) {
   let cameraRef;
-  let playerRef = useRef();
+  // playerRef is not used
+  // let playerRef = useRef();
 
   const windowWidth = Dimensions.get('screen').width;
 
@@ -104,7 +105,7 @@ export default function AddReelScreen({ navigation }) {
         }
       })
       .catch((e) => {
-        console.error('Error reading an image', error.message);
+        console.error('Error reading an image', e?.message || e);
       });
   };
 

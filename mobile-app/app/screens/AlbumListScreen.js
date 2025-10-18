@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function AlbumListScreen({ navigation, route: _route }) {
+export default function AlbumListScreen({ navigation, route }) {
   const { userData: user } = useContext(authContext)?.userState;
   const [albums, setAlbums] = useState([]);
   const dispatch = useDispatch();
