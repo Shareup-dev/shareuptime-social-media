@@ -69,15 +69,15 @@ const commentsSlice = createSlice({
       state.error = null;
     },
     addComment: (state, action: PayloadAction<Comment>) => {
-      const comment = action.payload;
-      const postId = comment.postId;
+      const newComment = action.payload;
+      const postId = newComment.postId;
 
       if (!state.commentsByPost[postId]) {
         state.commentsByPost[postId] = [];
       }
 
       // Add to beginning for chronological order
-      state.commentsByPost[postId].unshift(comment);
+      state.commentsByPost[postId].unshift(newComment);
     },
     updateComment: (
       state,
@@ -91,7 +91,7 @@ const commentsSlice = createSlice({
       const comments = state.commentsByPost[postId];
 
       if (comments) {
-        const commentIndex = comments.findIndex((comment) => comment.id === commentId);
+        const commentIndex = comments.findIndex((c) => c.id === commentId);
         if (commentIndex !== -1) {
           comments[commentIndex] = { ...comments[commentIndex], ...updates };
         }
@@ -102,7 +102,7 @@ const commentsSlice = createSlice({
       const comments = state.commentsByPost[postId];
 
       if (comments) {
-        state.commentsByPost[postId] = comments.filter((comment) => comment.id !== commentId);
+        state.commentsByPost[postId] = comments.filter((c) => c.id !== commentId);
       }
     },
     toggleCommentLike: (state, action: PayloadAction<{ postId: string; commentId: string }>) => {
@@ -110,10 +110,10 @@ const commentsSlice = createSlice({
       const comments = state.commentsByPost[postId];
 
       if (comments) {
-        const comment = comments.find((comment) => comment.id === commentId);
-        if (comment) {
-          comment.isLiked = !comment.isLiked;
-          comment.likeCount += comment.isLiked ? 1 : -1;
+        const found = comments.find((c) => c.id === commentId);
+        if (found) {
+          found.isLiked = !found.isLiked;
+          found.likeCount += found.isLiked ? 1 : -1;
         }
       }
     },
@@ -122,9 +122,9 @@ const commentsSlice = createSlice({
       const comments = state.commentsByPost[postId];
 
       if (comments) {
-        const comment = comments.find((comment) => comment.id === commentId);
-        if (comment) {
-          comment.replyCount += 1;
+        const found = comments.find((c) => c.id === commentId);
+        if (found) {
+          found.replyCount += 1;
         }
       }
     },
