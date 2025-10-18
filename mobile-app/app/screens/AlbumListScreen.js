@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { FlatList, Image, View } from 'react-native';
+import React, { useState, useContext, useCallback } from 'react';
+import { FlatList, View } from 'react-native';
 import Screen from '../components/Screen';
 import { Header, HeaderTitle } from '../components/headers';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function AlbumListScreen({ navigation, route }) {
+export default function AlbumListScreen({ navigation, route: _route }) {
   const { userData: user } = useContext(authContext)?.userState;
   const [albums, setAlbums] = useState([]);
   const dispatch = useDispatch();

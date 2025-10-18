@@ -9,7 +9,6 @@ import {
   TextInput,
   StatusBar,
   Alert,
-  ActivityIndicator,
 } from 'react-native';
 
 import colors from '../config/colors';
@@ -22,7 +21,6 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import AuthContext from '../authContext';
 import Video from 'react-native-video';
 import storyService from '../services/story.service';
-import { load } from 'npm';
 import { ProgressBar } from 'react-native-paper';
 
 export default function AddStoryScreen({ navigation }) {
@@ -114,7 +112,7 @@ export default function AddStoryScreen({ navigation }) {
     })
       .then((res) => {
         if (res.didCancel) return;
-        else if (res.assets[0].duration > 30) {
+        if (res.assets[0].duration > 30) {
           Alert.alert('Ops..', "Sorry you can't upload this video", [null], {
             cancelable: true,
           });
@@ -124,12 +122,8 @@ export default function AddStoryScreen({ navigation }) {
         }
       })
       .catch((e) => {
-        console.error('Error reading an image', error.message);
+        console.error('Error reading an image', e?.message || e);
       });
-
-    // if (result.didCancel === true) {
-    //   return;
-    // }
   };
 
   const handelRevertCamera = () => {
